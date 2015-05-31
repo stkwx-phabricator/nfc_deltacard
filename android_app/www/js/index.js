@@ -940,19 +940,16 @@ $(".scan_step2_btn").on('touchend', function() {
 $(".scan_step2_btn2").on("touchend", function() {
     $(".scan_read_btn").hide();
     $(".scan_step2_btn").show();
-    if (ifEmpytyTag) {
-        $('.scan_step2 input[name="product"]').textinput('enable');
-        $('.scan_step2 input[name="serial"]').textinput('enable');
-        $('.scan_step2 input[name="user"]').textinput('enable');
-        $('.scan_step2 input[name="prod"]').textinput('enable');
-        $('.scan_step2 input[name="start"]').textinput('enable');
-    } else if (nfcData[10] == "0" || nfcData[10] == null) {
-        $('.scan_step2 input[name="user"]').textinput('enable');
-        $('.scan_step2 input[name="start"]').textinput('enable');
-        nfcData[10] = '1';
-    } else {
-        $('.scan_step2 input[name="user"]').textinput('enable');
-    }
+    $('.scan_step2 input[name="product"]').textinput('enable');
+    $('.scan_step2 input[name="serial"]').textinput('enable');
+    $('.scan_step2 input[name="user"]').textinput('enable');
+    $('.scan_step2 input[name="prod"]').textinput('enable');
+    $('.scan_step2 input[name="start"]').textinput('enable');
+    $('.scan_step2 input[name="sav1"]').textinput('enable');
+    $('.scan_step2 input[name="sav2"]').textinput('enable');
+    $('.scan_step2 input[name="sav3"]').textinput('enable');
+    $('.scan_step2 input[name="sav4"]').textinput('enable');
+    $('.scan_step2 input[name="sav5"]').textinput('enable');
     showClearReadInput();
     $('.scan_step3_1').show();
     $('.scan_step3_2').hide();
@@ -1150,7 +1147,7 @@ $(".validate_registion").on('touchend', function() {
         confirm = $("#user_registion #passwordConfirm").val();
 		
 	//Delta Type for Maintenance version
-	var deltaType = 0;
+	var deltaType = 1;
 	
     if(firstName==""||lastName==""||email==""||login==""||company==""||password==""||confirm==""){
         myAlert('creationMsgMissing');
