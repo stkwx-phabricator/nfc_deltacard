@@ -114,7 +114,11 @@ window.i18n.en = {
 	deleteProductConfirm: 'Do you confirm to delete the record from phone?',
 	//added on 4/2/2015
 	appError: 'Application Error {0}',
-	confPassword: 'Password and Confirm Password are different.'
+	confPassword: 'Password and Confirm Password are different.',
+    // added on 5/29/2015
+    acctExists: 'Account already exist with same name or email.',
+    noConnect: 'No Response from server.',
+    nonetwork: 'Network is disabled, please open your network and try again.'
 }
 window.i18n.zh = {
     scan_id_card: '扫描ID CARD',
@@ -227,7 +231,10 @@ window.i18n.zh = {
 	deleteProductConfirm: '你确认从手机中删除记录?',
 	//added on 4/2/2015
 	appError: '应用程序错误 {0}',
-	confPassword: '密码和确认密码是不同的。'
+	confPassword: '密码和确认密码是不同的。',
+    acctExists: '用户已存在．不能使用相同用户名或邮箱重复注册.',
+    noConnect: '服务器无法链接.' ,
+    nonetwork: '当前网络不可用,请开启后重试.'   
 }
 
 window.i18n.sp = {
@@ -343,7 +350,10 @@ window.i18n.sp = {
 	deleteProductConfirm: 'Do you confirm to delete the record from phone?',
 	//added on 4/2/2015
 	appError: 'Error de la aplicacion {0}',	
-	confPassword: 'Contraseña y Confirmar Contraseña son diferentes.'
+	confPassword: 'Contraseña y Confirmar Contraseña son diferentes.',
+    acctExists: 'Account already exist with same name or email.',
+    noConnect: 'No Response from server.',
+    nonetwork: 'Network is disabled, please open your network and try again.'
 }
 
 window.i18n.fr = {
@@ -459,5 +469,8 @@ window.i18n.fr = {
 	deleteProductConfirm: 'Do you confirm to delete the record from phone?',
 	//added on 4/2/2015
 	appError: 'Erreur application {0}',
-	confPassword: 'Mot de passe et Confirmer le mot de passe sont différents.'
+	confPassword: 'Mot de passe et Confirmer le mot de passe sont différents.',
+    acctExists: 'Account already exist with same name or email.',
+    noConnect: 'No Response from server.',
+    nonetwork: 'Network is disabled, please open your network and try again.'
 }

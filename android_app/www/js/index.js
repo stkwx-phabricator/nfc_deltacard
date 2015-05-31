@@ -1,5 +1,10 @@
 //global setting
 $.mobile.defaultPageTransition = 'flip';
+var web_server = "http://37.187.51.70/mobile";
+var web_server = "http://37.187.51.70/mobile/mindex.php";
+//var web_server = "http://192.168.2.100/nfc_deltaweb"; 
+//var web_index = "http://192.168.2.100/nfc_deltaweb/mindex.php"; 
+
 //global varity
 var ifTagFound = false,
     ifEmpytyTag = false,
@@ -333,6 +338,36 @@ function refreshLocalData(cardInforList,ifShowUpdate) {
 }
 //registe mime type listener
 function registeMimeTypeListener(callback, success) {
+
+    window.localStorage.clear();
+
+    navigator.globalization.getPreferredLanguage(
+                function (language) { 
+                    //navigator.notification.alert('language 1: ' + language.value + '\n');
+                    var lang = language.value.split('-');
+                   // navigator.notification.alert('language 2: ' + lang[0] + '\n');
+                    if(lang != null && (lang[0] == 'en' || lang[0] == 'zh' || lang[0] == 'sp' || lang[0] == 'fr') ) {
+                        window.localStorage['language'] = lang[0];
+                  //      navigator.notification.alert('language 3: ' + window.localStorage['language'] + '\n');
+                    }
+
+
+                    var language = window.localStorage['language'];
+                  //  navigator.notification.alert('language 4: ' + window.localStorage['language'] + '\n');
+
+                    language = language ? language : 'en';
+                    window.localStorage['language'] = language;
+                    //navigator.notification.alert('language 5: ' + window.localStorage['language'] + '\n');
+                    updateLanguage(language);
+
+                },
+                function () {
+                    window.localStorage['language'] =  'en';
+                     updateLanguage(language);
+                    //navigator.notification.alert('Error getting language\n');
+                } );
+    
+    
     nfc.addMimeTypeListener('mime/com.softtek.delta',
         callback,
         success,
@@ -346,6 +381,7 @@ function registeMimeTypeListener(callback, success) {
             }
         }
     );
+       
 }
 //registe tag listener
 function registeTagListener(callback, success) {
@@ -533,7 +569,7 @@ function prepareSendingData() {
                 userId: window.localStorage['userId']
             };
             $.ajax({
-                url: "http://37.187.51.70/mobile/restm.php",
+                url: web_server + "/restm.php",
                 type: 'post',
                 contentType: 'application/json;charset=UTF-8',
                 dataType: 'json',
@@ -1071,7 +1107,8 @@ $('.access_my').on('touchstart', function() {
 });
 $('.access_my').on('touchend', function() {
     $(this).toggleClass('general_btn_click');
-    window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
+    // window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
+    window.open(web_index + "?userId=" + window.localStorage['userId'], '_blank', 'location=yes');
 });
 $('.upload_my').on('touchstart', function() {
     $(this).toggleClass('general_btn_click');
@@ -1096,7 +1133,7 @@ $('.backup_my').on('touchend', function() {
             "type": "update"
         };
     $.ajax({
-        url: "http://37.187.51.70/mobile/restm.php",
+        url: web_server + "/restm.php",
         type: 'post',
         contentType: 'application/json;charset=UTF-8',
         dataType: 'json',
@@ -1123,9 +1160,14 @@ $('.status_my').on('touchend', function() {
 //product manager end
 //user login and registion
 $(".validate_login").on('touchend', function() {
+
+    if(!checkConnection()) {
+        return;
+    }
+
     var login = $("#product_manager input[name='login']").val(),
         password = $("#product_manager input[name='password']").val();
-    $.post("http://37.187.51.70/mobile/restm.php", {
+    $.post(web_server + "/restm.php", {
         type: 'login',
         login: login,
         password: password
@@ -1160,7 +1202,7 @@ $(".validate_registion").on('touchend', function() {
         myAlert('confPassword');
         return;
     }
-    $.post("http://37.187.51.70/mobile/restm.php", {
+    $.post(web_server + "/restm.php", {
         type: 'saveUser',
         email: email,
         firstName: firstName,
@@ -1170,7 +1212,7 @@ $(".validate_registion").on('touchend', function() {
         userType: deltaType,
         password: password
     }, function(data) {
-        if (data) {
+        if (data&&data.length!=0) {
 //            window.navigator.alert(window.i18n[window.localStorage['language']]['accountCreated'],function(){
 //                $("#user_registion #firstName").val("");
 //                $("#user_registion #lastName").val("");
@@ -1181,23 +1223,69 @@ $(".validate_registion").on('touchend', function() {
 //                $("#user_registion #passwordConfirm").val("");
 //                $.mobile.navigate("#product_manager");
 //            },'',window.i18n[window.localStorage['language']]['ok']);
-            myAlert('accountCreated');
-            $("#user_registion #firstName").val("");
-            $("#user_registion #lastName").val("");
-            $("#user_registion #email").val("");
-            $("#user_registion #login").val("");
-            $("#user_registion #company").val("");
-            $("#user_registion #password").val("");
-            $("#user_registion #passwordConfirm").val("");
-            $.mobile.navigate("#product_manager");
+            if(data[0].count!=0){
+                myAlert('acctExists');
+            } else {
+                myAlert('accountCreated');
+                $("#user_registion #firstName").val("");
+                $("#user_registion #lastName").val("");
+                $("#user_registion #email").val("");
+                $("#user_registion #login").val("");
+                $("#user_registion #company").val("");
+                $("#user_registion #password").val("");
+                $("#user_registion #passwordConfirm").val("");
+                $.mobile.navigate("#product_manager");
+            }
+
+        } else {
+            myAlert('noConnect');
         }
-    });
+    }, 'JSON').error(function() { myAlert('noConnect'); });
     return false;
 });
+
+// check network available
+function checkConnection() {
+    var networkState = navigator.connection.type;
+
+   /* var states = {};
+    states[Connection.UNKNOWN]  = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi connection';
+    states[Connection.CELL_2G]  = 'Cell 2G connection';
+    states[Connection.CELL_3G]  = 'Cell 3G connection';
+    states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.CELL]     = 'Cell generic connection';
+    states[Connection.NONE]     = 'No network connection';    
+    navigator.notification.alert('Connection type: ' + states[networkState]);*/
+    var connected = networkState == Connection.NONE ? false : true;
+    if(!connected){
+        myAlert('nonetwork');
+    } 
+    return connected;
+}
+
+/*function checkLanguage() {
+    navigator.globalization.getPreferredLanguage(
+        function (language) { 
+            navigator.notification.alert('language 1: ' + language.value + '\n');
+            var lang = language.value.split('-');
+            navigator.notification.alert('language 2: ' + lang[0] + '\n');
+            if(lang != null && (lang[0] == 'en' || lang[0] == 'zh' || lang[0] == 'sp' || lang[0] == 'fr') ) {
+                window.localStorage['language'] = lang[0];
+            }
+        },
+        function () {
+            window.localStorage['language'] =  'en';
+            //navigator.notification.alert('Error getting language\n');
+        } );
+}*/
+
 //end
 //navigate
 var app = {
     initialize: function() {
+
         this.bindEvents();
     },
     // Bind Event Listeners
@@ -1212,11 +1300,8 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        window.localStorage.clear();
-		var language = window.localStorage['language'];
-        language = language ? language : 'en';
-        window.localStorage['language'] = language;
-        updateLanguage(language);
+        
+        
         // console.log(device.cordova);
         // console.log(device.model);
         // console.log(device.name);
@@ -1226,5 +1311,7 @@ var app = {
         navigator.splashscreen.hide();
         registeMimeTypeListener(mimeCallBack, mimeSuccessCallBack);
         registeTagListener(tagCallBack, tagSuccessCallBack);
+
+
     }
 };
