@@ -468,6 +468,24 @@ function updateLanguage(language) {
         }
     }
 }
+
+ function isAlphanumeric(obj){ 
+    reg=/^[A-Za-z][\w-]{0,}$/;   
+    if(!reg.test(obj)){   
+         return false;
+    }
+    return true;
+}
+
+function isChinese(obj){  
+    //reg=/^[\u4E00-\u9FA5]+$/;   // GBK
+    reg=/^[\u3400-\u9FBF]+$/;     //UTF-8
+    if(!reg.test(obj)){   
+        return false;
+    }
+    return true;
+}
+
 //form validation
 function validateForm() {
     var product = $('.scan_step2 input[name="product"]').val().replace(/ $/g, '').replace(/^ /g, ''),
@@ -486,6 +504,9 @@ function validateForm() {
     if (product.length > 10) {
         myAlert('productMaxLength');
         return false;
+    } else if(!isAlphanumeric(product)){
+        myAlert('invalidInput', 'Product');
+        return false;
     }
     if (serial === "") {
         myAlert('serialFieldEmpty');
@@ -493,6 +514,9 @@ function validateForm() {
     }
     if (serial.length > 10) {
         myAlert('serialMaxLength');
+        return false;
+    } else if(!isAlphanumeric(serial)){
+        myAlert('invalidInput', 'serial');
         return false;
     }
     if (user.length > 15) {
@@ -503,6 +527,20 @@ function validateForm() {
         myAlert('beforeAddFirstUseDate');
         return false;
     }
+
+    if(!isAlphanumeric(user)){
+        if(!isChinese(user)){
+            myAlert('invalidInput', 'User');
+            return false;
+        } else {
+            if(user.length>3){
+                 myAlert('userMaxLength');
+                return false;
+            }
+        }
+    }
+
+
     return true;
 }
 //for language
@@ -947,6 +985,8 @@ $('.scan_step1_4_instruction').on('touchend', function() {
 
 //new button for add id to my product only
 $(".scan_add_to_myproduct").on('touchend', function() {
+    // validate data before add to my product.
+
     if(nfcData[1]){
         writeCardInforToDB(true);
     }else{
@@ -958,6 +998,7 @@ $(".scan_step2_btn").on('touchstart', function() {
     $(this).toggleClass('general_btn_click');
 });
 $(".scan_step2_btn").on('touchend', function() {
+    // validate data before save into card 
     if (validateForm()) {
         $.mobile.navigate('#scan_sync');
         $('.scan_step2 input[name="product"]').textinput('disable');
@@ -976,19 +1017,16 @@ $(".scan_step2_btn").on('touchend', function() {
 $(".scan_step2_btn2").on("touchend", function() {
     $(".scan_read_btn").hide();
     $(".scan_step2_btn").show();
-    if (ifEmpytyTag) {
-        $('.scan_step2 input[name="product"]').textinput('enable');
-        $('.scan_step2 input[name="serial"]').textinput('enable');
-        $('.scan_step2 input[name="user"]').textinput('enable');
-        $('.scan_step2 input[name="prod"]').textinput('enable');
-        $('.scan_step2 input[name="start"]').textinput('enable');
-    } else if (nfcData[10] == "0" || nfcData[10] == null) {
-        $('.scan_step2 input[name="user"]').textinput('enable');
-        $('.scan_step2 input[name="start"]').textinput('enable');
-        nfcData[10] = '1';
-    } else {
-        $('.scan_step2 input[name="user"]').textinput('enable');
-    }
+    $('.scan_step2 input[name="product"]').textinput('enable');
+    $('.scan_step2 input[name="serial"]').textinput('enable');
+    $('.scan_step2 input[name="user"]').textinput('enable');
+    $('.scan_step2 input[name="prod"]').textinput('enable');
+    $('.scan_step2 input[name="start"]').textinput('enable');
+    $('.scan_step2 input[name="sav1"]').textinput('enable');
+    $('.scan_step2 input[name="sav2"]').textinput('enable');
+    $('.scan_step2 input[name="sav3"]').textinput('enable');
+    $('.scan_step2 input[name="sav4"]').textinput('enable');
+    $('.scan_step2 input[name="sav5"]').textinput('enable');
     showClearReadInput();
     $('.scan_step3_1').show();
     $('.scan_step3_2').hide();
@@ -1192,7 +1230,7 @@ $(".validate_registion").on('touchend', function() {
         confirm = $("#user_registion #passwordConfirm").val();
 		
 	//Delta Type for Maintenance version
-	var deltaType = 0;
+	var deltaType = 1;
 	
     if(firstName==""||lastName==""||email==""||login==""||company==""||password==""||confirm==""){
         myAlert('creationMsgMissing');
