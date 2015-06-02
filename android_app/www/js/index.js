@@ -1,9 +1,9 @@
 //global setting
 $.mobile.defaultPageTransition = 'flip';
-// var web_server = "http://37.187.51.70/mobile";
-// var web_server = "http://37.187.51.70/mobile/mindex.php";
-var web_server = "http://192.168.2.100/nfc_deltaweb"; 
-var web_index = "http://192.168.2.100/nfc_deltaweb/mindex.php"; 
+var web_server = "http://37.187.51.70/nfc_deltaweb";
+var web_index = "http://37.187.51.70/nfc_deltaweb/mindex.php";
+//var web_server = "http://192.168.2.100/nfc_deltaweb"; 
+//var web_index = "http://192.168.2.100/nfc_deltaweb/mindex.php"; 
 
 //global varity
 var ifTagFound = false,
