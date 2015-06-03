@@ -513,7 +513,7 @@ function validateForm() {
         myAlert('serialFieldEmpty');
         return false;
     }
-    if (serial.length > 10) {
+    if (serial.length > 12) {
         myAlert('serialMaxLength');
         return false;
     } else if(!isAlphanumeric(serial)){
