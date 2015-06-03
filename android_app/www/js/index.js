@@ -470,7 +470,8 @@ function updateLanguage(language) {
 }
 
  function isAlphanumeric(obj){ 
-    reg=/^[A-Za-z][\w-]{0,}$/;   
+    //reg=/^[A-Za-z][\w-]{0,}$/;   
+    reg=/[A-Za-z0-9/._-]+$/;
     if(!reg.test(obj)){   
          return false;
     }
@@ -512,7 +513,7 @@ function validateForm() {
         myAlert('serialFieldEmpty');
         return false;
     }
-    if (serial.length > 10) {
+    if (serial.length > 12) {
         myAlert('serialMaxLength');
         return false;
     } else if(!isAlphanumeric(serial)){
