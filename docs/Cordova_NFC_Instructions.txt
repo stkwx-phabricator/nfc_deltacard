@@ -23,6 +23,9 @@ Step to create Cordova project in Windows OS
 	cordova plugin add org.apache.cordova.device
 	cordova plugin add com.chariotsolutions.nfc.plugin
 
+	cordova plugin add org.apache.cordova.globalization
+	cordova plugin add org.apache.cordova.network-information
+
 4. At same level than www folder should be a Resource folder "res". This directory will include resources that applications needs as icon, background etc.
    Move resource files into this folder
 
