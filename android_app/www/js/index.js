@@ -2,8 +2,8 @@
 $.mobile.defaultPageTransition = 'flip';
 var web_server = "http://37.187.51.70/nfc_deltaweb";
 var web_index = "http://37.187.51.70/nfc_deltaweb/mindex.php";
-//var web_server = "http://192.168.2.100/nfc_deltaweb"; 
-//var web_index = "http://192.168.2.100/nfc_deltaweb/mindex.php"; 
+// var web_server = "http://192.168.2.100/nfc_deltaweb"; 
+// var web_index = "http://192.168.2.100/nfc_deltaweb/mindex.php"; 
 
 //global varity
 var ifTagFound = false,
@@ -447,7 +447,7 @@ function deleteRecordFromDB(serial){
     db.transaction(function(tx) {
         tx.executeSql('UPDATE cardInfor SET ifDelete = 1 WHERE serial = ?', [serial], function(tx, re) {
             readCardInforListFromDB();
-            $.mobile.back();
+            //$.mobile.back();
         });
     });
 }
@@ -470,8 +470,7 @@ function updateLanguage(language) {
 }
 
  function isAlphanumeric(obj){ 
-    //reg=/^[A-Za-z][\w-]{0,}$/;   
-    reg=/[A-Za-z0-9/._-]+$/;
+    reg=/[A-Za-z0-9/._-]+$/; 
     if(!reg.test(obj)){   
          return false;
     }
@@ -644,7 +643,7 @@ function updateReceivingData(data) {
                                 console.log(err);
                             }
                         } else {
-                            tx.executeSql('UPDATE cardInfor SET product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=? WHERE serial = ?', [item.product, item.user, item.prod, item.start,item.sav1 , item.sav2, item.sav3, item.sav4, item.sav5, item.serial]);
+                            tx.executeSql('UPDATE cardInfor SET product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=?,ifDelete=? WHERE serial = ?', [item.product, item.user, item.prod, item.start,item.sav1 , item.sav2, item.sav3, item.sav4, item.sav5, item.ifDelete, item.serial]);
                         }
                     });
                 })(data[i]);
@@ -659,11 +658,15 @@ function updateReceivingData(data) {
 }
 /* get char code from string */
 function getCharCodeFromString(str) {
-    var res = [];
-    for (var i = 0; i < str.length; i++) {
-        res.push(str.charCodeAt(i));
-    };
-    return res.join('.');
+    if(isChinese(str)){ 
+        var res = [];
+        for (var i = 0; i < str.length; i++) {
+            res.push(str.charCodeAt(i));
+        };
+        return res.join('.');
+    } else { 
+        return str;
+    }
 }
 
 function getStringFromCharCode(str) {
@@ -672,7 +675,12 @@ function getStringFromCharCode(str) {
     for (var i = 0; i < arr.length; i++) {
         res = res + String.fromCharCode(arr[i]);
     }
-    return res;
+    if(isChinese(res)){
+        return res;
+    } else {
+        return str;
+    }
+
 }
 /*
  end
