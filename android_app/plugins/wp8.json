@@ -1,0 +1,96 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"WebSql\"><param name=\"wp-package\" value=\"WebSql\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"wp-package\" value=\"Device\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"wp-package\" value=\"Notification\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Globalization\"><param name=\"wp-package\" value=\"Globalization\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"wp-package\" value=\"InAppBrowser\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"wp-package\" value=\"NetworkStatus\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"wp-package\" value=\"SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NfcPlugin\"><param name=\"wp-package\" value=\"NfcPlugin\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "Properties/WMAppManifest.xml": {
+                "parents": {
+                    "/Deployment/App/Capabilities": [
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_IDENTITY_DEVICE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_NETWORKING\" />",
+                            "count": 3
+                        },
+                        {
+                            "xml": "<Capability Name=\"ID_CAP_PROXIMITY\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.msopentech.websql": {
+            "PACKAGE_NAME": "{ad166400-5fa0-11e5-9d6c-71ef2e40122b}"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "{ad166400-5fa0-11e5-9d6c-71ef2e40122b}"
+        },
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "{ad166400-5fa0-11e5-9d6c-71ef2e40122b}"
+        },
+        "org.apache.cordova.dialogs": {
+            "PACKAGE_NAME": "{ad166400-5fa0-11e5-9d6c-71ef2e40122b}"
+        },
+        "org.apache.cordova.globalization": {
+            "PACKAGE_NAME": "{ad166400-5fa0-11e5-9d6c-71ef2e40122b}"
+        },
+        "org.apache.cordova.inappbrowser": {
+            "PACKAGE_NAME": "{ad166400-5fa0-11e5-9d6c-71ef2e40122b}"
+        },
+        "org.apache.cordova.network-information": {
+            "PACKAGE_NAME": "{ad166400-5fa0-11e5-9d6c-71ef2e40122b}"
+        },
+        "org.apache.cordova.splashscreen": {
+            "PACKAGE_NAME": "{ad166400-5fa0-11e5-9d6c-71ef2e40122b}"
+        },
+        "com.chariotsolutions.nfc.plugin": {
+            "PACKAGE_NAME": "{ad166400-5fa0-11e5-9d6c-71ef2e40122b}"
+        }
+    },
+    "dependent_plugins": {}
+}

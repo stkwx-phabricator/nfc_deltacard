@@ -1,0 +1,60 @@
+{
+    "org.apache.cordova.splashscreen": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.splashscreen"
+        }
+    },
+    "org.apache.cordova.inappbrowser": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.inappbrowser"
+        }
+    },
+    "org.apache.cordova.dialogs": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.dialogs"
+        }
+    },
+    "org.apache.cordova.device": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.device"
+        }
+    },
+    "org.apache.cordova.globalization": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.globalization"
+        }
+    },
+    "org.apache.cordova.network-information": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.network-information"
+        }
+    },
+    "cordova-plugin-whitelist": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-whitelist@1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.msopentech.websql": {
+        "source": {
+            "type": "registry",
+            "id": "com.msopentech.websql"
+        }
+    },
+    "com.chariotsolutions.nfc.plugin": {
+        "source": {
+            "type": "local",
+            "path": "D:\\cordova5.3.1\\APP\\phonegap-nfc-reader\\phonegap-nfc-reader\\plugins\\com.chariotsolutions.nfc.plugin"
+        },
+        "is_top_level": true,
+        "variables": {}
+    }
+}
