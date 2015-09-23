@@ -1,9 +1,26 @@
+* {
+-webkit-touch-callout:none;
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+user-select:none;
+}
+
 @media screen and (max-width: 1280px){ 
 /*    @viewport { 
         width: 360px; 
         height: 640px;
     }
-*/}
+
+    
+ @viewport { 
+        width: device-width; 
+        height: device-height;
+        user-zoom:fixed;
+    }
+*/
+
+}
 .basic{
     background: url(../img/background.png) no-repeat top center;
     background-size:100% 100%;

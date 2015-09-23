@@ -51,9 +51,18 @@ var ifTagFound = false,
     callBackGroup = {
         tagRead: {
             mimeCallBack: function(nfcEvent) {
+                // wp8 dont have tag.id, only android has, will consider as "ndefMessage[0].id" instead
+                // need to be sure both NFC tag is written with same data.
                 var tag = nfcEvent.tag,
                     ndefMessage = tag.ndefMessage;
-                tagId = nfc.bytesToHexString(tag.id);
+                if (device.platform == 'Android') {
+                    tagId = nfc.bytesToHexString(tag.id);
+                    if (tagId == null || tagId == "") {
+                        tagId = nfc.bytesToHexString(ndefMessage[0].id);
+                    }
+                } else {
+                    tagId = nfc.bytesToHexString(ndefMessage[0].id);
+                }
                 console.log(tagId);
                 nfcData = nfc.bytesToString(ndefMessage[0].payload).split('~');
                 if(nfcData.length!=11){
@@ -113,6 +122,7 @@ var ifTagFound = false,
                     $(".scan_step2_btn").hide();
                     $(".scan_read_btn").show();
                     $.mobile.navigate('#scan_read');
+                    $('#scan_read').attr("class", "basic container");
                 }, 2000);
                 mimeCallBack = function() {};
                 tagCallBack = function() {};
@@ -163,10 +173,23 @@ var ifTagFound = false,
         },
         tagWrite: {
             mimeCallBack: function(nfcEvent) {
-                clearTimeout(timeoutId);
-                var newTagId = nfc.bytesToHexString(nfcEvent.tag.id);
-                if(tagId===newTagId){
-                    nfc.write(message, function() {
+                clearTimeout(timeoutId);                
+                var newTagId;
+                var tag = nfcEvent.tag,
+                    ndefMessage = tag.ndefMessage;
+
+                //var newTagId = nfc.bytesToHexString(nfcEvent.tag.id);
+                if (device.platform == 'Android') {
+                    newTagId = nfc.bytesToHexString(tag.id);
+                    if (newTagId == null || newTagId == "") {
+                        newTagId = nfc.bytesToHexString(ndefMessage[0].id);
+                    }
+                } else {
+                    newTagId = nfc.bytesToHexString(ndefMessage[0].id);
+                }
+                //alert("inside callBackGroup - tagWrite - mimeCallBack" + (tagId === newTagId));
+                if (tagId === newTagId) {
+                    nfc.write(message, function () {
                         scan_next(3, 4);
                         writeCardInforToDB();
                         hasViewMyPro = false;
@@ -331,7 +354,7 @@ function refreshLocalData(cardInforList,ifShowUpdate) {
         }
     }
     $(".productList tbody").html(content);
-    $('.productList .productList_view').on('touchend', function() {
+    $('.productList .productList_view').on('click', function () {
         readCradInforWithId($(this).attr('id'));
     });
     $.mobile.navigate('#myproducts');
@@ -366,22 +389,37 @@ function registeMimeTypeListener(callback, success) {
                      updateLanguage(language);
                     //navigator.notification.alert('Error getting language\n');
                 } );
-    
-    
-    nfc.addMimeTypeListener('mime/com.softtek.delta',
-        callback,
-        success,
-        function(error) { // error callback
-            ifRegisteError = true;
-            var msg = JSON.stringify(error);
-            if(msg==='"NFC_DISABLED"'){
-                myAlert('nfcDisabled');
-            }else{
-                myAlert("initAppFailed",[JSON.stringify(error)]);
-            }
-        }
-    );
-       
+
+    if (device.platform == 'Android') {
+    //nfc.addMimeTypeListener('mime/com.softtek.delta',
+    //    callback,
+    //    success,
+    //    function(error) { // error callback
+    //        ifRegisteError = true;
+    //        var msg = JSON.stringify(error);
+    //        if(msg==='"NFC_DISABLED"'){
+    //            myAlert('nfcDisabled');
+    //        }else{
+    //            myAlert("initAppFailed",[JSON.stringify(error)]);
+    //        }
+    //    }
+        //);
+    }
+    // this is for wp8
+    else { 
+        nfc.addNdefListener(
+            callback,
+            success,
+            function (error) { // error callback
+                ifRegisteError = true;
+                var msg = JSON.stringify(error);
+                if (msg === '"NFC_DISABLED"') {
+                    myAlert('nfcDisabled');
+                } else {
+                    myAlert("initAppFailed", [JSON.stringify(error)]);
+                }
+        });
+    }    
 }
 //registe tag listener
 function registeTagListener(callback, success) {
@@ -782,7 +820,7 @@ $('.scan_step3_1,.scan_step3_2,.scan_step3_3,.scan_step3_4').css('top', bodyHeig
 //
 //});
 
-$(".scan_step2 .dateInput").val("").on('touchend',function(e){
+$(".scan_step2 .dateInput").val("").on('click', function (e) {
     var t = e.currentTarget;
     if(!t.disabled){
         window.currentDateName = t.name;
@@ -815,6 +853,7 @@ $(".scan_step2 .dateInput").val("").on('touchend',function(e){
 })();
 //navigator
 $(window).on('navigate', function(e, data) {
+    //alert("navigate - " + data.state.direction + " - " + data.state.hash);
     if (data.state.direction == null && data.state.hash === "#scan") { //when back to #scan page
         $(".scan_step1_1").show(20);
         $(".scan_step1_2").hide(20);
@@ -831,38 +870,39 @@ $(window).on('navigate', function(e, data) {
     }
 });
 //initialize event
-$('.generic_btn').on('touchstart', function() {
+$('.generic_btn').on('click', function () {
     $(this).addClass('generic_btn_click');
 });
-$('.generic_btn').on('touchend', function() {
+$('.generic_btn').on('click', function () {
     $(this).removeClass('generic_btn_click');
 });
-$('.generic_btn_scan').on('touchstart', function() {
+$('.generic_btn_scan').on('click', function () {
     $(this).addClass('generic_btn_scan_click');
 });
-$('.generic_btn_scan').on('touchend', function() {
+$('.generic_btn_scan').on('click', function () {
     $(this).removeClass('generic_btn_scan_click');
 });
-$('.btn_home').on('touchstart', function() {
+$('.btn_home').on('click', function () {
     $(this).css('color', 'yellow');
 });
-$('.btn_home').on('touchend', function() {
+$('.btn_home').on('click', function () {
     $(this).css('color', 'white');
     $.mobile.navigate("#home");
 });
-$('.btn_set').on('touchstart', function() {
+$('.btn_set').on('click', function () {
     $(this).css('color', 'yellow');
 });
-$('.btn_set').on('touchend', function() {
+$('.btn_set').on('click', function () {
     $(this).css('color', 'white');
     $.mobile.navigate("#setting");
 });
-$('.btn_back').on('touchstart', function() {
+$('.btn_back').on('click', function () {
     $(this).css('color', 'yellow');
 });
-$('.btn_back').on('touchend', function() {
+$('.btn_back').on('click', function () {
     $(this).css('color', 'white');
     if (window.location.hash == "#scan_read") {
+        //alert("goto scan_read");
         if (!$('.scan_step2 input[name="user"]')[0].disabled) {
             $('.scan_step2 input[name="product"]').attr('disabled', 'disabled');
             $('.scan_step2 input[name="serial"]').attr('disabled', 'disabled');
@@ -903,34 +943,34 @@ $('.btn_back').on('touchend', function() {
         $.mobile.back();
     }
 });
-$('.btn_webhome').on('touchend', function() {
+$('.btn_webhome').on('click', function () {
     window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
 });
-$('.website').on('touchend', function() {
+$('.website').on('click', function () {
     window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
 });
-$(".menu_scan").on('touchend', function() {
+$(".menu_scan").on('click', function () { 
     $('.scan_step1_1').show();
     $('.scan_step1_2').hide();
     $('.scan_step1_3').hide();
     $('.scan_step1_4').hide();
     $.mobile.navigate('#scan');
-    window.history.pushState({}, '', '#scan');
+    //window.history.pushState({}, '', '#scan');
 });
-$(".menu_view").on('touchend', function() {
+$(".menu_view").on('click', function () {
     readCardInforListFromDB();
 });
-$(".menu_product").on('touchend', function() {
+$(".menu_product").on('click', function () {
     if(window.localStorage['userId']){
         $.mobile.navigate('#product_manager_center');
     }else{
         $.mobile.navigate("#product_manager");
     }
 });
-$('.scan_step1_1_btn').on('touchstart', function() {
+$('.scan_step1_1_btn').on('click', function () {
     $(this).toggleClass('scan_step1_1_btn_click');
 });
-$('.scan_step1_1_btn').on('touchend', function() {
+$('.scan_step1_1_btn').on('click', function () {
     $(this).toggleClass('scan_step1_1_btn_click');
     scan_next(1, 1);
     isRead = true;
@@ -944,10 +984,10 @@ $('.scan_step1_1_btn').on('touchend', function() {
         }
     }, 20000);
 });
-$('.scan_step1_3_instruction').on('touchstart', function() {
+$('.scan_step1_3_instruction').on('click', function () {
     $(this).toggleClass('general_btn_click');
 });
-$('.scan_step1_3_instruction').on('touchend', function() {
+$('.scan_step1_3_instruction').on('click', function () {
     $(this).toggleClass('general_btn_click');
     scan_next(1, 1);
     $('.scan_step1_3').hide();
@@ -962,10 +1002,10 @@ $('.scan_step1_3_instruction').on('touchend', function() {
         }
     }, 20000);
 });
-$('.scan_step1_4_instruction').on('touchstart', function() {
+$('.scan_step1_4_instruction').on('click', function () {
     $(this).toggleClass('general_btn_click');
 });
-$('.scan_step1_4_instruction').on('touchend', function() {
+$('.scan_step1_4_instruction').on('click', function () {
     $(this).toggleClass('general_btn_click');
     $('.scan_step2 input[name="product"]').val(nfcData[0]);
     $('.scan_step2 input[name="serial"]').val(nfcData[1]);
@@ -993,7 +1033,7 @@ $('.scan_step1_4_instruction').on('touchend', function() {
 });
 
 //new button for add id to my product only
-$(".scan_add_to_myproduct").on('touchend', function() {
+$(".scan_add_to_myproduct").on('click', function () {
     // validate data before add to my product.
 
     if(nfcData[1]){
@@ -1003,10 +1043,10 @@ $(".scan_add_to_myproduct").on('touchend', function() {
     }
 });
 
-$(".scan_step2_btn").on('touchstart', function() {
+$(".scan_step2_btn").on('click', function () {
     $(this).toggleClass('general_btn_click');
 });
-$(".scan_step2_btn").on('touchend', function() {
+$(".scan_step2_btn").on('click', function () {
     // validate data before save into card 
     if (validateForm()) {
         $.mobile.navigate('#scan_sync');
@@ -1023,33 +1063,30 @@ $(".scan_step2_btn").on('touchend', function() {
     }
     // $(this).toggleClass('general_btn_click').html('EDIT DATA');
 });
-$(".scan_step2_btn2").on("touchend", function() {
+$(".scan_step2_btn2").on("click", function () {
     $(".scan_read_btn").hide();
     $(".scan_step2_btn").show();
-    if (ifEmpytyTag) {
-        $('.scan_step2 input[name="product"]').textinput('enable');
-        $('.scan_step2 input[name="serial"]').textinput('enable');
-        $('.scan_step2 input[name="user"]').textinput('enable');
-        $('.scan_step2 input[name="prod"]').textinput('enable');
-        $('.scan_step2 input[name="start"]').textinput('enable');
-    } else if (nfcData[10] == "0" || nfcData[10] == null) {
-        $('.scan_step2 input[name="user"]').textinput('enable');
-        $('.scan_step2 input[name="start"]').textinput('enable');
-        nfcData[10] = '1';
-    } else {
-        $('.scan_step2 input[name="user"]').textinput('enable');
-    }
+    $('.scan_step2 input[name="product"]').textinput('enable');
+    $('.scan_step2 input[name="serial"]').textinput('enable');
+    $('.scan_step2 input[name="user"]').textinput('enable');
+    $('.scan_step2 input[name="prod"]').textinput('enable');
+    $('.scan_step2 input[name="start"]').textinput('enable');
+    $('.scan_step2 input[name="sav1"]').textinput('enable');
+    $('.scan_step2 input[name="sav2"]').textinput('enable');
+    $('.scan_step2 input[name="sav3"]').textinput('enable');
+    $('.scan_step2 input[name="sav4"]').textinput('enable');
+    $('.scan_step2 input[name="sav5"]').textinput('enable');
     showClearReadInput();
     $('.scan_step3_1').show();
     $('.scan_step3_2').hide();
     $('.scan_step3_3').hide();
     $('.scan_step3_4').hide();
 });
-$(".scan_step3_1_btn").on('touchstart', function() {
+$(".scan_step3_1_btn").on('click', function () {
     $(this).toggleClass('scan_step3_1_btn_click');
 });
 //register listener for syncronize functionality
-$(".scan_step3_1_btn").on('touchend', function() {
+$(".scan_step3_1_btn").on('click', function () {
     $(this).toggleClass('scan_step3_1_btn_click');
     nfcData[0] = $('.scan_step2 input[name="product"]').val();
     nfcData[1] = $('.scan_step2 input[name="serial"]').val();
@@ -1078,10 +1115,10 @@ $(".scan_step3_1_btn").on('touchend', function() {
         }
     }, 20000);
 });
-$(".scan_step3_3_instruction").on('touchstart', function() {
+$(".scan_step3_3_instruction").on('click', function () {
     $(this).toggleClass('scan_step3_1_btn_click');
 });
-$(".scan_step3_3_instruction").on('touchend', function() {
+$(".scan_step3_3_instruction").on('click', function () {
     $(this).toggleClass('scan_step3_1_btn_click');
     message = [
         ndef.mimeMediaRecord('mime/com.softtek.delta', nfc.stringToBytes(nfcData.join("~"))),
@@ -1099,13 +1136,13 @@ $(".scan_step3_3_instruction").on('touchend', function() {
         }
     }, 20000);
 });
-$(".scan_step3_4_instruction").on('touchend', function() {
+$(".scan_step3_4_instruction").on('click', function () {
     readCardInforListFromDB(true);//set true if need to show which one has been updated
 });
-$(".backToViewMyProducts").on('touchstart', function() {
+$(".backToViewMyProducts").on('click', function () {
     $(this).toggleClass('general_btn_click');
 });
-$(".backToViewMyProducts").on('touchend', function() {
+$(".backToViewMyProducts").on('click', function () {
     $(this).toggleClass('general_btn_click');
     myConfirm('confirmToDeleteRecord',null,function(index){
         if(index==1){
@@ -1114,63 +1151,67 @@ $(".backToViewMyProducts").on('touchend', function() {
     });
 });
 //setting
-$('.menu_language').on('touchstart', function() {
+$('.menu_language').on('click', function () {
     $(this).toggleClass('general_btn_click');
 });
-$('.menu_language').on('touchend', function() {
+$('.menu_language').on('click', function () {
     $(this).toggleClass('general_btn_click');
     initLanguageSelection();
     $("#language_setting").popup('open');
 });
-$('.menu_use').on('touchstart', function() {
+$('.menu_use').on('click', function () {
     $(this).toggleClass('general_btn_click');
 });
-$('.menu_use').on('touchend', function() {
+$('.menu_use').on('click', function () {
     $(this).toggleClass('general_btn_click');
     window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
 });
-$('.menu_update').on('touchstart', function() {
+$('.menu_update').on('click', function () {
     $(this).toggleClass('general_btn_click');
 });
-$('.menu_update').on('touchend', function() {
+$('.menu_update').on('click', function () {
     $(this).toggleClass('general_btn_click');
-    $.mobile.navigate("#product_manager");
+    if (window.localStorage['userId']) {
+        $.mobile.navigate('#product_manager_center');
+    } else {
+        $.mobile.navigate("#product_manager");
+    }
 });
-$('.menu_about').on('touchstart', function() {
+$('.menu_about').on('click', function () {
     $(this).toggleClass('general_btn_click');
 });
-$('.menu_about').on('touchend', function() {
+$('.menu_about').on('click', function () {
     $(this).toggleClass('general_btn_click');
     myAlert('version', ['1.1.0']);
 });
 //setting end
 //product manager
-$(".product_manager").on('touchend', function() {
+$(".product_manager").on('click', function () {
     if(window.localStorage['userId']){
         $.mobile.navigate('#product_manager_center');
     }else{
         $.mobile.navigate("#product_manager");
     }
 });
-$('.access_my').on('touchstart', function() {
+$('.access_my').on('click', function () {
     $(this).toggleClass('general_btn_click');
 });
-$('.access_my').on('touchend', function() {
+$('.access_my').on('click', function () {
     $(this).toggleClass('general_btn_click');
     // window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
     window.open(web_index + "?userId=" + window.localStorage['userId'], '_blank', 'location=yes');
 });
-$('.upload_my').on('touchstart', function() {
+$('.upload_my').on('click', function () {
     $(this).toggleClass('general_btn_click');
 });
-$('.upload_my').on('touchend', function() {
+$('.upload_my').on('click', function () {
     $(this).toggleClass('general_btn_click');
     prepareSendingData();
 });
-$('.backup_my').on('touchstart', function() {
+$('.backup_my').on('click', function () {
     $(this).toggleClass('general_btn_click');
 });
-$('.backup_my').on('touchend', function() {
+$('.backup_my').on('click', function () {
     $(this).toggleClass('general_btn_click');
     var uploadLoader = $.mobile.loading("show", {
             text: "foo",
@@ -1200,16 +1241,16 @@ $('.backup_my').on('touchend', function() {
         }
     });
 });
-$('.status_my').on('touchstart', function() {
+$('.status_my').on('click', function () {
     $(this).toggleClass('general_btn_click');
 });
-$('.status_my').on('touchend', function() {
+$('.status_my').on('click', function () {
     $(this).toggleClass('general_btn_click');
     $.mobile.navigate('#ppe_status');
 });
 //product manager end
 //user login and registion
-$(".validate_login").on('touchend', function() {
+$(".validate_login").on('click', function () {
 
     if(!checkConnection()) {
         return;
@@ -1232,7 +1273,7 @@ $(".validate_login").on('touchend', function() {
         }
     });
 });
-$(".validate_registion").on('touchend', function() {
+$(".validate_registion").on('click', function () {
     var firstName = $("#user_registion #firstName").val(),
         lastName = $("#user_registion #lastName").val(),
         email = $("#user_registion #email").val(),
@@ -1242,7 +1283,7 @@ $(".validate_registion").on('touchend', function() {
         confirm = $("#user_registion #passwordConfirm").val();
 		
 	//Delta Type for Maintenance version
-	var deltaType = 0;
+	var deltaType = 1;
 	
     if(firstName==""||lastName==""||email==""||login==""||company==""||password==""||confirm==""){
         myAlert('creationMsgMissing');
@@ -1334,6 +1375,7 @@ function checkConnection() {
 //end
 //navigate
 var app = {
+    // Application Constructor
     initialize: function() {
 
         this.bindEvents();
@@ -1358,10 +1400,15 @@ var app = {
         // console.log(device.platform);
         // console.log(device.uuid);
         // console.log(device.version);
+        //navigator.splashscreen.hide();
+        navigator.splashscreen.show();
+        //setTimeout(function () {
         navigator.splashscreen.hide();
+        //}, 2000);
         registeMimeTypeListener(mimeCallBack, mimeSuccessCallBack);
-        registeTagListener(tagCallBack, tagSuccessCallBack);
 
+        // this is only works for android nfc.addTagDiscoveredListener
+        //registeTagListener(tagCallBack, tagSuccessCallBack); 
 
     }
 };

@@ -1,12 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="format-detection" content="telephone=no"/>
-    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-    <meta name="viewport"
-          content="user-scalable=no, initial-scale=2, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"/>
-    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!--
+        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
+        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
     <title>Delta ID Card</title>
     <link rel="stylesheet" href="css/jquery.mobile-1.4.3.min.css">
     <!--<link rel="stylesheet" href="css/mobiscroll.custom-2.6.2.min.css" type="text/css"/>-->
@@ -547,7 +550,7 @@ width: 95%;margin: 0 auto;color:white;">
         <div class="row generic_btn menu_about i_about">About</div>
     </div>
 </div>
-<div data-role="page" id="product_manager" class="basic container">
+    <div data-role="page" id="product_manager" class="basic container">
     <div class="row" style="">
         <div class="col-xs-2 btn_webhome"></div>
         <div class="col-xs-8 pull-right btn_navigator">
