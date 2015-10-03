@@ -30,10 +30,10 @@ var ifTagFound = false,
     tagId,
     myAlert = function(key,param,callback){
         var fun = callback?callback:function(){},
-        msg = window.i18n[window.localStorage['language']][key];
-        if(param){
-            for(var i in param){
-                msg = msg.replace("{"+i+"}",param[i]);
+        msg = window.i18n[window.localStorage['language']][key];        
+        if (param) {
+            for(var i in param){                
+                msg = msg.replace("{" + i + "}", param[i]);
             }
         }
         navigator.notification.alert(msg, fun, window.i18n[window.localStorage['language']]['alert'],window.i18n[window.localStorage['language']]['ok']);
@@ -503,9 +503,13 @@ function validateForm() {
     }
     if (product.length > 10) {
         myAlert('productMaxLength');
+        $('.scan_step2 input[name="product"]').val("");
+        $('.scan_step2 input[name="product"]').focus();
         return false;
     } else if(!isAlphanumeric(product)){
-        myAlert('invalidInput', 'Product');
+        myAlert('invalidInput', ['Product']);
+        $('.scan_step2 input[name="product"]').val("");
+        $('.scan_step2 input[name="product"]').focus();
         return false;
     }
     if (serial === "") {
@@ -514,13 +518,19 @@ function validateForm() {
     }
     if (serial.length > 12) {
         myAlert('serialMaxLength');
+        $('.scan_step2 input[name="serial"]').val("");
+        $('.scan_step2 input[name="serial"]').focus();
         return false;
     } else if(!isAlphanumeric(serial)){
-        myAlert('invalidInput', 'serial');
+        myAlert('invalidInput', ['ID']);
+        $('.scan_step2 input[name="serial"]').val("");
+        $('.scan_step2 input[name="serial"]').focus();
         return false;
     }
     if (user.length > 15) {
         myAlert('userMaxLength');
+        $('.scan_step2 input[name="user"]').val("");
+        $('.scan_step2 input[name="user"]').focus();
         return false;
     }
     if (start == "" && user != "") {
@@ -530,11 +540,15 @@ function validateForm() {
 
     if(!isAlphanumeric(user)){
         if(!isChinese(user)){
-            myAlert('invalidInput', 'User');
+            myAlert('invalidInput', ['User']);
+            $('.scan_step2 input[name="user"]').val("");
+            $('.scan_step2 input[name="user"]').focus();
             return false;
         } else {
             if(user.length>3){
-                 myAlert('userMaxLength');
+                myAlert('userMaxLength');
+                $('.scan_step2 input[name="user"]').val("");
+                $('.scan_step2 input[name="user"]').focus();
                 return false;
             }
         }
@@ -687,10 +701,14 @@ function getStringFromCharCode(str) {
  */
 
 function clearReadInput(obj) {
-    if($(obj).parent().find('input').val()!=""){
-        if (myConfirm('ifDelete')) {
-            $(obj).parent().find('input').val('');
-        }
+    
+    var element = $(obj).parent().find('input');
+    var answer;
+
+    if (element.val() != "") {        
+        if (myConfirm('ifDelete')== true) {
+            element.val("");
+        }        
     }
 }
 
@@ -1331,6 +1349,7 @@ function checkConnection() {
 //end
 //navigate
 var app = {
+    // Application Constructor
     initialize: function() {
 
         this.bindEvents();
