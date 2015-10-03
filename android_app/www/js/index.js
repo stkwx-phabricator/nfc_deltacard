@@ -113,6 +113,7 @@ var ifTagFound = false,
                     $(".scan_step2_btn").hide();
                     $(".scan_read_btn").show();
                     $.mobile.navigate('#scan_read');
+                    $('#scan_read').attr("class", "basic container");
                 }, 2000);
                 mimeCallBack = function() {};
                 tagCallBack = function() {};
@@ -210,7 +211,8 @@ var ifTagFound = false,
             }
         }
     },
-    mimeCallBack = function(nfcEvent) {
+    mimeCallBack = function (nfcEvent) {
+        //alert("in mimeCallBack isNfcEnable = " + isNfcEnable + " isRead=" + isRead);
         if (isNfcEnable) {
             if (isRead) {
                 callBackGroup.tagRead.mimeCallBack(nfcEvent);
@@ -700,15 +702,21 @@ function getStringFromCharCode(str) {
  end
  */
 
-function clearReadInput(obj) {
-    
+function clearReadInput(e) {
+    var obj = e.target;
     var element = $(obj).parent().find('input');
     var answer;
-
-    if (element.val() != "") {        
-        if (myConfirm('ifDelete')== true) {
-            element.val("");
-        }        
+    if (element.val() != "") {
+        /*
+       if (myConfirm('ifDelete')) {
+            element.val('');
+       }*/
+        myConfirm('ifDelete', null, function (index) {
+            //alert("comfirmation choose:" + index);
+           if (index == 1) {
+               element.val('');
+           }
+       });
     }
 }
 
@@ -730,7 +738,8 @@ function showClearReadInput() {
 function confirmToSelectDate(){
     var selectedMonth = parseInt($("select[name='month_tobe_selected']").val()),
      selectedYear = parseInt($("select[name='year_tobe_selected']").val()),
-     value = selectedMonth+"/"+selectedYear;
+     value = selectedMonth + "/" + selectedYear;
+    //alert("confirmToSelectDate" + value);
     if (window.currentDateName === "start") {
         var proDate = $('.scan_step2 input[name="prod"]').val().split("/");
         if (selectedYear<parseInt(proDate[1])||(selectedYear==parseInt(proDate[1])&&selectedMonth<parseInt(proDate[0]))) {
@@ -742,12 +751,17 @@ function confirmToSelectDate(){
             $("#date_picker").popup('close');
         };
     }
+   // alert("selected date = " + value);
     $(".scan_step2 input[name='"+window.currentDateName+"']").val(value);
     $("#date_picker").popup('close');
 }
 /**
  * for date picker end
  */
+$(".btn_confirmSelectDate").on('click', confirmToSelectDate);
+
+$(".glyphicon-remove").on('click', function (e) { clearReadInput(e);});
+
 $('input[name="changeLang"]').change(changeLanguage);
 //initialize position
 var bodyHeight = $('body').height(),
@@ -833,6 +847,7 @@ $(".scan_step2 .dateInput").val("").on('touchend',function(e){
 })();
 //navigator
 $(window).on('navigate', function(e, data) {
+    //alert("navigate - " + data.state.direction + " - " + data.state.hash);
     if (data.state.direction == null && data.state.hash === "#scan") { //when back to #scan page
         $(".scan_step1_1").show(20);
         $(".scan_step1_2").hide(20);
@@ -881,6 +896,7 @@ $('.btn_back').on('touchstart', function() {
 $('.btn_back').on('touchend', function() {
     $(this).css('color', 'white');
     if (window.location.hash == "#scan_read") {
+        //alert("goto scan_read");
         if (!$('.scan_step2 input[name="user"]')[0].disabled) {
             $('.scan_step2 input[name="product"]').attr('disabled', 'disabled');
             $('.scan_step2 input[name="serial"]').attr('disabled', 'disabled');
@@ -933,10 +949,11 @@ $(".menu_scan").on('touchend', function() {
     $('.scan_step1_3').hide();
     $('.scan_step1_4').hide();
     $.mobile.navigate('#scan');
-    window.history.pushState({}, '', '#scan');
+    //window.history.pushState({}, '', '#scan');
 });
 $(".menu_view").on('touchend', function() {
     readCardInforListFromDB();
+	$.mobile.navigate("#myproducts");
 });
 $(".menu_product").on('touchend', function() {
     if(window.localStorage['userId']){
@@ -1087,8 +1104,8 @@ $(".scan_step3_1_btn").on('touchend', function() {
     scan_next(3, 5);
     isRead = false;
     isNfcEnable = true;
-    timeoutId = setTimeout(function() {
-        if (!ifTagFound) {
+    timeoutId = setTimeout(function () {
+       if (!ifTagFound) {
             isNfcEnable = false;
             scan_next(3, 3);
         } else {
@@ -1152,14 +1169,18 @@ $('.menu_update').on('touchstart', function() {
 });
 $('.menu_update').on('touchend', function() {
     $(this).toggleClass('general_btn_click');
-    $.mobile.navigate("#product_manager");
+    if (window.localStorage['userId']) {
+        $.mobile.navigate('#product_manager_center');
+    } else {
+        $.mobile.navigate("#product_manager");
+    }
 });
 $('.menu_about').on('touchstart', function() {
     $(this).toggleClass('general_btn_click');
 });
 $('.menu_about').on('touchend', function() {
     $(this).toggleClass('general_btn_click');
-    myAlert('version', ['1.1.0']);
+    myAlert('version', ['1.2.1']);
 });
 //setting end
 //product manager
