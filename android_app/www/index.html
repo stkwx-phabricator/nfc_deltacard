@@ -11,8 +11,7 @@
     -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
     <title>Delta ID Card</title>
-    <link rel="stylesheet" href="css/jquery.mobile-1.4.3.min.css">
-    <!--<link rel="stylesheet" href="css/mobiscroll.custom-2.6.2.min.css" type="text/css"/>-->
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.3.min.css">    
     <link rel="stylesheet" href="css/mobiscroll.custom-2.13.2.min.css" type="text/css"/>
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
     <link rel="stylesheet" href="css/index.css">
@@ -108,8 +107,8 @@
         </div>
     </div>
     <div class="row">
-        <div style="position:absolute;width:100%;top:35%;">
-            <div class="scan_step2" style="">
+        <div style="position:absolute;width:100%;top:20%;">
+            <div class="scan_step2" style="border:2px solid yellow">
                 <form class="form-horizontal" role="form" style="margin:1em 0em 0em 2em;">
                     <div class="form-group form-group-sm">
                         <label class="col-xs-3 i_product">Product:</label>
@@ -118,7 +117,7 @@
                             <input type="text" class="form-control input-sm" disabled name="product">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; top: 1.2em; padding-right: 0.6em;display: none;"
+                              style="font-size: 2.5em; color: #ffffff; top: 1.2em; padding-right: 2.0em;display: none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
                     <div class="form-group form-group-sm">
@@ -128,20 +127,20 @@
                             <input type="text" class="form-control input-sm" disabled name="serial">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; top: 2.8em; padding-right: 0.6em;display: none;"
+                              style="font-size: 2.5em; color: #ffffff; top: 2.8em; padding-right: 2.0em;display: none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group" style="margin-bottom: 1em;">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-3 i_user">User:</label>
 
                         <div class="col-xs-8">
                             <input type="text" class="form-control input-sm" disabled name="user">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; top: 4.4em; padding-right: 0.6em;display: none;"
+                              style="font-size: 2.5em; color: #ffffff; top: 4.4em; padding-right: 2.0em;display: none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_prod" style="text-align: right;">Production:</label>
 
                         <div class="col-xs-4">
@@ -150,10 +149,10 @@
                                    onchange="if(this.value!=''){$(this).parent().parent().find('span').fadeIn();}">
                         </div>
                             <span class="glyphicon glyphicon-remove form-control-feedback"
-                                  style="font-size: 2.5em; color: #ffffff; top: 6em; padding-right: 0.6em;display: none;"
+                                  style="font-size: 2.5em; color: #ffffff; top: 6em; padding-right: 2.0em;display: none;"
                                   ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_start" style="text-align: right;">First Use:</label>
 
                         <div class="col-xs-4">
@@ -161,10 +160,10 @@
                                    name="start"/>
                         </div>
                             <span class="glyphicon glyphicon-remove form-control-feedback"
-                                  style="font-size: 2.5em; color: #ffffff; top: 7.5em; padding-right: 0.6em;display: none;"
+                                  style="font-size: 2.5em; color: #ffffff; top: 7.5em; padding-right: 2.0em;display: none;"
                                   ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_sav1" style="text-align: right;">Maintenance 1:</label>
 
                         <div class="col-xs-4">
@@ -172,10 +171,10 @@
                                    name="sav1">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; top: 9em; padding-right: 0.6em;display: none;"
+                              style="font-size: 2.5em; color: #ffffff; top: 9em; padding-right: 2.0em;display: none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_sav2" style="text-align: right;">Maintenance 2:</label>
 
                         <div class="col-xs-4">
@@ -183,10 +182,10 @@
                                    name="sav2">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; top: 10.5em; padding-right: 0.6em;display: none;"
+                              style="font-size: 2.5em; color: #ffffff; top: 10.5em; padding-right: 2.0em;display: none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_sav3" style="text-align: right;">Maintenance 3:</label>
 
                         <div class="col-xs-4">
@@ -194,10 +193,10 @@
                                    name="sav3">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; top: 12em; padding-right: 0.6em;display: none;"
+                              style="font-size: 2.5em; color: #ffffff; top: 12em; padding-right: 2.0em;display: none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_sav4" style="text-align: right;">Maintenance 4:</label>
 
                         <div class="col-xs-4">
@@ -205,10 +204,10 @@
                                    name="sav4">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; top: 13.5em; padding-right: 0.6em;display: none;"
+                              style="font-size: 2.5em; color: #ffffff; top: 13.5em; padding-right: 2.0em;display: none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_sav5" style="text-align: right;">Maintenance 5:</label>
 
                         <div class="col-xs-4">
@@ -216,7 +215,7 @@
                                    name="sav5">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; top: 15em; padding-right: 0.6em;display: none;"
+                              style="font-size: 2.5em; color: #ffffff; top: 15em; padding-right: 2.0em;display: none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
                     <div data-role="popup" id="date_picker" data-overlay-theme="b" data-theme="b" data-dismissible="false"
@@ -344,19 +343,18 @@
             </div>
         </div>
     </div>
-    <div class="row" style="position: absolute;width: 100%;top:30%;">
-        <table class="table table-condensed" style="margin-bottom:0em;background-color: black;
-width: 95%;margin: 0 auto;color:white;">
+    <div class="row" style="position: absolute; width: 100%; top:20%;">
+        <table class="table table-condensed" style="margin-bottom: 0em; background-color: black; width: 95%; margin: 0 auto; color:white; border:2px solid yellow">
             <thead style="">
             <tr>
                 <th width="10%"></th>
-                <th width="37%" style="text-align: center;" class="i_product">Product</th>
-                <th width="37%" style="text-align: center;">ID</th>
+                <th width="40%" style="text-align: center;" class="i_product">Product</th>
+                <th width="40%" style="text-align: center;">ID</th>
                 <th width="10%"></th>
             </tr>
             </thead>
         </table>
-        <div class="productList">
+        <div class="productList" style="border-left:2px solid yellow; border-right:2px solid yellow; border-bottom: 2px solid yellow">
             <table class="table table-condensed">
                 <tbody>
                 <tr>
@@ -390,8 +388,8 @@ width: 95%;margin: 0 auto;color:white;">
             </div>
         </div>
     </div>
-    <div class="row" style="position: absolute;width: 100%;top:35%;">
-        <div class="myproducts_detail_form">
+    <div class="row" style="position: absolute;width: 100%;top:20%;">
+        <div class="myproducts_detail_form" style="border:2px solid yellow">
                 <form class="form-horizontal" role="form" style="margin:1em 0em 0em 2em;">
                     <div class="form-group form-group-sm">
                         <label class="col-xs-3 i_product">Product:</label>
@@ -400,7 +398,7 @@ width: 95%;margin: 0 auto;color:white;">
                             <input type="text" class="form-control input-sm" disabled name="product">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; top: 0; padding-top: 0.4em; right: 0; padding-right: 0.6em;display:none;"
+                              style="font-size: 2.5em; color: #ffffff; top: 0; padding-top: 0.4em; right: 0; padding-right: 2.0em;display:none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
                     <div class="form-group form-group-sm">
@@ -410,20 +408,20 @@ width: 95%;margin: 0 auto;color:white;">
                             <input type="text" class="form-control input-sm" disabled name="serial">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; padding-top: 2.2em; right: 0; padding-right: 0.6em;display:none;"
+                              style="font-size: 2.5em; color: #ffffff; padding-top: 2.2em; right: 0; padding-right: 2.0em;display:none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group" style="margin-bottom: 1em;">
+                    <div class="form-group form-group-sm" style="margin-bottom: 1em;">
                         <label class="col-xs-3 i_user">User:</label>
 
                         <div class="col-xs-8">
                             <input type="text" class="form-control input-sm" disabled name="user">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; padding-top: 0.8em; right: 0; padding-right: 0.6em;display:none;"
+                              style="font-size: 2.5em; color: #ffffff; padding-top: 0.8em; right: 0; padding-right: 2.0em;display:none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_prod" style="text-align: right;">Production:</label>
 
                         <div class="col-xs-4">
@@ -432,10 +430,10 @@ width: 95%;margin: 0 auto;color:white;">
                                    onchange="if(this.value!=''){$(this).parent().parent().find('span').fadeIn();}">
                         </div>
                             <span class="glyphicon glyphicon-remove form-control-feedback"
-                                  style="font-size: 2.5em; color: #ffffff; padding-top: 3.8em; right: 0; padding-right: 0.6em;display:none;"
+                                  style="font-size: 2.5em; color: #ffffff; padding-top: 3.8em; right: 0; padding-right: 2.0em;display:none;"
                                   ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_start" style="text-align: right;">First Use:</label>
 
                         <div class="col-xs-4">
@@ -444,10 +442,10 @@ width: 95%;margin: 0 auto;color:white;">
                                    onchange="if(this.value!=''){$(this).parent().parent().find('span').show();}"/>
                         </div>
                             <span class="glyphicon glyphicon-remove form-control-feedback"
-                                  style="font-size: 2.5em; color: #ffffff; padding-top: 5.4em; right: 0; padding-right: 0.6em;display:none;"
+                                  style="font-size: 2.5em; color: #ffffff; padding-top: 5.4em; right: 0; padding-right: 2.0em;display:none;"
                                   ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_sav1" style="text-align: right;">Maintenance 1:</label>
 
                         <div class="col-xs-4">
@@ -455,10 +453,10 @@ width: 95%;margin: 0 auto;color:white;">
                                    name="sav1">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; padding-top: 6.8em; right: 0; padding-right: 0.6em;display:none;"
+                              style="font-size: 2.5em; color: #ffffff; padding-top: 6.8em; right: 0; padding-right: 2.0em;display:none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_sav2" style="text-align: right;">Maintenance 2:</label>
 
                         <div class="col-xs-4">
@@ -466,10 +464,10 @@ width: 95%;margin: 0 auto;color:white;">
                                    name="sav2">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; padding-top: 8.3em; right: 0; padding-right: 0.6em;display:none;"
+                              style="font-size: 2.5em; color: #ffffff; padding-top: 8.3em; right: 0; padding-right: 2.0em;display:none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_sav3" style="text-align: right;">Maintenance 3:</label>
 
                         <div class="col-xs-4">
@@ -477,10 +475,10 @@ width: 95%;margin: 0 auto;color:white;">
                                    name="sav3">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; padding-top: 9.7em; right: 0; padding-right: 0.6em;display:none;"
+                              style="font-size: 2.5em; color: #ffffff; padding-top: 9.7em; right: 0; padding-right: 2.0em;display:none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_sav4" style="text-align: right;">Maintenance 4:</label>
 
                         <div class="col-xs-4">
@@ -488,10 +486,10 @@ width: 95%;margin: 0 auto;color:white;">
                                    name="sav4">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; padding-top: 11.1em; right: 0; padding-right: 0.6em;display:none;"
+                              style="font-size: 2.5em; color: #ffffff; padding-top: 11.1em; right: 0; padding-right: 2.0em;display:none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group-sm">
                         <label class="col-xs-7 i_sav5" style="text-align: right;">Maintenance 5:</label>
 
                         <div class="col-xs-4">
@@ -499,7 +497,7 @@ width: 95%;margin: 0 auto;color:white;">
                                    name="sav5">
                         </div>
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                              style="font-size: 2.5em; color: #ffffff; padding-top: 12.6em; right: 0; padding-right: 0.6em;display:none;"
+                              style="font-size: 2.5em; color: #ffffff; padding-top: 12.6em; right: 0; padding-right: 2.0em;display:none;"
                               ontouchend="clearReadInput(this)"></span>
                     </div>
                 </form>
@@ -784,7 +782,6 @@ width: 95%;margin: 0 auto;color:white;">
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/jquery.mobile-1.4.3.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
-<!--<script type="text/javascript" src="js/mobiscroll.custom-2.6.2.min.js"></script>-->
 <script type="text/javascript" src="js/mobiscroll.custom-2.13.2.min.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
