@@ -5,6 +5,10 @@ var web_index = "http://37.187.51.70/nfc_deltaweb/mindex.php";
 // var web_server = "http://192.168.2.100/nfc_deltaweb"; 
 // var web_index = "http://192.168.2.100/nfc_deltaweb/mindex.php"; 
 
+
+/*maintenance verion flag*/
+var maintenance = true;
+
 //global varity
 var ifTagFound = false,
     ifEmpytyTag = false,
@@ -172,7 +176,8 @@ var ifTagFound = false,
             }
         },
         tagWrite: {
-            mimeCallBack: function(nfcEvent) {
+            mimeCallBack: function (nfcEvent) {
+                //alert("writing into data");
                 clearTimeout(timeoutId);                
                 var newTagId;
                 var tag = nfcEvent.tag,
@@ -233,7 +238,8 @@ var ifTagFound = false,
             }
         }
     },
-    mimeCallBack = function(nfcEvent) {
+    mimeCallBack = function (nfcEvent) {
+        //alert("in mimeCallBack isNfcEnable = " + isNfcEnable + " isRead=" + isRead);
         if (isNfcEnable) {
             if (isRead) {
                 callBackGroup.tagRead.mimeCallBack(nfcEvent);
@@ -244,7 +250,7 @@ var ifTagFound = false,
         }
     },
     mimeSuccessCallBack = function() {},
-    tagCallBack = function(nfcEvent) {
+    tagCallBack = function (nfcEvent) {
         if (isNfcEnable) {
             if (isRead) {
                 callBackGroup.tagRead.tagCallBack(nfcEvent);
@@ -738,15 +744,21 @@ function getStringFromCharCode(str) {
  end
  */
 
-function clearReadInput(obj) {
-    
+function clearReadInput(e) {
+    var obj = e.target;
     var element = $(obj).parent().find('input');
     var answer;
-
-    if (element.val() != "") {        
-        if (myConfirm('ifDelete')== true) {
-            element.val("");
-        }        
+    if (element.val() != "") {
+        /*
+       if (myConfirm('ifDelete')) {
+            element.val('');
+       }*/
+        myConfirm('ifDelete', null, function (index) {
+            //alert("comfirmation choose:" + index);
+           if (index == 1) {
+               element.val('');
+           }
+       });
     }
 }
 
@@ -768,7 +780,8 @@ function showClearReadInput() {
 function confirmToSelectDate(){
     var selectedMonth = parseInt($("select[name='month_tobe_selected']").val()),
      selectedYear = parseInt($("select[name='year_tobe_selected']").val()),
-     value = selectedMonth+"/"+selectedYear;
+     value = selectedMonth + "/" + selectedYear;
+    //alert("confirmToSelectDate" + value);
     if (window.currentDateName === "start") {
         var proDate = $('.scan_step2 input[name="prod"]').val().split("/");
         if (selectedYear<parseInt(proDate[1])||(selectedYear==parseInt(proDate[1])&&selectedMonth<parseInt(proDate[0]))) {
@@ -780,12 +793,17 @@ function confirmToSelectDate(){
             $("#date_picker").popup('close');
         };
     }
+   // alert("selected date = " + value);
     $(".scan_step2 input[name='"+window.currentDateName+"']").val(value);
     $("#date_picker").popup('close');
 }
 /**
  * for date picker end
  */
+$(".btn_confirmSelectDate").on('click', confirmToSelectDate);
+
+$(".glyphicon-remove").on('click', function (e) { clearReadInput(e);});
+
 $('input[name="changeLang"]').change(changeLanguage);
 //initialize position
 var bodyHeight = $('body').height(),
@@ -1084,16 +1102,34 @@ $(".scan_step2_btn").on('click', function () {
 $(".scan_step2_btn2").on("click", function () {
     $(".scan_read_btn").hide();
     $(".scan_step2_btn").show();
-    $('.scan_step2 input[name="product"]').textinput('enable');
-    $('.scan_step2 input[name="serial"]').textinput('enable');
-    $('.scan_step2 input[name="user"]').textinput('enable');
-    $('.scan_step2 input[name="prod"]').textinput('enable');
-    $('.scan_step2 input[name="start"]').textinput('enable');
-    $('.scan_step2 input[name="sav1"]').textinput('enable');
-    $('.scan_step2 input[name="sav2"]').textinput('enable');
-    $('.scan_step2 input[name="sav3"]').textinput('enable');
-    $('.scan_step2 input[name="sav4"]').textinput('enable');
-    $('.scan_step2 input[name="sav5"]').textinput('enable');
+
+    if (maintenance) {
+        $('.scan_step2 input[name="product"]').textinput('enable');
+        $('.scan_step2 input[name="serial"]').textinput('enable');
+        $('.scan_step2 input[name="user"]').textinput('enable');
+        $('.scan_step2 input[name="prod"]').textinput('enable');
+        $('.scan_step2 input[name="start"]').textinput('enable');
+        $('.scan_step2 input[name="sav1"]').textinput('enable');
+        $('.scan_step2 input[name="sav2"]').textinput('enable');
+        $('.scan_step2 input[name="sav3"]').textinput('enable');
+        $('.scan_step2 input[name="sav4"]').textinput('enable');
+        $('.scan_step2 input[name="sav5"]').textinput('enable');
+    } else {
+        if (ifEmpytyTag) {
+            $('.scan_step2 input[name="product"]').textinput('enable');
+            $('.scan_step2 input[name="serial"]').textinput('enable');
+            $('.scan_step2 input[name="user"]').textinput('enable');
+            $('.scan_step2 input[name="prod"]').textinput('enable');
+            $('.scan_step2 input[name="start"]').textinput('enable');
+        } else if (nfcData[10] == "0" || nfcData[10] == null) {
+            $('.scan_step2 input[name="user"]').textinput('enable');
+            $('.scan_step2 input[name="start"]').textinput('enable');
+            nfcData[10] = '1';
+        } else {
+            $('.scan_step2 input[name="user"]').textinput('enable');
+        }
+    }
+
     showClearReadInput();
     $('.scan_step3_1').show();
     $('.scan_step3_2').hide();
@@ -1121,11 +1157,12 @@ $(".scan_step3_1_btn").on('click', function () {
         ndef.mimeMediaRecord('mime/com.softtek.delta', nfc.stringToBytes(nfcData.join("~"))),
         ndef.uriRecord("http://www.deltaplus.eu")
     ];
+    
     scan_next(3, 5);
-    isRead = false;
+	isRead = false;
     isNfcEnable = true;
-    timeoutId = setTimeout(function() {
-        if (!ifTagFound) {
+    timeoutId = setTimeout(function () {
+       if (!ifTagFound) {
             isNfcEnable = false;
             scan_next(3, 3);
         } else {
