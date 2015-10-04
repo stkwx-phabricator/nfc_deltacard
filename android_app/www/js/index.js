@@ -126,7 +126,8 @@ var ifTagFound = false,
                     $(".scan_step2_btn").hide();
                     $(".scan_read_btn").show();
                     $.mobile.navigate('#scan_read');
-                    $('#scan_read').attr("class", "basic container");
+                    $('#scan_read').attr("class", "basic container");                    
+                    showClearReadInput();                    
                 }, 2000);
                 mimeCallBack = function() {};
                 tagCallBack = function() {};
@@ -166,7 +167,8 @@ var ifTagFound = false,
                     $('.scan_step2 input[name="sav5"]').attr('disabled', 'disabled');
                     $(".scan_step2_btn").hide();
                     $(".scan_read_btn").show();
-                    $.mobile.navigate('#scan_read');
+                    $.mobile.navigate('#scan_read');                    
+                    showClearReadInput();                    
                 }, 2000);
                 mimeCallBack = function() {};
                 tagCallBack = function() {};
@@ -771,6 +773,8 @@ function showClearReadInput() {
         var input = $(this).parent().find('input');
         if (!input[0].disabled) {
             $(this).show();
+        } else {
+            $(this).hide();
         }
     });
 }
@@ -880,7 +884,7 @@ $(".scan_step2 .dateInput").val("").on('touchend',function(e){
     var curYear = new Date().getFullYear(),
         options = [],
         curMonth = new Date().getMonth()+1;
-    for(var i = (curYear-5);i<=(curYear+5);i++){
+    for (var i = (curYear - 5) ; i <= (curYear + 5) ; i++) {
         options.push("<option value='"+i+"'>"+i+"</option>");
     }
     $("select[name='year_tobe_selected']").html(options).val(curYear);
@@ -901,7 +905,7 @@ $(window).on('navigate', function(e, data) {
         $(".scan_step3_1").show(20);
         $(".scan_step3_2").hide(20);
         $(".scan_step3_3").hide(20);
-        $(".scan_step3_4").hide(20);
+        $(".scan_step3_4").hide(20);        
         clearTimeout(timeoutId);
     }
 });
@@ -936,7 +940,7 @@ $('.btn_back').on('touchstart', function() {
     $(this).css('color', 'yellow');
 });
 $('.btn_back').on('touchend', function() {
-    $(this).css('color', 'white');
+    $(this).css('color', 'white');    
     if (window.location.hash == "#scan_read") {
         //alert("goto scan_read");
         if (!$('.scan_step2 input[name="user"]')[0].disabled) {
@@ -952,8 +956,13 @@ $('.btn_back').on('touchend', function() {
             $('.scan_step2 input[name="sav5"]').attr('disabled', 'disabled');
             $(".scan_step2_btn").hide();
             $(".scan_read_btn").show();
+            showClearReadInput();
         } else {
             $.mobile.navigate("#scan");
+            $('.scan_step1_1').show();
+            $('.scan_step1_2').hide();
+            $('.scan_step1_3').hide();
+            $('.scan_step1_4').hide();
         }
     } else if (window.location.hash == "#myproducts") {
         if (hasViewMyPro) {
@@ -975,6 +984,11 @@ $('.btn_back').on('touchend', function() {
         } else {
             $.mobile.back();
         }
+    } else if (window.location.hash === "#scan_sync") {
+        $.mobile.back();
+        $(".scan_step2_btn").hide();
+        $(".scan_read_btn").show();
+        showClearReadInput();
     } else {
         $.mobile.back();
     }
@@ -1097,6 +1111,7 @@ $(".scan_step2_btn").on('touchend', function() {
         $('.scan_step2 input[name="sav3"]').textinput('disable');
         $('.scan_step2 input[name="sav4"]').textinput('disable');
         $('.scan_step2 input[name="sav5"]').textinput('disable');
+        showClearReadInput();
     }
     // $(this).toggleClass('general_btn_click').html('EDIT DATA');
 });
@@ -1130,7 +1145,6 @@ $(".scan_step2_btn2").on("touchend", function() {
             $('.scan_step2 input[name="user"]').textinput('enable');
         }
     }
-
     showClearReadInput();
     $('.scan_step3_1').show();
     $('.scan_step3_2').hide();
