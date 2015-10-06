@@ -449,7 +449,7 @@ function readCardInforListFromDB(ifShowUpdate) {
 function deleteRecordFromDB(serial){
     var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024);
     db.transaction(function(tx) {
-        tx.executeSql('UPDATE cardInfor SET ifDelete = 1 WHERE serial = ?', [serial], function(tx, re) {
+        tx.executeSql('UPDATE cardInfor SET ifDelete = "1" WHERE serial = ?', [serial], function(tx, re) {
             readCardInforListFromDB();
             //$.mobile.back();
         });
@@ -1042,14 +1042,18 @@ $('.scan_step1_4_instruction').on('touchend', function() {
 });
 
 //new button for add id to my product only
-$(".scan_add_to_myproduct").on('touchend', function() {
-    // validate data before add to my product.
-
-    if(nfcData[1]){
-        writeCardInforToDB(true);
-    }else{
-        myAlert('productCantAdd');
-    }
+$(".scan_add_to_myproduct").on('click', function() {
+    // validate data before add to my product.    
+    var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024);    
+    db.transaction(function (tx) {        
+        tx.executeSql('SELECT serial FROM cardInfor WHERE ifDelete = "0" AND serial = ?', [nfcData[1]], function (tx, re) {            
+            if (re.rows.length == 0) {
+                writeCardInforToDB(true);
+            } else {
+                myAlert('productCantAdd', [nfcData[1]]);
+            }            
+        });
+    });   
 });
 
 $(".scan_step2_btn").on('touchstart', function() {
