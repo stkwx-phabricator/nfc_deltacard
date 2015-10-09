@@ -2,8 +2,8 @@
 $.mobile.defaultPageTransition = 'flip';
 var web_server = "http://37.187.51.70/nfc_deltaweb";
 var web_index = "http://37.187.51.70/nfc_deltaweb/mindex.php";
-// var web_server = "http://192.168.2.100/nfc_deltaweb"; 
-// var web_index = "http://192.168.2.100/nfc_deltaweb/mindex.php"; 
+// var web_server = "http://localhost/nfc_deltaweb"; 
+// var web_index = "http://localhost/nfc_deltaweb/mindex.php"; 
 
 
 /*maintenance verion flag*/
@@ -362,7 +362,7 @@ function refreshLocalData(cardInforList,ifShowUpdate) {
         }
     }
     $(".productList tbody").html(content);
-    $('.productList .productList_view').on('touchend', function() {
+    $('.productList .productList_view').on('click', function() {
         readCradInforWithId($(this).attr('id'));
     });
     $.mobile.navigate('#myproducts');
@@ -860,7 +860,7 @@ $('.scan_step3_1,.scan_step3_2,.scan_step3_3,.scan_step3_4').css('top', bodyHeig
 //
 //});
 
-$(".scan_step2 .dateInput").val("").on('touchend',function(e){
+$(".scan_step2 .dateInput").val("").on('click',function(e){
     var t = e.currentTarget;
     if(!t.disabled){
         window.currentDateName = t.name;
@@ -910,36 +910,36 @@ $(window).on('navigate', function(e, data) {
     }
 });
 //initialize event
-$('.generic_btn').on('touchstart', function() {
+$('.generic_btn').on('click', function() {
     $(this).addClass('generic_btn_click');
 });
-$('.generic_btn').on('touchend', function() {
+$('.generic_btn').on('click', function() {
     $(this).removeClass('generic_btn_click');
 });
-$('.generic_btn_scan').on('touchstart', function() {
+$('.generic_btn_scan').on('click', function() {
     $(this).addClass('generic_btn_scan_click');
 });
-$('.generic_btn_scan').on('touchend', function() {
+$('.generic_btn_scan').on('click', function() {
     $(this).removeClass('generic_btn_scan_click');
 });
-$('.btn_home').on('touchstart', function() {
+$('.btn_home').on('click', function() {
     $(this).css('color', 'yellow');
 });
-$('.btn_home').on('touchend', function() {
+$('.btn_home').on('click', function() {
     $(this).css('color', 'white');
     $.mobile.navigate("#home");
 });
-$('.btn_set').on('touchstart', function() {
+$('.btn_set').on('click', function() {
     $(this).css('color', 'yellow');
 });
-$('.btn_set').on('touchend', function() {
+$('.btn_set').on('click', function() {
     $(this).css('color', 'white');
     $.mobile.navigate("#setting");
 });
-$('.btn_back').on('touchstart', function() {
+$('.btn_back').on('click', function() {
     $(this).css('color', 'yellow');
 });
-$('.btn_back').on('touchend', function() {
+$('.btn_back').on('click', function() {
     $(this).css('color', 'white');    
     if (window.location.hash == "#scan_read") {
         //alert("goto scan_read");
@@ -993,13 +993,13 @@ $('.btn_back').on('touchend', function() {
         $.mobile.back();
     }
 });
-$('.btn_webhome').on('touchend', function() {
+$('.btn_webhome').on('click', function() {
     window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
 });
-$('.website').on('touchend', function() {
+$('.website').on('click', function() {
     window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
 });
-$(".menu_scan").on('touchend', function() {
+$(".menu_scan").on('click', function() {
     $('.scan_step1_1').show();
     $('.scan_step1_2').hide();
     $('.scan_step1_3').hide();
@@ -1007,21 +1007,21 @@ $(".menu_scan").on('touchend', function() {
     $.mobile.navigate('#scan');
     //window.history.pushState({}, '', '#scan');
 });
-$(".menu_view").on('touchend', function() {
+$(".menu_view").on('click', function() {
     readCardInforListFromDB();
 	$.mobile.navigate("#myproducts");
 });
-$(".menu_product").on('touchend', function() {
+$(".menu_product").on('click', function() {
     if(window.localStorage['userId']){
         $.mobile.navigate('#product_manager_center');
     }else{
         $.mobile.navigate("#product_manager");
     }
 });
-$('.scan_step1_1_btn').on('touchstart', function() {
+$('.scan_step1_1_btn').on('click', function() {
     $(this).toggleClass('scan_step1_1_btn_click');
 });
-$('.scan_step1_1_btn').on('touchend', function() {
+$('.scan_step1_1_btn').on('click', function() {
     $(this).toggleClass('scan_step1_1_btn_click');
     scan_next(1, 1);
     isRead = true;
@@ -1035,10 +1035,10 @@ $('.scan_step1_1_btn').on('touchend', function() {
         }
     }, 20000);
 });
-$('.scan_step1_3_instruction').on('touchstart', function() {
+$('.scan_step1_3_instruction').on('click', function() {
     $(this).toggleClass('general_btn_click');
 });
-$('.scan_step1_3_instruction').on('touchend', function() {
+$('.scan_step1_3_instruction').on('click', function() {
     $(this).toggleClass('general_btn_click');
     scan_next(1, 1);
     $('.scan_step1_3').hide();
@@ -1053,10 +1053,10 @@ $('.scan_step1_3_instruction').on('touchend', function() {
         }
     }, 20000);
 });
-$('.scan_step1_4_instruction').on('touchstart', function() {
+$('.scan_step1_4_instruction').on('click', function() {
     $(this).toggleClass('general_btn_click');
 });
-$('.scan_step1_4_instruction').on('touchend', function() {
+$('.scan_step1_4_instruction').on('click', function() {
     $(this).toggleClass('general_btn_click');
     $('.scan_step2 input[name="product"]').val(nfcData[0]);
     $('.scan_step2 input[name="serial"]').val(nfcData[1]);
@@ -1098,10 +1098,10 @@ $(".scan_add_to_myproduct").on('click', function() {
     });   
 });
 
-$(".scan_step2_btn").on('touchstart', function() {
+$(".scan_step2_btn").on('click', function() {
     $(this).toggleClass('general_btn_click');
 });
-$(".scan_step2_btn").on('touchend', function() {
+$(".scan_step2_btn").on('click', function() {
     // validate data before save into card 
     if (validateForm()) {
         $.mobile.navigate('#scan_sync');
@@ -1119,7 +1119,7 @@ $(".scan_step2_btn").on('touchend', function() {
     }
     // $(this).toggleClass('general_btn_click').html('EDIT DATA');
 });
-$(".scan_step2_btn2").on("touchend", function() {
+$(".scan_step2_btn2").on("click", function() {
     $(".scan_read_btn").hide();
     $(".scan_step2_btn").show();
 
@@ -1155,11 +1155,11 @@ $(".scan_step2_btn2").on("touchend", function() {
     $('.scan_step3_3').hide();
     $('.scan_step3_4').hide();
 });
-$(".scan_step3_1_btn").on('touchstart', function() {
+$(".scan_step3_1_btn").on('click', function() {
     $(this).toggleClass('scan_step3_1_btn_click');
 });
 //register listener for syncronize functionality
-$(".scan_step3_1_btn").on('touchend', function() {
+$(".scan_step3_1_btn").on('click', function() {
     $(this).toggleClass('scan_step3_1_btn_click');
     nfcData[0] = $('.scan_step2 input[name="product"]').val();
     nfcData[1] = $('.scan_step2 input[name="serial"]').val();
@@ -1188,10 +1188,10 @@ $(".scan_step3_1_btn").on('touchend', function() {
         }
     }, 20000);
 });
-$(".scan_step3_3_instruction").on('touchstart', function() {
+$(".scan_step3_3_instruction").on('click', function() {
     $(this).toggleClass('scan_step3_1_btn_click');
 });
-$(".scan_step3_3_instruction").on('touchend', function() {
+$(".scan_step3_3_instruction").on('click', function() {
     $(this).toggleClass('scan_step3_1_btn_click');
     message = [
         ndef.mimeMediaRecord('mime/com.softtek.delta', nfc.stringToBytes(nfcData.join("~"))),
@@ -1209,13 +1209,13 @@ $(".scan_step3_3_instruction").on('touchend', function() {
         }
     }, 20000);
 });
-$(".scan_step3_4_instruction").on('touchend', function() {
+$(".scan_step3_4_instruction").on('click', function() {
     readCardInforListFromDB(true);//set true if need to show which one has been updated
 });
-$(".backToViewMyProducts").on('touchstart', function() {
+$(".backToViewMyProducts").on('click', function() {
     $(this).toggleClass('general_btn_click');
 });
-$(".backToViewMyProducts").on('touchend', function() {
+$(".backToViewMyProducts").on('click', function() {
     $(this).toggleClass('general_btn_click');
     myConfirm('confirmToDeleteRecord',null,function(index){
         if(index==1){
@@ -1224,25 +1224,25 @@ $(".backToViewMyProducts").on('touchend', function() {
     });
 });
 //setting
-$('.menu_language').on('touchstart', function() {
+$('.menu_language').on('click', function() {
     $(this).toggleClass('general_btn_click');
 });
-$('.menu_language').on('touchend', function() {
+$('.menu_language').on('click', function() {
     $(this).toggleClass('general_btn_click');
     initLanguageSelection();
     $("#language_setting").popup('open');
 });
-$('.menu_use').on('touchstart', function() {
+$('.menu_use').on('click', function() {
     $(this).toggleClass('general_btn_click');
 });
-$('.menu_use').on('touchend', function() {
+$('.menu_use').on('click', function() {
     $(this).toggleClass('general_btn_click');
     window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
 });
-$('.menu_update').on('touchstart', function() {
+$('.menu_update').on('click', function() {
     $(this).toggleClass('general_btn_click');
 });
-$('.menu_update').on('touchend', function() {
+$('.menu_update').on('click', function() {
     $(this).toggleClass('general_btn_click');
     if (window.localStorage['userId']) {
         $.mobile.navigate('#product_manager_center');
@@ -1250,41 +1250,41 @@ $('.menu_update').on('touchend', function() {
         $.mobile.navigate("#product_manager");
     }
 });
-$('.menu_about').on('touchstart', function() {
+$('.menu_about').on('click', function() {
     $(this).toggleClass('general_btn_click');
 });
-$('.menu_about').on('touchend', function() {
+$('.menu_about').on('click', function() {
     $(this).toggleClass('general_btn_click');
     myAlert('version', ['1.2.1']);
 });
 //setting end
 //product manager
-$(".product_manager").on('touchend', function() {
+$(".product_manager").on('click', function() {
     if(window.localStorage['userId']){
         $.mobile.navigate('#product_manager_center');
     }else{
         $.mobile.navigate("#product_manager");
     }
 });
-$('.access_my').on('touchstart', function() {
+$('.access_my').on('click', function() {
     $(this).toggleClass('general_btn_click');
 });
-$('.access_my').on('touchend', function() {
+$('.access_my').on('click', function() {
     $(this).toggleClass('general_btn_click');
     // window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
     window.open(web_index + "?userId=" + window.localStorage['userId'], '_blank', 'location=yes');
 });
-$('.upload_my').on('touchstart', function() {
+$('.upload_my').on('click', function() {
     $(this).toggleClass('general_btn_click');
 });
-$('.upload_my').on('touchend', function() {
+$('.upload_my').on('click', function() {
     $(this).toggleClass('general_btn_click');
     prepareSendingData();
 });
-$('.backup_my').on('touchstart', function() {
+$('.backup_my').on('click', function() {
     $(this).toggleClass('general_btn_click');
 });
-$('.backup_my').on('touchend', function() {
+$('.backup_my').on('click', function() {
     $(this).toggleClass('general_btn_click');
     var uploadLoader = $.mobile.loading("show", {
             text: "foo",
@@ -1314,16 +1314,16 @@ $('.backup_my').on('touchend', function() {
         }
     });
 });
-$('.status_my').on('touchstart', function() {
+$('.status_my').on('click', function() {
     $(this).toggleClass('general_btn_click');
 });
-$('.status_my').on('touchend', function() {
+$('.status_my').on('click', function() {
     $(this).toggleClass('general_btn_click');
     $.mobile.navigate('#ppe_status');
 });
 //product manager end
 //user login and registion
-$(".validate_login").on('touchend', function() {
+$(".validate_login").on('click', function() {
 
     if(!checkConnection()) {
         return;
@@ -1346,7 +1346,7 @@ $(".validate_login").on('touchend', function() {
         }
     });
 });
-$(".validate_registion").on('touchend', function() {
+$(".validate_registion").on('click', function() {
     var firstName = $("#user_registion #firstName").val(),
         lastName = $("#user_registion #lastName").val(),
         email = $("#user_registion #email").val(),
@@ -1407,6 +1407,147 @@ $(".validate_registion").on('touchend', function() {
     }, 'JSON').error(function() { myAlert('noConnect'); });
     return false;
 });
+/**
+* Remember password Function binding.
+*/
+
+$(".nav_lost_password").on('click', function () {
+    $.mobile.navigate('#remember_password');
+});
+$(".remember_password_step1_nextstep").on('click', function () {
+
+   // $(".remember_password_step1").hide();
+   // $(".remember_password_step2").show();
+    //$('#rp_step1_login').val('');
+
+    var login = $('#rp_step1_login').val();
+    if (isNull(login)) {
+        //alert('Invalid input for user.')
+        myAlert('invalidInput', ['user']);
+        $('#rp_step1_login').focus();
+        return;
+    } else {
+        if (!checkConnection()) {
+            return;
+        }
+        $.post(web_server + "/restm.php", {
+            type: 'findAccount',
+            email: login
+        }, function (data) {
+            if (data && data.length != 0) {
+                //alert('data found: ' + data[0].login + data[0].email);
+                $('#rp_step2_login').val(data[0].login);
+                $('#rp_step2_email').val(data[0].email);
+                $(".remember_password_step1").hide();
+                $(".remember_password_step2").show();
+                $('#rp_step1_login').val('');
+            } else {
+                alert('Invalid input for user.')
+                $('#rp_step1_login').focus();
+                return;
+            }
+        },
+        'JSON').error(function() { myAlert('noConnect'); });
+        
+    }
+});
+$(".remember_password_step2_nextstep").on('click', function () {
+
+   // $(".remember_password_step2").hide();
+   // $(".remember_password_step3").show();
+
+    var secCode = $('#rp_step2_secCode').val();
+    if (isNull(secCode)) {
+        //alert('Invalid input for security code.')
+        myAlert('invalidInput', ['secCode']);
+        $('#rp_step2_secCode').focus();
+        return;
+    } else {
+        $.post(web_server + "/restm.php", {
+            type: 'validateSecCode',
+            secCode: secCode
+        }, function (data) {
+            //alert('data found: ' + data.status);
+            //if (data && data.status == 'success') {
+            if (window.localStorage['secCode'] == secCode) {               
+                $(".remember_password_step2").hide();
+                $(".remember_password_step3").show();
+                $('#rp_step2_login').val('');
+                $('#rp_step2_email').val('');
+                window.localStorage['secCode'] = '';
+
+            } else {
+                myAlert('invalidInput', ['secCode']);
+                $('#rp_step2_secCode').focus();
+                return;
+            }
+        },
+          'JSON').error(function () { myAlert('noConnect'); }); 
+    }
+});
+$(".remember_password_step2_sendcode").on('click', function () {
+    var login = $('#rp_step2_email').val();
+    $.post(web_server + "/sendmail.php", {
+        resource: 'mobile',
+        email: login
+    }, function (data) {
+        if (data) {
+            alert(data.message);
+            window.localStorage['secCode'] = data.secCode;
+        } else {
+            myAlert('invalidInput', ['user']);
+            $('#rp_step1_login').focus();
+            return;
+        }
+    },
+        'JSON').error(function (error) {
+            //alert(JSON.stringify(error));
+            myAlert('noConnect');
+        });
+});
+$(".remember_password_step3_save").on('click', function () {
+  
+    var login = $('#rp_step2_login').val();
+    var psw1 = $('#rp_step3_password1').val();
+    var psw2 = $('#rp_step3_password2').val();
+    if (!psw1 || psw1 == '' || psw1 != psw2 ) {
+        //alert('invalid input for password')
+        myAlert('invalidInput', ['password']);
+    }else{
+        $.post(web_server + "/restm.php", {
+            type: 'resetPassword',
+            login: login,
+            password: psw1
+        }, function (data) {
+            myAlert('rp_step3_succes');
+            $(".remember_password_step3").hide();
+            $(".remember_password_step1").show();
+            $.mobile.navigate('#product_manager');
+            window.localStorage['secCode'] = '';
+            $('#rp_step3_password1').val('');
+            $('#rp_step3_password2').val('');
+
+        },
+            'JSON').error(function (error) {
+                //alert(JSON.stringify(error))
+                myAlert('noConnect');
+            });
+    }
+});
+
+$(".remember_password_cancel").on('click', function () {
+    $.mobile.navigate('#product_manager');
+    return;
+});
+
+
+// valudate form input
+function isNull(obj) {
+    if (!obj || obj == '') {
+        return true;
+    }
+    return false;
+}
 
 // check network available
 function checkConnection() {
@@ -1465,8 +1606,6 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        
-        
         // console.log(device.cordova);
         // console.log(device.model);
         // console.log(device.name);
