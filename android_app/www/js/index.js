@@ -4,6 +4,8 @@ var web_server = "http://37.187.51.70/nfc_deltaweb";
 var web_index = "http://37.187.51.70/nfc_deltaweb/mindex.php";
 // var web_server = "http://localhost/nfc_deltaweb"; 
 // var web_index = "http://localhost/nfc_deltaweb/mindex.php"; 
+ //var web_server = "http://192.168.2.101/nfc_deltaweb"; 
+ //var web_index = "http://192.168.2.101/nfc_deltaweb/mindex.php";
 
 
 /*maintenance verion flag*/
@@ -36,8 +38,11 @@ var ifTagFound = false,
         var fun = callback?callback:function(){},
         msg = window.i18n[window.localStorage['language']][key];        
         if (param) {
-            for(var i in param){                
-                msg = msg.replace("{" + i + "}", param[i]);
+            for (var i in param) {
+                if(window.i18n[window.localStorage['language']][param[i]])
+                    msg = msg.replace("{" + i + "}", window.i18n[window.localStorage['language']][param[i]]);
+                else
+                    msg = msg.replace("{" + i + "}", param[i]);
             }
         }
         navigator.notification.alert(msg, fun, window.i18n[window.localStorage['language']]['alert'],window.i18n[window.localStorage['language']]['ok']);
@@ -797,6 +802,7 @@ function confirmToSelectDate(){
             $("#date_picker").popup('close');
         };
     }
+    
    // alert("selected date = " + value);
     $(".scan_step2 input[name='"+window.currentDateName+"']").val(value);
     $("#date_picker").popup('close');
@@ -1331,11 +1337,22 @@ $(".validate_login").on('click', function() {
 
     var login = $("#product_manager input[name='login']").val(),
         password = $("#product_manager input[name='password']").val();
+    if (isNull(login)) {
+        myAlert('invalidInput', ['user']);
+        return;
+    }
+    if (isNull(password)) {
+        myAlert('invalidInput', ['password']);
+        return;
+    }
+
+    var loader = showLoading('Loading');
     $.post(web_server + "/restm.php", {
         type: 'login',
         login: login,
         password: password
-    }, function(data) {
+    }, function (data) {
+        loader.hide();
         if (data && data.length != 0) {
             window.localStorage['userId'] = data[0].id;
             $("#product_manager input[name='login']").val("");
@@ -1344,6 +1361,8 @@ $(".validate_login").on('click', function() {
         } else {
             myAlert('loginfailed');
         }
+    }).error(function () {
+        loader.hide();
     });
 });
 $(".validate_registion").on('click', function() {
@@ -1364,6 +1383,10 @@ $(".validate_registion").on('click', function() {
     }
     if(password!=confirm){
         myAlert('confPassword');
+        return;
+    }
+    if (password.length < 6) {
+        myAlert('passworminlength');
         return;
     }
     $.post(web_server + "/restm.php", {
@@ -1414,15 +1437,15 @@ $(".validate_registion").on('click', function() {
 $(".nav_lost_password").on('click', function () {
     $.mobile.navigate('#remember_password');
 });
+
+$(".nav_new_user_registration").on('click', function () {
+    $.mobile.navigate('#user_registion');
+});
+
 $(".remember_password_step1_nextstep").on('click', function () {
 
-   // $(".remember_password_step1").hide();
-   // $(".remember_password_step2").show();
-    //$('#rp_step1_login').val('');
-
     var login = $('#rp_step1_login').val();
-    if (isNull(login)) {
-        //alert('Invalid input for user.')
+    if (isNull(login)) { 
         myAlert('invalidInput', ['user']);
         $('#rp_step1_login').focus();
         return;
@@ -1430,95 +1453,110 @@ $(".remember_password_step1_nextstep").on('click', function () {
         if (!checkConnection()) {
             return;
         }
+        var loader = showLoading('Loading...'); 
         $.post(web_server + "/restm.php", {
             type: 'findAccount',
             email: login
         }, function (data) {
+            loader.hide();
             if (data && data.length != 0) {
-                //alert('data found: ' + data[0].login + data[0].email);
                 $('#rp_step2_login').val(data[0].login);
                 $('#rp_step2_email').val(data[0].email);
                 $(".remember_password_step1").hide();
                 $(".remember_password_step2").show();
                 $('#rp_step1_login').val('');
             } else {
-                alert('Invalid input for user.')
+                myAlert('invalidInput', ['user']);
                 $('#rp_step1_login').focus();
-                return;
             }
         },
-        'JSON').error(function() { myAlert('noConnect'); });
+        'JSON').error(function () {
+            loader.hide(); myAlert('noConnect');
+        });
         
     }
 });
 $(".remember_password_step2_nextstep").on('click', function () {
-
-   // $(".remember_password_step2").hide();
-   // $(".remember_password_step3").show();
-
     var secCode = $('#rp_step2_secCode').val();
-    if (isNull(secCode)) {
-        //alert('Invalid input for security code.')
+    if (isNull(secCode)) { 
         myAlert('invalidInput', ['secCode']);
         $('#rp_step2_secCode').focus();
         return;
     } else {
+        var loader = showLoading('Loading...');
         $.post(web_server + "/restm.php", {
             type: 'validateSecCode',
             secCode: secCode
         }, function (data) {
-            //alert('data found: ' + data.status);
+            loader.hide();
             //if (data && data.status == 'success') {
             if (window.localStorage['secCode'] == secCode) {               
                 $(".remember_password_step2").hide();
                 $(".remember_password_step3").show();
-                $('#rp_step2_login').val('');
-                $('#rp_step2_email').val('');
+                $('#rp_step2_secCode').val('')
                 window.localStorage['secCode'] = '';
 
             } else {
                 myAlert('invalidInput', ['secCode']);
                 $('#rp_step2_secCode').focus();
-                return;
             }
         },
-          'JSON').error(function () { myAlert('noConnect'); }); 
+          'JSON').error(function () {
+              loader.hide();
+              myAlert('noConnect');
+          });
     }
 });
 $(".remember_password_step2_sendcode").on('click', function () {
-    var login = $('#rp_step2_email').val();
+    var email = $('#rp_step2_email').val();
+    var loader = showLoading('Loading...');
     $.post(web_server + "/sendmail.php", {
         resource: 'mobile',
-        email: login
+        email: email
     }, function (data) {
+        loader.hide();
         if (data) {
-            alert(data.message);
-            window.localStorage['secCode'] = data.secCode;
+            //alert(data.message);
+            if (!isNull(data.secCode)) {
+                myAlert('emailSendSuccess', [email]);
+                window.localStorage['secCode'] = data.secCode;
+            } else {
+                myAlert('emailsendFail', [email]);
+            }
         } else {
-            myAlert('invalidInput', ['user']);
+            myAlert('noConnect');
             $('#rp_step1_login').focus();
             return;
         }
     },
         'JSON').error(function (error) {
-            //alert(JSON.stringify(error));
+            loader.hide();
             myAlert('noConnect');
         });
 });
-$(".remember_password_step3_save").on('click', function () {
-  
+$(".remember_password_step3_save").on('click', function () {  
     var login = $('#rp_step2_login').val();
     var psw1 = $('#rp_step3_password1').val();
     var psw2 = $('#rp_step3_password2').val();
-    if (!psw1 || psw1 == '' || psw1 != psw2 ) {
-        //alert('invalid input for password')
+    if (!psw1 || !psw2 || psw1 == '' || psw2 == '') {
         myAlert('invalidInput', ['password']);
-    }else{
+        return;
+    }
+    if (psw1 != psw2) {
+        myAlert('confPassword');
+        return;
+    }
+    if (psw1.length < 6) {
+        myAlert('passworminlength');
+        return;
+    }
+        var loader = showLoading('Loading...');
         $.post(web_server + "/restm.php", {
             type: 'resetPassword',
             login: login,
             password: psw1
         }, function (data) {
+            loader.hide();
             myAlert('rp_step3_succes');
             $(".remember_password_step3").hide();
             $(".remember_password_step1").show();
@@ -1529,14 +1567,15 @@ $(".remember_password_step3_save").on('click', function () {
 
         },
             'JSON').error(function (error) {
-                //alert(JSON.stringify(error))
+                loader.hide();
                 myAlert('noConnect');
             });
-    }
+    
 });
 
 $(".remember_password_cancel").on('click', function () {
     $.mobile.navigate('#product_manager');
+    $('#rp_step1_login').val('');
     return;
 });
 
@@ -1547,6 +1586,17 @@ function isNull(obj) {
         return true;
     }
     return false;
+}
+
+function showLoading(msg) {
+    var uploadLoader = $.mobile.loading("show", {
+        text: "foo",
+        textVisible: true,
+        theme: "z",
+        html: '<span class="ui-bar ui-shadow ui-overlay-d ui-corner-all" style="background-color:white;"><span class="ui-icon-loading"></span><span style="font-size:2em;">' + msg + '</span></span>'
+    });
+    uploadLoader.show();
+    return uploadLoader;
 }
 
 // check network available

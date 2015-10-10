@@ -127,8 +127,10 @@ window.i18n.en = {
     rp_step2_note: 'Note: Please validate your account and email address and click send code.',
     rp_step2_sendcode: 'Send Code',
     rp_step3_title: 'Step 3: Reset Password',
-    rp_step3_succes: 'password reset successfully. Please use your new password to login'
-
+    rp_step3_succes: 'password reset successfully. Please use your new password to login',
+    passworminlength: 'Password must be 6 characters at least.',
+    emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
+    emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.'
 
 }
 window.i18n.zh = {
@@ -259,7 +261,10 @@ window.i18n.zh = {
     rp_step2_note: '提示：请确认用户名和邮件地址是否正确，然后请按发送进行验证码检验。',
     rp_step2_sendcode: '发送',
     rp_step3_title: '第三步：重置密码',
-    rp_step3_succes: '密码重置成功，请用新密码登陆。'
+    rp_step3_succes: '密码重置成功，请用新密码登陆。',
+    passworminlength: '密码至少六位。',
+    emailSendSuccess: '邮件成功发送到您的邮箱({0})，请查阅.',
+    emailSendFail: '邮件未成功发送到您的邮箱({0}) ({0}).请重试。如果问题仍然存在请详细我们的客服人员。'
 }
 
 window.i18n.sp = {
@@ -389,7 +394,10 @@ window.i18n.sp = {
     rp_step2_note: 'Note: Please validate your account and email address and click send code.',
     rp_step2_sendcode: 'Send Code',
     rp_step3_title: 'Step 3: Reset Password',
-    rp_step3_succes: 'password reset successfully. Please use your new password to login'
+    rp_step3_succes: 'password reset successfully. Please use your new password to login',
+    passworminlength: 'Password must be 6 characters at least.',
+    emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
+    emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.'
 }
 
 window.i18n.fr = {
@@ -519,5 +527,8 @@ window.i18n.fr = {
     rp_step2_note: 'Note: Please validate your account and email address and click send code.',
     rp_step2_sendcode: 'Send Code',
     rp_step3_title: 'Step 3: Reset Password',
-    rp_step3_succes: 'password reset successfully. Please use your new password to login'
+    rp_step3_succes: 'password reset successfully. Please use your new password to login',
+    passworminlength: 'Password must be 6 characters at least.',
+    emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
+    emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.'
 }
