@@ -117,7 +117,21 @@ window.i18n.en = {
     acctExists: 'Account already exist with same name or email.',
     noConnect: 'No Response from server.',
     nonetwork: 'Network is disabled, please open your network and try again.',
-    invalidInput:'Invalid input for {0}'
+    invalidInput: 'Invalid input for {0}',
+    /*Remember password*/
+    rp_step1_title: 'Step 1: Fill Account',
+    rp_step_next: 'Next Step',
+    rp_step_cancel: 'Cancel',
+    rp_step2_title: 'Step 2: Validate Code',
+    secCode: 'Code',
+    rp_step2_note: 'Note: Please validate your account and email address and click send code.',
+    rp_step2_sendcode: 'Send Code',
+    rp_step3_title: 'Step 3: Reset Password',
+    rp_step3_succes: 'password reset successfully. Please use your new password to login',
+    passworminlength: 'Password must be 6 characters at least.',
+    emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
+    emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.'
+
 }
 window.i18n.zh = {
     scan_id_card: '扫描ID CARD',
@@ -236,7 +250,21 @@ window.i18n.zh = {
     acctExists: '用户已存在．不能使用相同用户名或邮箱重复注册.',
     noConnect: '服务器无法链接.' ,
     nonetwork: '当前网络不可用,请开启后重试.',
-    invalidInput:'无效的输入: {0}'
+    invalidInput: '无效的输入: {0}',
+
+    /*Remember password*/
+    rp_step1_title: '第一步：查找用户名',
+    rp_step_next: '下一步',
+    rp_step_cancel: '取消',
+    rp_step2_title: '第二步：验证',
+    secCode: '验证码',
+    rp_step2_note: '提示：请确认用户名和邮件地址是否正确，然后请按发送进行验证码检验。',
+    rp_step2_sendcode: '发送',
+    rp_step3_title: '第三步：重置密码',
+    rp_step3_succes: '密码重置成功，请用新密码登陆。',
+    passworminlength: '密码至少六位。',
+    emailSendSuccess: '邮件成功发送到您的邮箱({0})，请查阅.',
+    emailSendFail: '邮件未成功发送到您的邮箱({0}) ({0}).请重试。如果问题仍然存在请详细我们的客服人员。'
 }
 
 window.i18n.sp = {
@@ -356,7 +384,20 @@ window.i18n.sp = {
     acctExists: 'Account already exist with same name or email.',
     noConnect: 'No Response from server.',
     nonetwork: 'Network is disabled, please open your network and try again.',
-    invalidInput:'Invalid input for {0}'
+    invalidInput: 'Invalid input for {0}',
+    /*Remember password*/
+    rp_step1_title: 'Step 1: Fill Account',
+    rp_step_next: 'Next Step',
+    rp_step_cancel: 'Cancel',
+    rp_step2_title: 'Step 2: Validate Code',
+    secCode: 'Code',
+    rp_step2_note: 'Note: Please validate your account and email address and click send code.',
+    rp_step2_sendcode: 'Send Code',
+    rp_step3_title: 'Step 3: Reset Password',
+    rp_step3_succes: 'password reset successfully. Please use your new password to login',
+    passworminlength: 'Password must be 6 characters at least.',
+    emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
+    emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.'
 }
 
 window.i18n.fr = {
@@ -476,5 +517,18 @@ window.i18n.fr = {
     acctExists: 'Account already exist with same name or email.',
     noConnect: 'No Response from server.',
     nonetwork: 'Network is disabled, please open your network and try again.',
-    invalidInput:'Invalid input for {0}'
+    invalidInput:'Invalid input for {0}',
+    /*Remember password*/
+    rp_step1_title: 'Step 1: Fill Account',
+    rp_step_next: 'Next Step',
+    rp_step_cancel: 'Cancel',
+    rp_step2_title: 'Step 2: Validate Code',
+    secCode: 'Code',
+    rp_step2_note: 'Note: Please validate your account and email address and click send code.',
+    rp_step2_sendcode: 'Send Code',
+    rp_step3_title: 'Step 3: Reset Password',
+    rp_step3_succes: 'password reset successfully. Please use your new password to login',
+    passworminlength: 'Password must be 6 characters at least.',
+    emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
+    emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.'
 }

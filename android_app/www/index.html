@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -501,9 +501,9 @@
                                    checked="checked">
                             <label for="changeLang_en">English</label>
                             <input type="radio" name="changeLang" id="changeLang_zh" value="on">
-                            <label for="changeLang_zh">??</label>
+                            <label for="changeLang_zh">中文</label>
                             <input type="radio" name="changeLang" id="changeLang_fr" value="on">
-                            <label for="changeLang_fr">Fran�ois</label>
+                            <label for="changeLang_fr">François</label>
                             <input type="radio" name="changeLang" id="changeLang_sp" value="on">
                             <label for="changeLang_sp">Espanol</label>
                         </fieldset>
@@ -560,10 +560,10 @@
         </div>
         <div class="generic_btn validate_login i_validate">Login</div>
         <div style="text-align:center;font-size:2.5em;font-weight:bold;margin-top:2em;">
-            <div ontouchend="alert('not finished yet')" style="margin:0.5em 0 0.5em 0" class="i_lost_password">Remember Password              
+            <div style="margin:0.5em 0 0.5em 0" class="nav_lost_password i_lost_password">Remember Password              
             </div>
-            <div ontouchend="$.mobile.navigate('#user_registion')" style="margin:0.5em 0 0.5em 0"
-                 class="i_new_user_registration">Register an account
+            <div style="margin:0.5em 0 0.5em 0"
+                 class="nav_new_user_registration i_new_user_registration">Register an account
             </div>
             <div ontouchend="alert('not finished yet')" style="margin:0.5em 0 0.5em 0" class="i_about_product_manager">
                 About ID CARD Manager
@@ -660,6 +660,148 @@
         </div>
     </div>
 </div>
+
+    <div data-role="page" id="remember_password" class="basic container">
+        <div class="row" style="">
+            <div class="col-xs-2 btn_webhome"></div>
+            <div class="col-xs-8 pull-right btn_navigator">
+                <div class="col-xs-4 btn_back">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                </div>
+                <div class="col-xs-4 btn_home">
+                    <span class="glyphicon glyphicon-home"></span>
+                </div>
+                <div class="col-xs-4 btn_set">
+                    <span class="glyphicon glyphicon-cog"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="remember_password_step1" style="position:absolute;width:100%;top:32%; ">
+                <div class="product_manager_login_form">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-12 i_rp_step1_title" style="font-size:3em;color:yellow;margin-bottom:1em;">
+                                Step 1: Fill A<small>ccount</small>
+                            </label>
+                        </div><br />
+                        <div class="form-group form-group-sm" style="margin-top:1em;margin-bottom:1em;">
+                            <label class="col-xs-3 control-label2"><span class="i_login">User</span>:</label>
+
+                            <div class="col-xs-9">
+                                <input type="text" class="form-control" id="rp_step1_login" maxlength="16">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-xs-2"></div>
+                <div class=" col-xs-4 generic_small_btn remember_password_step1_nextstep">
+                    <div style="line-height: 1em;margin-top: 1.5em;" class="i_rp_step_next">
+                        Next Step
+                    </div>
+                </div>
+                <div class="col-xs-4 generic_small_btn remember_password_cancel">
+                    <div style="line-height: 1em;margin-top: 1.5em;" class="i_rp_step_cancel">
+                        Cancel
+                    </div>
+                </div>
+                <div class="col-xs-2"></div>
+
+            </div>
+            <div class="remember_password_step2" style="position:absolute;width:100%;top:32%;display:none">
+                <div class="product_manager_login_form">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-12 i_rp_step2_title" style="font-size:3em;color:yellow;">
+                                Step 2: Validate Code
+                            </label>
+                        </div>
+                        <div class="form-group form-group-sm" style="margin-top:1em;">
+                            <label class="col-xs-3 control-label2"><span class="i_login">User</span>:</label>
+                            <div class="col-xs-9">
+                                <input type="text" class="form-control" id="rp_step2_login" value="" disabled maxlength="16">
+                            </div>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-3 control-label2"><span class="i_email">Email</span>:</label>
+
+                            <div class="col-xs-9">
+                                <input type="text" class="form-control" id="rp_step2_email" value="" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group form-group-sm" style="">
+                            <label class="col-xs-3 control-label2"><span class="i_secCode">Code:</span>:</label>
+
+                            <div class="col-xs-9">
+                                <input type="text" class="form-control" id="rp_step2_secCode">
+                            </div>
+                        </div>
+                        <div class="form-group form-group-sm" style="margin-bottom:1em;">
+                            <label class="col-xs-12 control-label2">
+                                <span class="i_rp_step2_note">
+                                    <strong>Note:</strong> Please validate your account and email address and click send code.
+                                </span>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-xs-4 generic_small_btn remember_password_step2_sendcode ">
+                    <div style="line-height: 1em;margin-top: 1.5em;" class="i_rp_step2_sendcode">
+                        Send Code
+                    </div>
+                </div>
+                <div class="col-xs-4 generic_small_btn remember_password_step2_nextstep ">
+                    <div style="line-height: 1em;margin-top: 1.5em;" class="i_rp_step_next">
+                        Next Step
+                    </div>
+                </div>
+                <div class="col-xs-4 generic_small_btn remember_password_cancel ">
+                    <div style="line-height: 1em;margin-top: 1.5em;" class="i_rp_step_cancel">
+                        Cancel
+                    </div>
+                </div>
+
+            </div>
+            <div class="remember_password_step3" style="position:absolute;width:100%;top:32%;display:none">
+                <div class="product_manager_login_form">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-12 i_rp_step3_title" style="font-size:3em;color:yellow;">
+                                Step 3: Reset Password
+                            </label>
+                        </div>
+                        <div class="form-group form-group-sm" style="margin-top:1em; margin-bottom:1em">
+                            <label class="col-xs-5 control-label2"><span class="i_password">Password</span>:</label>
+                            <div class="col-xs-7">
+                                <input type="password" class="form-control" id="rp_step3_password1" value="" maxlength="16">
+                            </div>
+                        </div>
+                        <div class="form-group form-group-sm" style="margin-top:1em; margin-bottom:1em">
+                            <label class="col-xs-5 control-label2"><span class="i_confirmPassword">Confirm Password</span>:</label>
+
+                            <div class="col-xs-7">
+                                <input type="password" class="form-control" id="rp_step3_password2" value="">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-xs-2"></div>
+                <div class="col-xs-4 generic_small_btn remember_password_step3_save ">
+                    <div style="line-height: 1em;margin-top: 1.5em;" class="i_rp_step_next">
+                        Next Step
+                    </div>
+                </div>
+                <div class="col-xs-4 generic_small_btn remember_password_cancel ">
+                    <div style="line-height: 1em;margin-top: 1.5em;" class="i_rp_step_cancel">
+                        Cancel
+                    </div>
+                </div>
+                <div class="col-xs-2"></div>
+            </div>
+        </div>
+    </div>
+
+
 <div data-role="page" id="product_manager_center" class="basic container">
     <div class="row" style="">
         <div class="col-xs-2 btn_webhome"></div>
