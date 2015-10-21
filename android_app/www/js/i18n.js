@@ -1,4 +1,4 @@
-window.i18n = {};
+﻿window.i18n = {};
 window.i18n.en = {
     scan_id_card: 'Scan ID CARD',
     scan_id_card_press: 'Push',

@@ -1,4 +1,4 @@
-//global setting
+﻿//global setting
 $.mobile.defaultPageTransition = 'flip';
 var web_server = "http://37.187.51.70/nfc_deltaweb";
 var web_index = "http://37.187.51.70/nfc_deltaweb/mindex.php";
