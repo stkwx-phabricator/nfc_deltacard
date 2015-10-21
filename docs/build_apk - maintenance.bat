@@ -1,2 +1,2 @@
-cd D:\Projects\NFC_Delta\nfc_maintenance\www
+cd D:\Projects\nfc_deltacard_maintenance\android_app\www
 cordova build android --release

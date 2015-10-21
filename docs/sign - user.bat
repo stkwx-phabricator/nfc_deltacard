@@ -1,4 +1,4 @@
-"C:\Program Files (x86)\Java\jdk1.7.0_75\bin\jarsigner" -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "D:\Projects\NFC_Delta\key\delta.keystore" "D:\Projects\NFC_Delta\nfc_user\platforms\android\ant-build\MainActivity-release-unsigned.apk" delta
+"C:\Program Files\Java\jdk1.7.0_79\bin\jarsigner" -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "D:\Projects\nfc_deltacard\docs\delta.keystore" "D:\Projects\nfc_deltacard\android_app\platforms\android\ant-build\MainActivity-release-unsigned.apk" delta
 
-copy "D:\Projects\NFC_Delta\nfc_user\platforms\android\ant-build\MainActivity-release-unsigned.apk" "D:\Projects\NFC_Delta\"
-rename MainActivity-release-unsigned.apk delta_user.apk
+copy "D:\Projects\nfc_deltacard\android_app\platforms\android\ant-build\MainActivity-release-unsigned.apk" "D:\Projects\nfc_deltacard\dist\"
+rename D:\Projects\nfc_deltacard\dist\MainActivity-release-unsigned.apk delta_user.apk
