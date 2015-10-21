@@ -32,8 +32,11 @@ var ifTagFound = false,
         var fun = callback?callback:function(){},
         msg = window.i18n[window.localStorage['language']][key];        
         if (param) {
-            for(var i in param){                
-                msg = msg.replace("{" + i + "}", param[i]);
+            for (var i in param) {
+                if(window.i18n[window.localStorage['language']][param[i]])
+                    msg = msg.replace("{" + i + "}", window.i18n[window.localStorage['language']][param[i]]);
+                else
+                    msg = msg.replace("{" + i + "}", param[i]);
             }
         }
         navigator.notification.alert(msg, fun, window.i18n[window.localStorage['language']]['alert'],window.i18n[window.localStorage['language']]['ok']);
