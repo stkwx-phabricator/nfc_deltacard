@@ -1,9 +1,9 @@
 //global setting
 $.mobile.defaultPageTransition = 'flip';
-var web_server = "http://52.74.123.208/nfc_deltaweb";
-var web_index = "http://52.74.123.208/nfc_deltaweb/mindex.php";
-// var web_server = "http://192.168.2.100/nfc_deltaweb"; 
-// var web_index = "http://192.168.2.100/nfc_deltaweb/mindex.php"; 
+//var web_server = "http://52.74.123.208/nfc_deltaweb";
+//var web_index = "http://52.74.123.208/nfc_deltaweb/mindex.php";
+var web_server = "http://localhost/nfc_deltaweb"; 
+var web_index = "http://localhost/nfc_deltaweb/mindex.php"; 
 
 //global varity
 var ifTagFound = false,
@@ -200,7 +200,7 @@ var ifTagFound = false,
                         writeCardInforToDB();
                         hasViewMyPro = false;
                     }, function(error) {
-                        alert('appError', error);
+                        myAlert('appError', error);
                         $.mobile.navigate('#scan');
                     });
                     mimeCallBack = function() {};
@@ -1203,7 +1203,7 @@ $('.menu_about').on('touchstart', function() {
 });
 $('.menu_about').on('touchend', function() {
     $(this).toggleClass('general_btn_click');
-    myAlert('version', ['1.2.1']);
+    myAlert('version', ['1.3']);
 });
 //setting end
 //product manager
@@ -1279,98 +1279,101 @@ $(".validate_login").on('touchend', function() {
 
     var login = $("#product_manager input[name='login']").val(),
         password = $("#product_manager input[name='password']").val();
+	
     if (isNull(login)) {
-        myAlert('invalidInput', ['user']);
-        return;
-    }
-    if (isNull(password)) {
-        myAlert('invalidInput', ['password']);
-        return;
-    }
-
-    var loader = showLoading('Loading');
-    $.post(web_server + "/restm.php", {
-        type: 'login',
-        login: login,
-        password: password
-    }, function (data) {
-        loader.hide();
-        if (data && data.length != 0) {
-            window.localStorage['userId'] = data[0].id;
-            $("#product_manager input[name='login']").val("");
-            $("#product_manager input[name='password']").val("");
-            $.mobile.navigate('#product_manager_center');
-        } else {
-            myAlert('loginfailed');
-        }
-    }).error(function () {
-        loader.hide();
-    });
+        myAlert('invalidInput', ['user']);        
+    } else if (isNull(password)) {
+        myAlert('invalidInput', ['password']);        
+    } else {
+		var loader = showLoading('Loading');
+		$.post(web_server + "/restm.php", {
+			type: 'login',
+			login: login,
+			password: password
+		}, function (data) {
+			loader.hide();
+			if (data && data.length != 0) {
+				window.localStorage['userId'] = data[0].id;
+				$("#product_manager input[name='login']").val("");
+				$("#product_manager input[name='password']").val("");
+				$.mobile.navigate('#product_manager_center');
+			} else {
+				myAlert('loginfailed');				
+				$("#product_manager input[name='password']").val("");
+				$("#product_manager input[name='password']").focus();
+			}
+		}).error(function () {
+			loader.hide();
+			myAlert("error");
+		});
+	}
 });
+
 $(".validate_registion").on('touchend', function() {
     var firstName = $("#user_registion #firstName").val(),
         lastName = $("#user_registion #lastName").val(),
-        email = $("#user_registion #email").val(),
-        login = $("#user_registion #login").val(),
         company = $("#user_registion #company").val(),
+        phone = $("#user_registion #phone").val(),
+        email = $("#user_registion #email").val(),        
         password = $("#user_registion #password").val(),
         confirm = $("#user_registion #passwordConfirm").val();
+        
+    var emailRegEx = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
 		
 	//Delta Type for Maintenance version
 	var deltaType = 0;
 	
-    if(firstName==""||lastName==""||email==""||login==""||company==""||password==""||confirm==""){
-        myAlert('creationMsgMissing');
-        return;
-    }
-    if(password!=confirm){
+    if(firstName == "" || lastName == "" || company == "" || phone == "" || email == "" || password == "" || confirm == "") {
+        myAlert('creationMsgMissing');        
+    } else if(!emailRegEx.test(email.toLowerCase())){
+        myAlert("Wrong email address");
+		$("#user_registion #email").val("");
+        $("#user_registion #email").focus();
+    } else if(password!=confirm){
         myAlert('confPassword');
-        return;
-    }
-    if (password.length < 6) {
+		$("#user_registion #password").val("");
+        $("#user_registion #passwordConfirm").val("");
+		$("#user_registion #password").focus();        
+    } else if (password.length < 6) {
         myAlert('passworminlength');
-        return;
-    }
-    $.post(web_server + "/restm.php", {
-        type: 'saveUser',
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        login: login,
-        company: company,
-        userType: deltaType,
-        password: password
-    }, function(data) {
-        if (data&&data.length!=0) {
-//            window.navigator.alert(window.i18n[window.localStorage['language']]['accountCreated'],function(){
-//                $("#user_registion #firstName").val("");
-//                $("#user_registion #lastName").val("");
-//                $("#user_registion #email").val("");
-//                $("#user_registion #login").val("");
-//                $("#user_registion #company").val("");
-//                $("#user_registion #password").val("");
-//                $("#user_registion #passwordConfirm").val("");
-//                $.mobile.navigate("#product_manager");
-//            },'',window.i18n[window.localStorage['language']]['ok']);
-            if(data[0].count!=0){
-                myAlert('acctExists');
-            } else {
-                myAlert('accountCreated');
-                $("#user_registion #firstName").val("");
-                $("#user_registion #lastName").val("");
-                $("#user_registion #email").val("");
-                $("#user_registion #login").val("");
-                $("#user_registion #company").val("");
-                $("#user_registion #password").val("");
-                $("#user_registion #passwordConfirm").val("");
-                $.mobile.navigate("#product_manager");
-            }
+		$("#user_registion #password").val("");
+		$("#user_registion #passwordConfirm").val("");
+		$("#user_registion #password").focus();        
+    } else {
+		$.post(web_server + "/restm.php", {
+			type: 'saveUser',
+			email: email,
+			firstName: firstName,
+			lastName: lastName,
+			phone: phone,
+			company: company,
+			userType: deltaType,
+			password: password
+		}, function(data) {        
+			if (data && data.length != 0) {
+				if(data[0].count != 0){
+					myAlert('acctExists');
+					$("#user_registion #email").val("");
+					$("#user_registion #password").val("");
+					$("#user_registion #passwordConfirm").val("");
+					$("#user_registion #email").focus();
+				} else {
+					myAlert('accountCreated');
+					$("#user_registion #firstName").val("");
+					$("#user_registion #lastName").val("");
+					$("#user_registion #email").val("");
+					$("#user_registion #phone").val("");
+					$("#user_registion #company").val("");
+					$("#user_registion #password").val("");
+					$("#user_registion #passwordConfirm").val("");
+					$.mobile.navigate("#product_manager");
+				}
 
-        } else {
-            myAlert('noConnect');
-        }
-    }, 'JSON').error(function() { myAlert('noConnect'); });
-    return false;
+			} else {
+				myAlert('noAccountCreate');
+			}
+		}, 'JSON').fail(function() { myAlert('noConnect'); });		
+	}
 });
 /**
 * Remember password Function binding.
@@ -1400,9 +1403,8 @@ $(".remember_password_step1_nextstep").on('click', function () {
             type: 'findAccount',
             email: login
         }, function (data) {
-            loader.hide();
-            if (data && data.length != 0) {
-                $('#rp_step2_login').val(data[0].login);
+            loader.hide();			
+            if (data && data.length != 0) {                
                 $('#rp_step2_email').val(data[0].email);
                 $(".remember_password_step1").hide();
                 $(".remember_password_step2").show();
@@ -1457,8 +1459,7 @@ $(".remember_password_step2_sendcode").on('click', function () {
         email: email
     }, function (data) {
         loader.hide();
-        if (data) {
-            //alert(data.message);
+        if (data) {            
             if (!isNull(data.secCode)) {
                 myAlert('emailSendSuccess', [email]);
                 window.localStorage['secCode'] = data.secCode;
@@ -1477,7 +1478,7 @@ $(".remember_password_step2_sendcode").on('click', function () {
         });
 });
 $(".remember_password_step3_save").on('click', function () {  
-    var login = $('#rp_step2_login').val();
+    var login = $('#rp_step2_email').val();
     var psw1 = $('#rp_step3_password1').val();
     var psw2 = $('#rp_step3_password2').val();
     if (!psw1 || !psw2 || psw1 == '' || psw2 == '') {

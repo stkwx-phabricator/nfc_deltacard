@@ -49,7 +49,7 @@ window.i18n.en = {
     saveInfo: 'To save data, you must synchronize the ID CARD',
     creationMsgMissing: 'All the fields are mandatory.Please fill out all fields correctly.',
     creationSuccessful: 'Your account has been created! Now you will be able to log in from ID CARD or from the http://www.deltaplus.eu website to access your PPE Manager space',
-    login: 'User',
+    login: 'Username (email)',
     confirmPassword: 'Confirm Password',
     idCardNotFound: "ID CARD<br/>Not found",
     scanAgain: 'Try scanning again',
@@ -114,7 +114,7 @@ window.i18n.en = {
 	appError: 'Application Error {0}',
 	confPassword: 'Password and Confirm Password are different.',
     // added on 5/29/2015
-    acctExists: 'Account already exist with same name or email.',
+    acctExists: 'Account already exist with same email.',
     noConnect: 'No Response from server.',
     nonetwork: 'Network is disabled, please open your network and try again.',
     invalidInput: 'Invalid input for {0}',
@@ -130,7 +130,9 @@ window.i18n.en = {
     rp_step3_succes: 'password reset successfully. Please use your new password to login',
     passworminlength: 'Password must be 6 characters at least.',
     emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
-    emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.'
+    emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.',
+	//added 8/29/2016
+	noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service'
 
 }
 window.i18n.zh = {
@@ -183,13 +185,13 @@ window.i18n.zh = {
     saveInfo: '若要保存数据，您必须同步 ID 卡',
     creationMsgMissing: '信息不完整，请正确填写所有信息!',
     creationSuccessful: '',
-    login: '登录名',
+    login: '登录名(邮箱)',
     confirmPassword: '确认密码',
     idCardNotFound: "未发现ID卡",
     scanAgain: '请再次扫描',
     idCardFound: '发现ID卡',
     ok: '确认',
-    version: '版本',
+    version: '版本{0}',
     addIdTo: '添加产品',
     myProductList: '我的产品列表',
     editProduct: '编辑产品',
@@ -264,7 +266,9 @@ window.i18n.zh = {
     rp_step3_succes: '密码重置成功，请用新密码登陆。',
     passworminlength: '密码至少六位。',
     emailSendSuccess: '邮件成功发送到您的邮箱({0})，请查阅.',
-    emailSendFail: '邮件未成功发送到您的邮箱({0}) ({0}).请重试。如果问题仍然存在请详细我们的客服人员。'
+    emailSendFail: '邮件未成功发送到您的邮箱({0}) ({0}).请重试。如果问题仍然存在请详细我们的客服人员。',
+	//added 8/29/2016
+	noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service'
 }
 
 window.i18n.sp = {
@@ -317,13 +321,13 @@ window.i18n.sp = {
     saveInfo: "Para guardar los datos, debe sincronizar el ID CARD",
     creationMsgMissing: 'Todos los campos son obligatorios. Por favor introdusca la informacion correcta.',
     creationSuccessful: 'Su cuenta ha sido creada. Ahora usted podrá conectarse desde la aplicación ID CARD o desde el sitio web http://www.deltaplus.eu para acceder a su espacio de Gerente EPI',
-    login: 'Usuario',
+    login: 'Usuario (email)',
     confirmPassword: 'Confirmar Contraseña',
     idCardNotFound: "ID CARD<br/>No encontrada",
     scanAgain: 'Escanear otra vez',
     idCardFound: 'ID Card<br/>Encontrado',
     ok: 'OK',
-    version: 'Version',
+    version: 'Version{0}',
     addIdTo: 'Agregar Producto',
     myProductList: 'Mis Productos',
     editProduct: 'Editar Producto',
@@ -381,7 +385,7 @@ window.i18n.sp = {
 	//added on 4/2/2015
 	appError: 'Error de la aplicacion {0}',	
 	confPassword: 'Contraseña y Confirmar Contraseña son diferentes.',
-    acctExists: 'Account already exist with same name or email.',
+    acctExists: 'Cuenta ya existe con el mismo email.',
     noConnect: 'No Response from server.',
     nonetwork: 'Network is disabled, please open your network and try again.',
     invalidInput: 'Invalid input for {0}',
@@ -397,7 +401,9 @@ window.i18n.sp = {
     rp_step3_succes: 'password reset successfully. Please use your new password to login',
     passworminlength: 'Password must be 6 characters at least.',
     emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
-    emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.'
+    emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.',
+	//added 8/29/2016
+	noAccountCreate: 'Cuenta NO creada. Por favor contacte DeltaPlus Servicio al Cliente'
 }
 
 window.i18n.fr = {
@@ -411,7 +417,7 @@ window.i18n.fr = {
     new_user_registration: 'Créer un Compte',
     about_product_manager: 'à propos du Gestionnaire',
     password: 'Mot de Passe',
-    email: 'EMAIL',
+    email: 'email',
     first_name: 'Prénom',
     last_name: 'Nom',
     phone: 'Téléphone',
@@ -450,13 +456,13 @@ window.i18n.fr = {
     saveInfo: "Pour enregistrer les données, vous devez synchroniser l'ID CARD",
     creationMsgMissing: 'Tous les champs sont  obligatoires. Merci de remplir tous les champs correctement !',
     creationSuccessful: "Votre compte a été créé ! Maintenant, vous serez capables de vous connecter depuis cette application ou depuis le site Web de http://www.deltaplus.eu afin d'accéder à votre espace de gestionnaire EPI",
-    login: 'Nom d’utilisateur',
+    login: 'Nom d’utilisateur (email)',
     confirmPassword: 'Confirmer mot de Passe',
     idCardNotFound: "ID CARD<br/>Non Trouvé",
     scanAgain: 'Scanner de Nouveau',
     idCardFound: 'ID CARD<br/>Trouvé',
     ok: 'OK',
-    version: 'Version',
+    version: 'Version{0}',
     addIdTo: 'Ajouter Produit',
     myProductList: 'Mes Produits',
     editProduct: 'éditer Produit',
@@ -514,7 +520,7 @@ window.i18n.fr = {
 	//added on 4/2/2015
 	appError: 'Erreur application {0}',
 	confPassword: 'Mot de passe et Confirmer le mot de passe sont différents.',
-    acctExists: 'Account already exist with same name or email.',
+    acctExists: 'Account already exist with same email.',
     noConnect: 'No Response from server.',
     nonetwork: 'Network is disabled, please open your network and try again.',
     invalidInput:'Invalid input for {0}',
@@ -530,5 +536,7 @@ window.i18n.fr = {
     rp_step3_succes: 'password reset successfully. Please use your new password to login',
     passworminlength: 'Password must be 6 characters at least.',
     emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
-    emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.'
+    emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.',
+	//added 8/29/2016
+	noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service'
 }
