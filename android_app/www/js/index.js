@@ -1,9 +1,19 @@
 //global setting
 $.mobile.defaultPageTransition = 'flip';
+// AWS Server
 //var web_server = "http://52.74.123.208/nfc_deltaweb";
 //var web_index = "http://52.74.123.208/nfc_deltaweb/mindex.php";
-var web_server = "http://localhost/nfc_deltaweb"; 
-var web_index = "http://localhost/nfc_deltaweb/mindex.php"; 
+// Local Host
+//var web_server = "http://localhost/nfc_deltaweb";
+//var web_index = "http://localhost/nfc_deltaweb/mindex.php";
+// Development Environment
+//var web_server_delta = "http://172.17.17.140:8080/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.annualcheckuseraccount";
+//var web_server_delta = "https://www.deltaplus.eu/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.annualcheckuseraccount";
+//Production Environment
+var web_server_delta = "https://www.deltaplus.eu/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.annualcheckuseraccount/";
+//https://www.deltaplus.eu/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.annualcheckuseraccount/create-annual-check-account?emailAddress=gera_ga83@hotmail.com&firstName=Gerardo&lastName=Garza&password=12345678&jobTitle=&company=Softtek&street1&zip&city=&country=&phoneNumber=18762650921&phoneExtension&faxNumber&faxExtension&companyActivity&companyWorkforce&companyTurnover&comment&contactWish=Mail&languageCode=en
+var liferaywsUser = "annualcheckserviceadmin";
+var liferaywsPassword = "annualcheckserviceadmin!789";
 
 //global varity
 var ifTagFound = false,
@@ -1203,7 +1213,7 @@ $('.menu_about').on('touchstart', function() {
 });
 $('.menu_about').on('touchend', function() {
     $(this).toggleClass('general_btn_click');
-    myAlert('version', ['1.3']);
+    myAlert('version', ['1.5.2']);
 });
 //setting end
 //product manager
@@ -1318,7 +1328,7 @@ $(".validate_registion").on('touchend', function() {
         password = $("#user_registion #password").val(),
         confirm = $("#user_registion #passwordConfirm").val();
         
-    var emailRegEx = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+    var emailRegEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 		
 	//Delta Type for Maintenance version
 	var deltaType = 0;
@@ -1326,7 +1336,7 @@ $(".validate_registion").on('touchend', function() {
     if(firstName == "" || lastName == "" || company == "" || phone == "" || email == "" || password == "" || confirm == "") {
         myAlert('creationMsgMissing');        
     } else if(!emailRegEx.test(email.toLowerCase())){
-        myAlert("Wrong email address");
+        myAlert('wrongEmail');
 		$("#user_registion #email").val("");
         $("#user_registion #email").focus();
     } else if(password!=confirm){
@@ -1340,40 +1350,72 @@ $(".validate_registion").on('touchend', function() {
 		$("#user_registion #passwordConfirm").val("");
 		$("#user_registion #password").focus();        
     } else {
-		$.post(web_server + "/restm.php", {
-			type: 'saveUser',
-			email: email,
-			firstName: firstName,
-			lastName: lastName,
-			phone: phone,
-			company: company,
-			userType: deltaType,
-			password: password
-		}, function(data) {        
-			if (data && data.length != 0) {
-				if(data[0].count != 0){
-					myAlert('acctExists');
-					$("#user_registion #email").val("");
-					$("#user_registion #password").val("");
-					$("#user_registion #passwordConfirm").val("");
-					$("#user_registion #email").focus();
-				} else {
-					myAlert('accountCreated');
-					$("#user_registion #firstName").val("");
-					$("#user_registion #lastName").val("");
-					$("#user_registion #email").val("");
-					$("#user_registion #phone").val("");
-					$("#user_registion #company").val("");
-					$("#user_registion #password").val("");
-					$("#user_registion #passwordConfirm").val("");
-					$.mobile.navigate("#product_manager");
-				}
+		function make_base_auth(user, password) {
+            var token = liferaywsUser + ":" + liferaywsPassword;
+            var hash = btoa(token);
+            return "Basic " + hash;
+        }
+        var loader = showLoading('Loading...');
 
-			} else {
-				myAlert('noAccountCreate');
-			}
-		}, 'JSON').fail(function() { myAlert('noConnect'); });		
-	}
+        $.ajax({
+            type: "POST",
+            url: web_server_delta + "create-annual-check-account",         
+            //contentType: "application/json",
+            //data: JSON.stringify({
+            data: {
+    			//type: 'saveUser',
+    			//userType: deltaType,    			
+                emailAddress: email,
+                firstName: firstName,
+                lastName: lastName,
+                password: password,
+                jobTitle: null,
+                company: company,
+                street1: null,
+                zip: null,
+                city: null,
+                country: null,
+                phoneNumber: phone,
+                phoneExtension: null,
+                faxNumber: null,
+                faxExtension: null,
+                companyActivity: null,
+                companyWorkforce: null,
+                companyTurnover: null,
+                comment: null,
+                contactWish: 'Mail',
+                languageCode: 'en'},            
+            beforeSend: function (xhr) {
+                //xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
+            },
+            success:  
+                function(data) {                    
+                    loader.hide();
+                    alert("WebService call successfully " + data + " userId: " + data.userId + " length: " + data.length + " Message: " + data.message);
+                    alert("Exception: " + data.exception + " status " + data.status);
+                    if (data.exception == "") {				        
+    					myAlert('accountCreated');
+    					$("#user_registion #firstName").val("");
+    					$("#user_registion #lastName").val("");
+    					$("#user_registion #email").val("");
+    					$("#user_registion #phone").val("");
+    					$("#user_registion #company").val("");
+    					$("#user_registion #password").val("");
+    					$("#user_registion #passwordConfirm").val("");
+    					$.mobile.navigate("#product_manager");				        
+                    } else {
+				        loader.hide();
+                        alert("Message: " + data.message + " Exception: " + data.exception);
+                        myAlert('noAccountCreate');
+			        }
+                },
+            error:
+                function() {
+                    alert("Error Web Services");
+                } 		
+	    });
+    }
 });
 /**
 * Remember password Function binding.

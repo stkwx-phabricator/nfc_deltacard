@@ -132,7 +132,8 @@ window.i18n.en = {
     emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
     emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.',
 	//added 8/29/2016
-	noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service'
+	noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service',
+    wrongEmail: 'email address is invalid.'
 
 }
 window.i18n.zh = {
@@ -268,7 +269,8 @@ window.i18n.zh = {
     emailSendSuccess: '邮件成功发送到您的邮箱({0})，请查阅.',
     emailSendFail: '邮件未成功发送到您的邮箱({0}) ({0}).请重试。如果问题仍然存在请详细我们的客服人员。',
 	//added 8/29/2016
-	noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service'
+	noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service',
+    wrongEmail: 'email address is invalid.'
 }
 
 window.i18n.sp = {
@@ -403,7 +405,8 @@ window.i18n.sp = {
     emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
     emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.',
 	//added 8/29/2016
-	noAccountCreate: 'Cuenta NO creada. Por favor contacte DeltaPlus Servicio al Cliente'
+	noAccountCreate: 'Cuenta NO creada. Por favor contacte DeltaPlus Servicio al Cliente',
+    wrongEmail: 'La cuenta de correo es invalida'
 }
 
 window.i18n.fr = {
@@ -538,5 +541,6 @@ window.i18n.fr = {
     emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
     emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.',
 	//added 8/29/2016
-	noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service'
+	noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service',
+    wrongEmail: 'email address is invalid.'
 }
