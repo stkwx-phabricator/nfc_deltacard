@@ -12,8 +12,9 @@ $.mobile.defaultPageTransition = 'flip';
 //Production Environment
 var web_server_delta = "https://www.deltaplus.eu/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.annualcheckuseraccount/";
 //https://www.deltaplus.eu/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.annualcheckuseraccount/create-annual-check-account?emailAddress=gera_ga83@hotmail.com&firstName=Gerardo&lastName=Garza&password=12345678&jobTitle=&company=Softtek&street1&zip&city=&country=&phoneNumber=18762650921&phoneExtension&faxNumber&faxExtension&companyActivity&companyWorkforce&companyTurnover&comment&contactWish=Mail&languageCode=en
-var liferaywsUser = "annualcheckserviceadmin";
-var liferaywsPassword = "annualcheckserviceadmin!789";
+var web_server_equipment = "https://www.deltaplus.eu/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.equipment/";
+var liferaywsUserAdmin = "annualcheckserviceadmin";
+var liferaywsPasswordAdmin = "annualcheckserviceadmin!789";
 
 //global varity
 var ifTagFound = false,
@@ -427,10 +428,10 @@ function writeCardInforToDB(ifAddIdOnly) {
     nfcData[9] = $('.scan_step2 input[name="sav5"]').val();
     var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024);
     db.transaction(function(tx) {
-        tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete)')
+        tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
         tx.executeSql('SELECT * FROM cardInfor WHERE serial = ?', [nfcData[1]], function(tx, re) {
             if (re.rows.length == 0) {
-                tx.executeSql('INSERT INTO cardInfor VALUES(?,?,?,?,?,?,?,?,?,?,?,"0")', nfcData);
+                tx.executeSql('INSERT INTO cardInfor VALUES(?,?,?,?,?,?,?,?,?,?,?,"0",null)', nfcData);
             } else {
                 tx.executeSql('UPDATE cardInfor SET product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=?,ifDelete="0" WHERE serial = ?', [nfcData[0], nfcData[2], nfcData[3], nfcData[4], nfcData[5], nfcData[6], nfcData[7], nfcData[8], nfcData[9], nfcData[1]]);
             }
@@ -447,7 +448,7 @@ function readCardInforListFromDB(ifShowUpdate) {
     var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024),
         result = [];
     db.transaction(function(tx) {
-        tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete)')
+        tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)')
         tx.executeSql("SELECT * FROM cardInfor where ifDelete ='0'", [], function(tx, re) {
             for (var i = 0; i < re.rows.length; i++) {
                 result[i] = {};
@@ -606,6 +607,13 @@ function changeLanguage() {
     updateLanguage(lang);
 }
 //for synchronize
+
+function make_base_auth(user, password) {
+    var token = user + ":" + password;
+    var hash = btoa(token);
+    return "Basic " + hash;
+}
+
 function prepareSendingData() {
     var uploadLoader = $.mobile.loading("show", {
             text: "foo",
@@ -615,10 +623,12 @@ function prepareSendingData() {
         }),
         db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024),
         result = [];
-    db.transaction(function(tx) {
-        tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete)')
+        var liferaywsUser = window.localStorage['username'];                    
+        var liferaywsPassword = window.localStorage['password'];
+    db.transaction(function(tx) {        
+        tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
         tx.executeSql('SELECT * FROM cardInfor', [], function(tx, re) {
-            for (var i = 0; i < re.rows.length; i++) {
+            for (var i = 0; i < re.rows.length; i++) {                
                 result[i] = {};
                 result[i].product = re.rows.item(i).product;
                 result[i].serial = re.rows.item(i).serial;
@@ -631,45 +641,203 @@ function prepareSendingData() {
                 result[i].sav4 = re.rows.item(i).sav4;
                 result[i].sav5 = re.rows.item(i).sav5;
                 result[i].ifDelete = re.rows.item(i).ifDelete;
+                result[i].equipmentId = re.rows.item(i).equipmentId;
             }
-            var resData = {
-                type: 'backup',
-                products: result,
-                userId: window.localStorage['userId']
-            };
-            $.ajax({
-                url: web_server + "/restm.php",
-                type: 'post',
-                contentType: 'application/json;charset=UTF-8',
-                dataType: 'json',
-                data: JSON.stringify(resData),
-                success: function(data) {
-                    uploadLoader.hide();
-                    if (data) {
-                        myAlert('uploadSuccessfully');
+            
+            for(var j = 0; j < result.length; j++) {
+                alert('Product ' + result[j].product + ' Serial ' + result[j].serial + ' User ' + result[j].user + ' EquipmentID ' + result[j].equipmentId);
+
+                //result[j].equipmentId = 55802;
+                alert(result[j].equipmentId);
+
+                if(result[j].equipmentId == null) {
+                    
+                    /*
+                    $.ajax({
+                    type: 'GET';
+                    url: web_server_equipment + '/get-equipment';
+                    contentType: 'application/json;charset=UTF-8',
+                    dataType: 'json',
+                    data: {
+                        equipmentId: result[i].equipmentId
+                    },
+                    beforeSend: function (xhr) {                    
+                        alert(liferaywsUser + "/" + liferaywsPassword);
+                        xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
+                    },
+                    success: function(data, status) {
+                        uploadLoader.hide();
+                        alert('Equipment ' + data.equipmentId + ' status ' + status);
+                        alert('Message ' + data.message + ' Exception ' + data.exception);
+                        if (typeof data.equipmentId !== 'undefined') {
+                            myAlert('uploadSuccessfully');
+                        } else {
+                            alert("Algo salio mal!");
+                        }
+                    },
+                    error: function(m1, m2, m3) {
+                        uploadLoader.hide();
+                        alert("Error Web Services status " + m2 + " Exception "  + m3);             
+                        console.log(m2);
                     }
-                },
-                error: function(m1, m2, m3) {
+                    });
+                    */
+
+                    $.ajax({
+                    type: 'GET',
+                    url: web_server_equipment + "/create-equipment",                
+                    contentType: 'application/json;charset=UTF-8',
+                    dataType: 'json',
+                    data: {
+                        reference: result[j].product,
+                        brand: 'DELTAPLUS',
+                        designation: 'DeltaPlus',
+                        description: null,
+                        lotNumber: result[j].serial,
+                        userName: result[j].user,
+                        retailerName: 'Softtek',
+                        retailerParticulars: 'Wuxi China',
+                        observation: null,
+                        manufacturingMonth: 1,
+                        manufacturingDay: 1,
+                        manufacturingYear: 2015,
+                        firstUsageMonth: 0,
+                        firstUsageDay: 0,
+                        firstUsageYear: 0,
+                        lastcontrolDateMonth: 0,
+                        lastcontrolDateDay: 0,
+                        lastcontrolDateYear: 0,
+                        control1DateMonth: 0,
+                        control1DateDay: 0,
+                        Control1DateYear: 0,
+                        control2DateMonth: 0,
+                        control2DateDay: 0,
+                        Control2DateYear: 0,
+                        control3DateMonth: 0,
+                        control3DateDay: 0,
+                        Control3DateYear: 0,
+                        control4DateMonth: 0,
+                        control4DateDay: 0,
+                        Control4DateYear: 0,
+                        control5DateMonth: 0,
+                        control5DateDay: 0,
+                        Control5DateYear: 0,
+                    },
+                    beforeSend: function (xhr) {                    
+                        alert(liferaywsUser + "/" + liferaywsPassword);
+                        xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
+                    },
+                    success: function(data, status) {                        
+                        alert('Equipment ' + data.equipmentId + ' status ' + status);
+                        alert('Message ' + data.message + ' Exception ' + data.exception);
+                        if (typeof data.equipmentId !== 'undefined') {
+                            alert(tx);
+                            tx.executeSql('UPDATE cardInfor SET equipmentId=? WHERE product=? AND serial=? AND user=?', [data.equipmentId, result[j].product, result[j].serial, result[j].user], transactionSuccess, errorHandler);
+                            myAlert('uploadSuccessfully');
+                        } else {
+                            alert("Algo salio mal!");
+                        }
+                    },
+                    error: function(m1, m2, m3) {                        
+                        alert("Error Web Services status " + m2 + " Exception "  + m3);             
+                        console.log(m2);
+                    }
+                    });
+                } else {
+                    $.ajax({
+                    type: 'POST',
+                    url: web_server_equipment + "/update-equipment",                
+                    contentType: 'application/json;charset=UTF-8',
+                    dataType: 'json',
+                    data: {                        
+                        equipmentId: result[j].equipmentId,
+                        reference: result[j].product,
+                        brand: 'DELTAPLUS',
+                        designation: 'DeltaPlus',
+                        description: null,
+                        lotNumber: result[j].serial,
+                        userName: result[j].user,
+                        retailerName: 'Softtek Update',
+                        retailerParticulars: 'Wuxi Jiangsu China',
+                        observation: null,
+                        manufacturingMonth: '1',
+                        manufacturingDay: '1',
+                        manufacturingYear: '2015',
+                        firstUsageMonth: '1',
+                        firstUsageDay: '3',
+                        firstUsageYear: '2016',                        
+                        lastcontrolDateMonth: '10',
+                        lastcontrolDateDay: '3',
+                        lastcontrolDateYear: '2016',
+                        control1DateMonth: '0',
+                        control1DateDay: '0',
+                        Control1DateYear: '0',
+                        control2DateMonth: '0',
+                        control2DateDay: '0',
+                        Control2DateYear: '0',
+                        control3DateMonth: '0',
+                        control3DateDay: '0',
+                        Control3DateYear: '0',
+                        control4DateMonth: '0',
+                        control4DateDay: '0',
+                        Control4DateYear: '0',
+                        control5DateMonth: '0',
+                        control5DateDay: '0',
+                        Control5DateYear: '0',
+                    },
+                    beforeSend: function (xhr) {                    
+                        alert(liferaywsUser + "/" + liferaywsPassword);
+                        xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
+                    },
+                    success: function(data, status) {                        
+                        alert('Equipment ' + data.equipmentId + ' status ' + status);
+                        alert('Message ' + data.message + ' Exception ' + data.exception);
+                        if (typeof data.equipmentId !== 'undefined') {
+                            myAlert('uploadSuccessfully');
+                        } else {
+                            alert("Update algo salio mal!");
+                        }
+                    },
+                    error: function(m1, m2, m3) {
+                        uploadLoader.hide();
+                        alert("Error Web Services status (update) " + m2 + " Exception "  + m3);             
+                        console.log(m2);
+                    }
+                    });
                     uploadLoader.hide();
-                    console.log(m2);
-                }
-            });
+                }                 
+            }
         });
     });
+}
+
+function transactionSuccess(transaction, results) {
+    alert(results.rows.length);
+}
+
+function errorHandler(transaction, error) {        
+    if (error.code===1){
+        // DB Table already exists
+        alert("Table already exists");
+    } else {
+        // Error is a human-readable string.
+        alert('Oops.  Error was '+error.message+' (Code '+ error.code +')');
+    }
+    return false;           
 }
 
 function updateReceivingData(data) {
     try {
         var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024);
         db.transaction(function(tx) {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete)');
+            tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
             for (var i in data) {
                 (function(item){
                     tx.executeSql('SELECT * FROM cardInfor WHERE serial = ?', [item.serial], function(tx, re) {
                         if (re.rows.length == 0) {
                             try{
                                 console.log(item.serial);
-                                tx.executeSql('INSERT INTO cardInfor VALUES(?,?,?,?,?,?,?,?,?,?,?,?)', [item.product,item.serial,item.user,item.prod,item.start,item.sav1,item.sav2,item.sav3,item.sav4,item.sav5,1,item.ifDelete]);
+                                tx.executeSql('INSERT INTO cardInfor VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)', [item.product,item.serial,item.user,item.prod,item.start,item.sav1,item.sav2,item.sav3,item.sav4,item.sav5,1,item.ifDelete,item.equipmentId]);
                             }catch(err){
                                 console.log(err);
                             }
@@ -769,7 +937,7 @@ function confirmToSelectDate(){
         };
     }
     
-   // alert("selected date = " + value);
+   //alert("selected date = " + value);
     $(".scan_step2 input[name='"+window.currentDateName+"']").val(value);
     $("#date_picker").popup('close');
 }
@@ -984,6 +1152,10 @@ $(".menu_view").on('touchend', function() {
 	$.mobile.navigate("#myproducts");
 });
 $(".menu_product").on('touchend', function() {
+    
+    //window.localStorage['userId'] = 11748068;
+    //window.localStorage.clear();
+   
     if(window.localStorage['userId']){
         $.mobile.navigate('#product_manager_center');
     }else{
@@ -1056,11 +1228,15 @@ $('.scan_step1_4_instruction').on('touchend', function() {
 });
 
 //new button for add id to my product only
-$(".scan_add_to_myproduct").on('click', function() {
+$(".scan_add_to_myproduct").on('touchstart', function() {
+    $(this).toggleClass('general_btn_click');
+});
+$(".scan_add_to_myproduct").on('touchend', function() {
     // validate data before add to my product.    
     var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024);    
     db.transaction(function (tx) {        
-        tx.executeSql('SELECT serial FROM cardInfor WHERE ifDelete = "0" AND serial = ?', [nfcData[1]], function (tx, re) {            
+        tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
+        tx.executeSql('SELECT serial FROM cardInfor WHERE ifDelete = "0" AND serial = ?', [nfcData[1]], function (tx, re) {                  
             if (re.rows.length == 0) {
                 writeCardInforToDB(true);
             } else {
@@ -1236,7 +1412,7 @@ $('.upload_my').on('touchstart', function() {
     $(this).toggleClass('general_btn_click');
 });
 $('.upload_my').on('touchend', function() {
-    $(this).toggleClass('general_btn_click');
+    $(this).toggleClass('general_btn_click');    
     prepareSendingData();
 });
 $('.backup_my').on('touchstart', function() {
@@ -1296,25 +1472,40 @@ $(".validate_login").on('touchend', function() {
         myAlert('invalidInput', ['password']);        
     } else {
 		var loader = showLoading('Loading');
-		$.post(web_server + "/restm.php", {
-			type: 'login',
-			login: login,
-			password: password
-		}, function (data) {
-			loader.hide();
-			if (data && data.length != 0) {
-				window.localStorage['userId'] = data[0].id;
-				$("#product_manager input[name='login']").val("");
-				$("#product_manager input[name='password']").val("");
-				$.mobile.navigate('#product_manager_center');
-			} else {
-				myAlert('loginfailed');				
-				$("#product_manager input[name='password']").val("");
-				$("#product_manager input[name='password']").focus();
-			}
-		}).error(function () {
-			loader.hide();
-			myAlert("error");
+		$.ajax({
+			type: 'GET',
+            url: web_server_delta + 'get-annual-check-account',                        
+            crossDomain: true,
+			data: {
+                userId: -1
+            },
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                //xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.setRequestHeader("Authorization", make_base_auth(login, password));
+            },
+            success: function(data, status) {                    
+                loader.hide();
+                alert("WebService call successfully " + data + " userId: " + data.userId + "Status: " + status);
+                alert("Exception: " + data.exception + " Message: " + data.message);
+                if (typeof data.userId !== 'undefined') {             
+                    window.localStorage['userId'] = data.userId;
+                    window.localStorage['username'] = login;
+                    window.localStorage['password'] = password;
+                    $("#product_manager input[name='login']").val("");
+                    $("#product_manager input[name='password']").val("");
+                    $.mobile.navigate('#product_manager_center');                     
+                } else {
+                    myAlert('loginfailed');             
+                    $("#product_manager input[name='password']").val("");
+                    $("#product_manager input[name='password']").focus();
+                }
+            },
+            error: function(jqXHR, status, throwerror) {
+                loader.hide();
+                alert("Error Web Services " + status + " Message " + throwerror);
+            } 
 		});
 	}
 });
@@ -1349,22 +1540,15 @@ $(".validate_registion").on('touchend', function() {
 		$("#user_registion #password").val("");
 		$("#user_registion #passwordConfirm").val("");
 		$("#user_registion #password").focus();        
-    } else {
-		function make_base_auth(user, password) {
-            var token = liferaywsUser + ":" + liferaywsPassword;
-            var hash = btoa(token);
-            return "Basic " + hash;
-        }
+    } else {		
         var loader = showLoading('Loading...');
 
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: web_server_delta + "create-annual-check-account",         
-            //contentType: "application/json",
-            //data: JSON.stringify({
-            data: {
-    			//type: 'saveUser',
-    			//userType: deltaType,    			
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'json',
+            data: {    			 			
                 emailAddress: email,
                 firstName: firstName,
                 lastName: lastName,
@@ -1384,36 +1568,35 @@ $(".validate_registion").on('touchend', function() {
                 companyTurnover: null,
                 comment: null,
                 contactWish: 'Mail',
-                languageCode: 'en'},            
-            beforeSend: function (xhr) {
+                languageCode: 'en'
+            },            
+            beforeSend: function (xhr, status) {
                 //xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
+                xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUserAdmin, liferaywsPasswordAdmin));
             },
-            success:  
-                function(data) {                    
-                    loader.hide();
-                    alert("WebService call successfully " + data + " userId: " + data.userId + " length: " + data.length + " Message: " + data.message);
-                    alert("Exception: " + data.exception + " status " + data.status);
-                    if (data.exception == "") {				        
-    					myAlert('accountCreated');
-    					$("#user_registion #firstName").val("");
-    					$("#user_registion #lastName").val("");
-    					$("#user_registion #email").val("");
-    					$("#user_registion #phone").val("");
-    					$("#user_registion #company").val("");
-    					$("#user_registion #password").val("");
-    					$("#user_registion #passwordConfirm").val("");
-    					$.mobile.navigate("#product_manager");				        
-                    } else {
-				        loader.hide();
-                        alert("Message: " + data.message + " Exception: " + data.exception);
-                        myAlert('noAccountCreate');
-			        }
-                },
-            error:
-                function() {
-                    alert("Error Web Services");
-                } 		
+            success:  function(data, status) {                    
+                loader.hide();
+                alert("WebService call successfully " + JSON.stringify(data));
+                alert("Exception: " + data.exception + " status " + status);
+                if (typeof data !== 'undefined') {				        
+					myAlert('accountCreated');
+					$("#user_registion #firstName").val("");
+					$("#user_registion #lastName").val("");
+					$("#user_registion #email").val("");
+					$("#user_registion #phone").val("");
+					$("#user_registion #company").val("");
+					$("#user_registion #password").val("");
+					$("#user_registion #passwordConfirm").val("");
+					$.mobile.navigate("#product_manager");				        
+                } else {
+			        loader.hide();
+                    alert("Message: " + data.message + " Exception: " + data.exception);
+                    myAlert('noAccountCreate');
+		        }
+            },
+            error: function(jqXHR, status, throwerror) {
+                alert("Error Web Services " + status);
+            } 		
 	    });
     }
 });
@@ -1626,7 +1809,6 @@ function checkConnection() {
 var app = {
     // Application Constructor
     initialize: function() {
-
         this.bindEvents();
     },
     // Bind Event Listeners
