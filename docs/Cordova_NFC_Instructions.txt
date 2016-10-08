@@ -26,6 +26,10 @@ Step to create Cordova project in Windows OS
 	cordova plugin add org.apache.cordova.globalization
 	cordova plugin add org.apache.cordova.network-information
 
+	## this whitelist plugin is applying for android version greater than 4.0, otherwise, you will failed when calling remote server.
+	cordova plugin add cordova-plugin-whitelist
+    cordova plugin add cordova-plugin-http
+
 4. At same level than www folder should be a Resource folder "res". This directory will include resources that applications needs as icon, background etc.
    Move resource files into this folder
 

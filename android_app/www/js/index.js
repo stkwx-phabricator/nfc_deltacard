@@ -16,6 +16,9 @@ var web_server_equipment = "https://www.deltaplus.eu/api/jsonws/deltaplus-deltaw
 var liferaywsUserAdmin = "annualcheckserviceadmin";
 var liferaywsPasswordAdmin = "annualcheckserviceadmin!789";
 
+// app maintenance flag
+var version_maintenance = true;
+
 //global varity
 var ifTagFound = false,
     ifEmpytyTag = false,
@@ -41,7 +44,10 @@ var ifTagFound = false,
     tagId,
     myAlert = function(key,param,callback){
         var fun = callback?callback:function(){},
-        msg = window.i18n[window.localStorage['language']][key];        
+        msg = window.i18n[window.localStorage['language']][key];
+        if(!msg) {
+            msg = key;
+        }
         if (param) {
             for (var i in param) {
                 if(window.i18n[window.localStorage['language']][param[i]])
@@ -1270,7 +1276,19 @@ $(".scan_step2_btn").on('touchend', function() {
 $(".scan_step2_btn2").on("touchend", function() {
     $(".scan_read_btn").hide();
     $(".scan_step2_btn").show();
-    if (ifEmpytyTag) {
+    if(version_maintenance) {
+        $('.scan_step2 input[name="product"]').textinput('enable');
+        $('.scan_step2 input[name="serial"]').textinput('enable');
+        $('.scan_step2 input[name="user"]').textinput('enable');
+        $('.scan_step2 input[name="prod"]').textinput('enable');
+        $('.scan_step2 input[name="start"]').textinput('enable');
+        $('.scan_step2 input[name="sav1"]').textinput('enable');
+        $('.scan_step2 input[name="sav2"]').textinput('enable');
+        $('.scan_step2 input[name="sav3"]').textinput('enable');
+        $('.scan_step2 input[name="sav4"]').textinput('enable');
+        $('.scan_step2 input[name="sav5"]').textinput('enable');
+    }
+    else if (ifEmpytyTag) {
         $('.scan_step2 input[name="product"]').textinput('enable');
         $('.scan_step2 input[name="serial"]').textinput('enable');
         $('.scan_step2 input[name="user"]').textinput('enable');
@@ -1487,8 +1505,6 @@ $(".validate_login").on('touchend', function() {
             },
             success: function(data, status) {                    
                 loader.hide();
-                alert("WebService call successfully " + data + " userId: " + data.userId + "Status: " + status);
-                alert("Exception: " + data.exception + " Message: " + data.message);
                 if (typeof data.userId !== 'undefined') {             
                     window.localStorage['userId'] = data.userId;
                     window.localStorage['username'] = login;
@@ -1497,14 +1513,15 @@ $(".validate_login").on('touchend', function() {
                     $("#product_manager input[name='password']").val("");
                     $.mobile.navigate('#product_manager_center');                     
                 } else {
-                    myAlert('loginfailed');             
+                    myAlert('loginfailed');
                     $("#product_manager input[name='password']").val("");
                     $("#product_manager input[name='password']").focus();
                 }
             },
             error: function(jqXHR, status, throwerror) {
                 loader.hide();
-                alert("Error Web Services " + status + " Message " + throwerror);
+                myAlert("appError", throwerror);
+
             } 
 		});
 	}
@@ -1574,28 +1591,28 @@ $(".validate_registion").on('touchend', function() {
                 //xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUserAdmin, liferaywsPasswordAdmin));
             },
-            success:  function(data, status) {                    
+            success:  function(data, status) {
                 loader.hide();
                 alert("WebService call successfully " + JSON.stringify(data));
                 alert("Exception: " + data.exception + " status " + status);
-                if (typeof data !== 'undefined') {				        
-					myAlert('accountCreated');
-					$("#user_registion #firstName").val("");
-					$("#user_registion #lastName").val("");
-					$("#user_registion #email").val("");
-					$("#user_registion #phone").val("");
-					$("#user_registion #company").val("");
-					$("#user_registion #password").val("");
-					$("#user_registion #passwordConfirm").val("");
-					$.mobile.navigate("#product_manager");				        
+                if (typeof data !== 'undefined') {
+                  myAlert('accountCreated');
+                  $("#user_registion #firstName").val("");
+                  $("#user_registion #lastName").val("");
+                  $("#user_registion #email").val("");
+                  $("#user_registion #phone").val("");
+                  $("#user_registion #company").val("");
+                  $("#user_registion #password").val("");
+                  $("#user_registion #passwordConfirm").val("");
+                  $.mobile.navigate("#product_manager");
                 } else {
-			        loader.hide();
-                    alert("Message: " + data.message + " Exception: " + data.exception);
-                    myAlert('noAccountCreate');
+                  loader.hide();
+                  myAlert('noAccountCreate');
 		        }
             },
-            error: function(jqXHR, status, throwerror) {
-                alert("Error Web Services " + status);
+            error: function(error) {
+                loader.hide();
+                myAlert("Error Web Services " + error);
             } 		
 	    });
     }

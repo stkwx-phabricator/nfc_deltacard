@@ -64,6 +64,12 @@
         }
     },
     "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.softtek.delta"
+        },
+        "cordova-plugin-http": {
+            "PACKAGE_NAME": "com.softtek.delta"
+        },
         "org.apache.cordova.device": {
             "PACKAGE_NAME": "com.softtek.delta"
         },

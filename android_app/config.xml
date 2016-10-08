@@ -8,7 +8,7 @@
         Gerardo Garza
     </author>
     <content src="index.html" />
-    <access origin="*" />	
+    <access origin="*" />
 	<preference name="SplashScreen" value="screen" />
 	<platform name="android">
 		<splash src="res/screen.png" density="port-hdpi"/>
