@@ -839,16 +839,19 @@ function updateReceivingData(data) {
             tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
             for (var i in data) {
                 (function(item){
-                    tx.executeSql('SELECT * FROM cardInfor WHERE serial = ?', [item.serial], function(tx, re) {
+                    tx.executeSql('SELECT * FROM cardInfor WHERE serial = ?', [item.lotnumber], function(tx, re) {
                         if (re.rows.length == 0) {
                             try{
-                                console.log(item.serial);
-                                tx.executeSql('INSERT INTO cardInfor VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)', [item.product,item.serial,item.user,item.prod,item.start,item.sav1,item.sav2,item.sav3,item.sav4,item.sav5,1,item.ifDelete,item.equipmentId]);
+                                tx.executeSql('INSERT INTO cardInfor VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                                  [item.reference,item.lotnumber,item.username,item.manufacturingdate,item.firstcommissioningdate,
+                                      item.controlDate1,item.controlDate2,item.controlDate3,item.controlDate4,item.controlDate5,1,"0",item.equipmentId]);
                             }catch(err){
                                 console.log(err);
                             }
                         } else {
-                            tx.executeSql('UPDATE cardInfor SET product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=?,ifDelete=? WHERE serial = ?', [item.product, item.user, item.prod, item.start,item.sav1 , item.sav2, item.sav3, item.sav4, item.sav5, item.ifDelete, item.serial]);
+                            tx.executeSql('UPDATE cardInfor SET product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=?,ifDelete=? WHERE serial = ?',
+                              [item.reference, item.username, item.manufacturingdate, item.firstcommissioningdate,
+                                  item.controlDate1,item.controlDate2,item.controlDate3,item.controlDate4,item.controlDate5, "0", item.lotnumber]);
                         }
                     });
                 })(data[i]);
@@ -1438,31 +1441,31 @@ $('.backup_my').on('touchstart', function() {
 });
 $('.backup_my').on('touchend', function() {
     $(this).toggleClass('general_btn_click');
-    var uploadLoader = $.mobile.loading("show", {
-            text: "foo",
-            textVisible: true,
-            theme: "z",
-            html: '<span class="ui-bar ui-shadow ui-overlay-d ui-corner-all" style="background-color:white;"><span class="ui-icon-loading"></span><span style="font-size:2em;">downloading...</span></span>'
-        }),
-        reqData = {
-            "userId": window.localStorage['userId'],
-            "type": "update"
-        };
+
+    var login = window.localStorage['username'];
+    var password = window.localStorage['password'];
+    var loader = showLoading('Loading');
     $.ajax({
-        url: web_server + "/restm.php",
-        type: 'post',
-        contentType: 'application/json;charset=UTF-8',
+        type: 'POST',
+        url: web_server_equipment + 'get-equipments',
+        crossDomain: true,
+        data: "start=0&end=100",
         dataType: 'json',
-        data: JSON.stringify(reqData),
-        success: function(data) {
-            uploadLoader.hide();
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", make_base_auth(login, password));
+        },
+        success: function(data, status) {
+            loader.hide();
             if (data) {
                 updateReceivingData(data);
+            } else {
+                myAlert('No data found');
             }
         },
-        error: function(m1, m2, m3) {
-            uploadLoader.hide();
-            myAlert('appError', m3);
+        error: function(jqXHR, status, throwerror) {
+            loader.hide();
+            myAlert("appError", throwerror);
+
         }
     });
 });
@@ -1492,7 +1495,7 @@ $(".validate_login").on('touchend', function() {
 		var loader = showLoading('Loading');
 		$.ajax({
 			type: 'GET',
-            url: web_server_delta + 'get-annual-check-account',                        
+            url: web_server_delta + 'get-annual-check-account',
             crossDomain: true,
 			data: {
                 userId: -1
