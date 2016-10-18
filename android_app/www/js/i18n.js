@@ -131,9 +131,11 @@ window.i18n.en = {
     passworminlength: 'Password must be 6 characters at least.',
     emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
     emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.',
-	//added 8/29/2016
-	noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service',
-    wrongEmail: 'email address is invalid.'
+	  //added 8/29/2016
+	  noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service',
+    wrongEmail: 'Email address is invalid.',
+    remoteServerError: 'Remote server is unavailable now, please try later',
+    noDataFound: 'No Data found.'
 
 }
 window.i18n.zh = {
@@ -230,7 +232,7 @@ window.i18n.zh = {
     importSuccessfully:'导入数据成功',
     startDateNotSelect:'请先填入生产日期',
     fillProductionDate:'请先填入生产日期',
-    productCantAdd:'没有产品名称，无法添加到我的产品列表',
+    productCantAdd:'产品已经存在，无法再次添加',
     confirmToDeleteRecord:'确定从手机中删除这条记录吗?',
     confirmMsg:'确认',
     cancel:'取消',
@@ -267,10 +269,12 @@ window.i18n.zh = {
     rp_step3_succes: '密码重置成功，请用新密码登陆。',
     passworminlength: '密码至少六位。',
     emailSendSuccess: '邮件成功发送到您的邮箱({0})，请查阅.',
-    emailSendFail: '邮件未成功发送到您的邮箱({0}) ({0}).请重试。如果问题仍然存在请详细我们的客服人员。',
-	//added 8/29/2016
-	noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service',
-    wrongEmail: 'email address is invalid.'
+    emailSendFail: '邮件未成功发送到您的邮箱({0}) ({0}).请重试。如果问题仍然存在请联系我们的客服人员。',
+	  //added 8/29/2016
+	  noAccountCreate: '帐户创建失败,请重试。如果问题仍然存在请联系我们的客服人员。',
+    wrongEmail: '邮件地址无效',
+    remoteServerError: '服务器无响应,请稍后重试',
+    noDataFound: '无数据'
 }
 
 window.i18n.sp = {
@@ -404,9 +408,11 @@ window.i18n.sp = {
     passworminlength: 'Password must be 6 characters at least.',
     emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
     emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.',
-	//added 8/29/2016
+	//added 8/29/2016  Todo: need translate into Spanish
 	noAccountCreate: 'Cuenta NO creada. Por favor contacte DeltaPlus Servicio al Cliente',
-    wrongEmail: 'La cuenta de correo es invalida'
+  wrongEmail: 'La cuenta de correo es invalida',
+  remoteServerError: 'Remote server is unavailable now, please try later',
+  noDataFound: 'No Data found.'
 }
 
 window.i18n.fr = {
@@ -488,7 +494,7 @@ window.i18n.fr = {
     addIdToMyProduct: 'add id to Myproduct successfully',
     saveData: 'Save Data',
     uploadMyProductList: 'Télécharger une liste de produits mon',
-	useSameIdCard:'please use the same ID card!',
+	  useSameIdCard:'please use the same ID card!',
     productFieldEmpty:'product field is empty!',
 	//added on 1.31 2015
     productMaxLength:'Product field exceed maximum length name',
@@ -540,7 +546,9 @@ window.i18n.fr = {
     passworminlength: 'Password must be 6 characters at least.',
     emailSendSuccess: 'Email has been sent to your email ({0}) successfully, please check your email.',
     emailSendFail: 'Failed to send email ({0}). please try again. If issue still present, please contact our IT support.',
-	//added 8/29/2016
-	noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service',
-    wrongEmail: 'email address is invalid.'
+	  //added 8/29/2016 Todo: need translate into France
+	  noAccountCreate: 'Account was not created. Please contact DeltaPlus Customer Service',
+    wrongEmail: 'email address is invalid.',
+    remoteServerError: 'Remote server is unavailable now, please try later',
+    noDataFound: 'No Data found.'
 }

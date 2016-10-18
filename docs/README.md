@@ -8,6 +8,11 @@
 > cordova build android  
   cordova emulate android
   
+
+## Debug by GapDebug
+> start GapDebug App, it will open the Emulator in chrome auto.
+
+  
 ## To build maintenance version or user version
 > need change the www/js/index.js file following line:  
 `var version_maintenance = true;`

@@ -10,7 +10,7 @@
     background-color: white;
 }
 div{
-    overflow-x:hidden; 
+    /*overflow-x:hidden; */
     text-decoration: none;
     text-shadow:none;
 }

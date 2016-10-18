@@ -11,13 +11,12 @@ $.mobile.defaultPageTransition = 'flip';
 //var web_server_delta = "https://www.deltaplus.eu/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.annualcheckuseraccount";
 //Production Environment
 var web_server_delta = "https://www.deltaplus.eu/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.annualcheckuseraccount/";
-//https://www.deltaplus.eu/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.annualcheckuseraccount/create-annual-check-account?emailAddress=gera_ga83@hotmail.com&firstName=Gerardo&lastName=Garza&password=12345678&jobTitle=&company=Softtek&street1&zip&city=&country=&phoneNumber=18762650921&phoneExtension&faxNumber&faxExtension&companyActivity&companyWorkforce&companyTurnover&comment&contactWish=Mail&languageCode=en
-var web_server_equipment = "https://www.deltaplus.eu/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.equipment/";
+var web_server_equipment =  "https://www.deltaplus.eu/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.equipment/";
 var liferaywsUserAdmin = "annualcheckserviceadmin";
 var liferaywsPasswordAdmin = "annualcheckserviceadmin!789";
 
 // app maintenance flag
-var version_maintenance = true;
+var version_maintenance = false;
 
 //global varity
 var ifTagFound = false,
@@ -97,6 +96,7 @@ var ifTagFound = false,
                     nfc.write(message,function(){
 
                     },function(error){
+                        // todo there is some random error when saving data into card, eg. if you move card during writing process.
                         myAlert('appError', error);
                     });
                     myAlert('dataFomatNotRight',[nfc.bytesToHexString(tag.id)]);
@@ -194,7 +194,7 @@ var ifTagFound = false,
                         writeCardInforToDB();
                         hasViewMyPro = false;
                     }, function(error) {
-                        myAlert('appError', error);
+                        myAlert('appError', [error]);
                         $.mobile.navigate('#scan');
                     });
                     mimeCallBack = function() {};
@@ -217,7 +217,7 @@ var ifTagFound = false,
                         writeCardInforToDB();
                         hasViewMyPro = false;
                     }, function(error) {
-                        myAlert('appError', error);
+                        myAlert('appError', [error]);
                         $.mobile.navigate('#scan');
                     });
                     mimeCallBack = function() {};
@@ -415,7 +415,7 @@ function registeTagListener(callback, success) {
             success,
             function(error) { // error callback
                 // alert("Error adding TAG listener, reason: " + JSON.stringify(error));
-				myAlert("appError", [JSON.stringify(error)]);
+				        myAlert("appError", [JSON.stringify(error)]);
             }
         );
     }
@@ -631,203 +631,184 @@ function prepareSendingData() {
         result = [];
         var liferaywsUser = window.localStorage['username'];                    
         var liferaywsPassword = window.localStorage['password'];
-    db.transaction(function(tx) {        
-        tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
-        tx.executeSql('SELECT * FROM cardInfor', [], function(tx, re) {
-            for (var i = 0; i < re.rows.length; i++) {                
-                result[i] = {};
-                result[i].product = re.rows.item(i).product;
-                result[i].serial = re.rows.item(i).serial;
-                result[i].user = re.rows.item(i).user;
-                result[i].prod = re.rows.item(i).prod;
-                result[i].start = re.rows.item(i).start;
-                result[i].sav1 = re.rows.item(i).sav1;
-                result[i].sav2 = re.rows.item(i).sav2;
-                result[i].sav3 = re.rows.item(i).sav3;
-                result[i].sav4 = re.rows.item(i).sav4;
-                result[i].sav5 = re.rows.item(i).sav5;
-                result[i].ifDelete = re.rows.item(i).ifDelete;
-                result[i].equipmentId = re.rows.item(i).equipmentId;
-            }
-            
-            for(var j = 0; j < result.length; j++) {
-                alert('Product ' + result[j].product + ' Serial ' + result[j].serial + ' User ' + result[j].user + ' EquipmentID ' + result[j].equipmentId);
+        db.transaction(function(tx) {
+            tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
+            tx.executeSql('SELECT * FROM cardInfor where ifDelete = "0"', [], function(tx, re) {
+                for (var i = 0; i < re.rows.length; i++) {
+                    result[i] = {};
+                    result[i].reference = re.rows.item(i).product;
+                    result[i].lotnumber = re.rows.item(i).serial;
+                    result[i].username = re.rows.item(i).user;
+                    result[i].manufacturingdate = re.rows.item(i).prod;
+                    result[i].firstcommissioningdate = re.rows.item(i).start;
+                    result[i].controlDate1 = re.rows.item(i).sav1;
+                    result[i].controlDate2 = re.rows.item(i).sav2;
+                    result[i].controlDate3 = re.rows.item(i).sav3;
+                    result[i].controlDate4 = re.rows.item(i).sav4;
+                    result[i].controlDate5 = re.rows.item(i).sav5;
+                    result[i].ifDelete = re.rows.item(i).ifDelete;
+                    result[i].equipmentId = re.rows.item(i).equipmentId;
+                }
 
-                //result[j].equipmentId = 55802;
-                alert(result[j].equipmentId);
+                for(var j = 0; j < result.length; j++) {
+                    //if(true) {
+                    if(result[j].equipmentId == null) {
+                        var manufactureDate = getDateFromStr(result[j].manufacturingdate);
+                        var firstcommissioningdate = getDateFromStr(result[j].firstcommissioningdate);
+                        var controlDate1 = getDateFromStr(result[j].controlDate1);
+                        var controlDate2 = getDateFromStr(result[j].controlDate2);
+                        var controlDate3 = getDateFromStr(result[j].controlDate3);
+                        var controlDate4 = getDateFromStr(result[j].controlDate4);
+                        var controlDate5 = getDateFromStr(result[j].controlDate5);
 
-                if(result[j].equipmentId == null) {
-                    
-                    /*
-                    $.ajax({
-                    type: 'GET';
-                    url: web_server_equipment + '/get-equipment';
-                    contentType: 'application/json;charset=UTF-8',
-                    dataType: 'json',
-                    data: {
-                        equipmentId: result[i].equipmentId
-                    },
-                    beforeSend: function (xhr) {                    
-                        alert(liferaywsUser + "/" + liferaywsPassword);
-                        xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
-                    },
-                    success: function(data, status) {
-                        uploadLoader.hide();
-                        alert('Equipment ' + data.equipmentId + ' status ' + status);
-                        alert('Message ' + data.message + ' Exception ' + data.exception);
-                        if (typeof data.equipmentId !== 'undefined') {
-                            myAlert('uploadSuccessfully');
-                        } else {
-                            alert("Algo salio mal!");
-                        }
-                    },
-                    error: function(m1, m2, m3) {
-                        uploadLoader.hide();
-                        alert("Error Web Services status " + m2 + " Exception "  + m3);             
-                        console.log(m2);
-                    }
-                    });
-                    */
+                        var parameters = 'reference='+ result[j].reference +
+                          '&brand='+ 'DELTAPLUS' +
+                          '&designation='+ 'DeltaPlus' +
+                          '&description' +
+                          '&lotNumber='+ result[j].lotnumber +
+                          '&userName='+ result[j].username +
+                          '&retailerName='+ 'Softtek' +
+                          '&&&retailerParticulars='+ 'Wuxi China' +
+                          '&&observation' +
+                          '&manufacturingMonth='+ getMonth(manufactureDate) +
+                          '&manufacturingDay='+ getDate(manufactureDate) +
+                          '&manufacturingYear='+ getYear(manufactureDate) +
+                          '&firstUsageMonth='+ getMonth(firstcommissioningdate) +
+                          '&firstUsageDay='+ getDate(firstcommissioningdate) +
+                          '&firstUsageYear='+ getYear(firstcommissioningdate) +
+                          '&lastcontrolDateMonth='+ 0 +
+                          '&lastcontrolDateDay='+ 0 +
+                          '&lastcontrolDateYear='+ 0 +
+                          '&control1DateMonth='+ getMonth(controlDate1) +
+                          '&control1DateDay='+ getDate(controlDate1) +
+                          '&Control1DateYear='+ getYear(controlDate1) +
+                          '&control2DateMonth='+ getMonth(controlDate2) +
+                          '&control2DateDay='+ getDate(controlDate2) +
+                          '&Control2DateYear='+ getYear(controlDate3) +
+                          '&control3DateMonth='+ getMonth(controlDate3) +
+                          '&control3DateDay='+ getDate(controlDate3) +
+                          '&Control3DateYear='+ getYear(controlDate3) +
+                          '&control4DateMonth='+ getMonth(controlDate4) +
+                          '&control4DateDay='+ getDate(controlDate4) +
+                          '&Control4DateYear='+ getYear(controlDate4) +
+                          '&control5DateMonth='+ getMonth(controlDate5) +
+                          '&control5DateDay='+ getDate(controlDate5) +
+                          '&Control5DateYear='+ getYear(controlDate5);
 
-                    $.ajax({
-                    type: 'GET',
-                    url: web_server_equipment + "/create-equipment",                
-                    contentType: 'application/json;charset=UTF-8',
-                    dataType: 'json',
-                    data: {
-                        reference: result[j].product,
-                        brand: 'DELTAPLUS',
-                        designation: 'DeltaPlus',
-                        description: null,
-                        lotNumber: result[j].serial,
-                        userName: result[j].user,
-                        retailerName: 'Softtek',
-                        retailerParticulars: 'Wuxi China',
-                        observation: null,
-                        manufacturingMonth: 1,
-                        manufacturingDay: 1,
-                        manufacturingYear: 2015,
-                        firstUsageMonth: 0,
-                        firstUsageDay: 0,
-                        firstUsageYear: 0,
-                        lastcontrolDateMonth: 0,
-                        lastcontrolDateDay: 0,
-                        lastcontrolDateYear: 0,
-                        control1DateMonth: 0,
-                        control1DateDay: 0,
-                        Control1DateYear: 0,
-                        control2DateMonth: 0,
-                        control2DateDay: 0,
-                        Control2DateYear: 0,
-                        control3DateMonth: 0,
-                        control3DateDay: 0,
-                        Control3DateYear: 0,
-                        control4DateMonth: 0,
-                        control4DateDay: 0,
-                        Control4DateYear: 0,
-                        control5DateMonth: 0,
-                        control5DateDay: 0,
-                        Control5DateYear: 0,
-                    },
-                    beforeSend: function (xhr) {                    
-                        alert(liferaywsUser + "/" + liferaywsPassword);
-                        xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
-                    },
-                    success: function(data, status) {                        
-                        alert('Equipment ' + data.equipmentId + ' status ' + status);
-                        alert('Message ' + data.message + ' Exception ' + data.exception);
-                        if (typeof data.equipmentId !== 'undefined') {
-                            alert(tx);
-                            tx.executeSql('UPDATE cardInfor SET equipmentId=? WHERE product=? AND serial=? AND user=?', [data.equipmentId, result[j].product, result[j].serial, result[j].user], transactionSuccess, errorHandler);
-                            myAlert('uploadSuccessfully');
-                        } else {
-                            alert("Algo salio mal!");
+                        $.ajax({
+                            type: 'POST',
+                            url: web_server_equipment + "create-equipment",
+                            contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+                            dataType: 'json',
+                            data: parameters,
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
+                            },
+                            success: function(data, status) {
+                                if (typeof data.equipmentId !== 'undefined') {
+                                    tx.executeSql('UPDATE cardInfor SET equipmentId=? WHERE product=? AND serial=? AND user=?',
+                                                [   data.equipmentId,
+                                                    data.reference,
+                                                    data.lotnumber,
+                                                    data.username], transactionSuccess, errorHandler);
+                                } else {
+                                    // myAlert('No equipement id returned !!!');
+                                    //todo: handle failed equipment creation.
+                                }
+                            },
+                            error: function(m1, m2, m3) {
+                                //myAlert("Error Web Services status " + m2 + " Exception "  + m3);
+                                myAlert("appError", [m3]);
+                            }
+                        });
+                    } else {
+                        var manufactureDate = getDateFromStr(result[j].manufacturingdate);
+                        var firstcommissioningdate = getDateFromStr(result[j].firstcommissioningdate);
+                        var controlDate1 = getDateFromStr(result[j].controlDate1);
+                        var controlDate2 = getDateFromStr(result[j].controlDate2);
+                        var controlDate3 = getDateFromStr(result[j].controlDate3);
+                        var controlDate4 = getDateFromStr(result[j].controlDate4);
+                        var controlDate5 = getDateFromStr(result[j].controlDate5);
+
+                        var parameters = 'equipmentId='+ result[j].equipmentId +
+                          '&reference='+ result[j].reference +
+                          '&brand='+ 'DELTAPLUS' +
+                          '&designation='+ 'DeltaPlus' +
+                          '&description' +
+                          '&lotNumber='+ result[j].lotnumber +
+                          '&userName='+ result[j].username +
+                          '&retailerName='+ 'Softtek' +
+                          '&&&retailerParticulars='+ 'Wuxi China' +
+                          '&&observation' +
+                          '&manufacturingMonth='+ getMonth(manufactureDate) +
+                          '&manufacturingDay='+ getDate(manufactureDate) +
+                          '&manufacturingYear='+ getYear(manufactureDate) +
+                          '&firstUsageMonth='+ getMonth(firstcommissioningdate) +
+                          '&firstUsageDay='+ getDate(firstcommissioningdate) +
+                          '&firstUsageYear='+ getYear(firstcommissioningdate) +
+                          '&lastcontrolDateMonth='+ 0 +
+                          '&lastcontrolDateDay='+ 0 +
+                          '&lastcontrolDateYear='+ 0 +
+                          '&delete='+ result[j].ifDelete.toString() +
+                          '&control1DateMonth='+ getMonth(controlDate1) +
+                          '&control1DateDay='+ getDate(controlDate1) +
+                          '&Control1DateYear='+ getYear(controlDate1) +
+                          '&control2DateMonth='+ getMonth(controlDate2) +
+                          '&control2DateDay='+ getDate(controlDate2) +
+                          '&Control2DateYear='+ getYear(controlDate3) +
+                          '&control3DateMonth='+ getMonth(controlDate3) +
+                          '&control3DateDay='+ getDate(controlDate3) +
+                          '&Control3DateYear='+ getYear(controlDate3) +
+                          '&control4DateMonth='+ getMonth(controlDate4) +
+                          '&control4DateDay='+ getDate(controlDate4) +
+                          '&Control4DateYear='+ getYear(controlDate4) +
+                          '&control5DateMonth='+ getMonth(controlDate5) +
+                          '&control5DateDay='+ getDate(controlDate5) +
+                          '&Control5DateYear='+ getYear(controlDate5);
+
+                        $.ajax({
+                        type: 'POST',
+                        url: web_server_equipment + "/update-equipment",
+                        contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+                        dataType: 'json',
+                        data: parameters,
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
+                        },
+                        success: function(data, status) {
+                            if (typeof data.equipmentId !== 'undefined') {
+                                // myAlert('uploadSuccessfully');
+                            } else {
+                                //todo: handle failed equipment creation.
+                                // myAlert('No success returns');
+                            }
+                        },
+                        error: function(m1, m2, m3) {
+                            // myAlert("Error Web Services status " + m2 + " Exception "  + m3);
+                            myAlert("appError", [m3]);
                         }
-                    },
-                    error: function(m1, m2, m3) {                        
-                        alert("Error Web Services status " + m2 + " Exception "  + m3);             
-                        console.log(m2);
+                        });
                     }
-                    });
-                } else {
-                    $.ajax({
-                    type: 'POST',
-                    url: web_server_equipment + "/update-equipment",                
-                    contentType: 'application/json;charset=UTF-8',
-                    dataType: 'json',
-                    data: {                        
-                        equipmentId: result[j].equipmentId,
-                        reference: result[j].product,
-                        brand: 'DELTAPLUS',
-                        designation: 'DeltaPlus',
-                        description: null,
-                        lotNumber: result[j].serial,
-                        userName: result[j].user,
-                        retailerName: 'Softtek Update',
-                        retailerParticulars: 'Wuxi Jiangsu China',
-                        observation: null,
-                        manufacturingMonth: '1',
-                        manufacturingDay: '1',
-                        manufacturingYear: '2015',
-                        firstUsageMonth: '1',
-                        firstUsageDay: '3',
-                        firstUsageYear: '2016',                        
-                        lastcontrolDateMonth: '10',
-                        lastcontrolDateDay: '3',
-                        lastcontrolDateYear: '2016',
-                        control1DateMonth: '0',
-                        control1DateDay: '0',
-                        Control1DateYear: '0',
-                        control2DateMonth: '0',
-                        control2DateDay: '0',
-                        Control2DateYear: '0',
-                        control3DateMonth: '0',
-                        control3DateDay: '0',
-                        Control3DateYear: '0',
-                        control4DateMonth: '0',
-                        control4DateDay: '0',
-                        Control4DateYear: '0',
-                        control5DateMonth: '0',
-                        control5DateDay: '0',
-                        Control5DateYear: '0',
-                    },
-                    beforeSend: function (xhr) {                    
-                        alert(liferaywsUser + "/" + liferaywsPassword);
-                        xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
-                    },
-                    success: function(data, status) {                        
-                        alert('Equipment ' + data.equipmentId + ' status ' + status);
-                        alert('Message ' + data.message + ' Exception ' + data.exception);
-                        if (typeof data.equipmentId !== 'undefined') {
-                            myAlert('uploadSuccessfully');
-                        } else {
-                            alert("Update algo salio mal!");
-                        }
-                    },
-                    error: function(m1, m2, m3) {
-                        uploadLoader.hide();
-                        alert("Error Web Services status (update) " + m2 + " Exception "  + m3);             
-                        console.log(m2);
-                    }
-                    });
-                    uploadLoader.hide();
-                }                 
-            }
+                }
+                uploadLoader.hide();
+                myAlert('uploadSuccessfully');
+            });
         });
-    });
 }
 
 function transactionSuccess(transaction, results) {
-    alert(results.rows.length);
+    //todo handle DB transaction success
+    // myAlert("successful DB transaction: " + results.rows.length);
 }
 
-function errorHandler(transaction, error) {        
+function errorHandler(transaction, error) {
+    // todo handler error message for DB transactions.
     if (error.code===1){
         // DB Table already exists
-        alert("Table already exists");
+        // alert("Table already exists");
     } else {
         // Error is a human-readable string.
-        alert('Oops.  Error was '+error.message+' (Code '+ error.code +')');
+        // alert('Oops.  Error was '+error.message+' (Code '+ error.code +')');
     }
     return false;           
 }
@@ -839,19 +820,40 @@ function updateReceivingData(data) {
             tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
             for (var i in data) {
                 (function(item){
-                    tx.executeSql('SELECT * FROM cardInfor WHERE serial = ?', [item.lotnumber], function(tx, re) {
+                // var item = data[i];
+                tx.executeSql('SELECT * FROM cardInfor WHERE ifDelete="0" and serial = ?', [item.lotnumber], function(tx, re) {
                         if (re.rows.length == 0) {
                             try{
                                 tx.executeSql('INSERT INTO cardInfor VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
-                                  [item.reference,item.lotnumber,item.username,item.manufacturingdate,item.firstcommissioningdate,
-                                      item.controlDate1,item.controlDate2,item.controlDate3,item.controlDate4,item.controlDate5,1,"0",item.equipmentId]);
+                                  [   item.reference,
+                                      item.lotnumber,
+                                      item.username,
+                                      getFullDate(item.manufacturingdate),
+                                      getFullDate(item.firstcommissioningdate),
+                                      getFullDate(item.controlDate1),
+                                      getFullDate(item.controlDate2),
+                                      getFullDate(item.controlDate3),
+                                      getFullDate(item.controlDate4),
+                                      getFullDate(item.controlDate5),
+                                      1,
+                                      "0",
+                                      item.equipmentId
+                                  ]);
                             }catch(err){
                                 console.log(err);
                             }
                         } else {
-                            tx.executeSql('UPDATE cardInfor SET product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=?,ifDelete=? WHERE serial = ?',
-                              [item.reference, item.username, item.manufacturingdate, item.firstcommissioningdate,
-                                  item.controlDate1,item.controlDate2,item.controlDate3,item.controlDate4,item.controlDate5, "0", item.lotnumber]);
+                            tx.executeSql('UPDATE cardInfor SET product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=?,ifDelete=?'
+                                            + ' WHERE ifDelete="0" and  serial = ?',
+                              [item.reference, item.username, getFullDate(item.manufacturingdate),
+                                  getFullDate(item.firstcommissioningdate),
+                                  getFullDate(item.controlDate1),
+                                  getFullDate(item.controlDate2),
+                                  getFullDate(item.controlDate3),
+                                  getFullDate(item.controlDate4),
+                                  getFullDate(item.controlDate5),
+                                  //"0",
+                                  item.lotnumber]);
                         }
                     });
                 })(data[i]);
@@ -1459,12 +1461,12 @@ $('.backup_my').on('touchend', function() {
             if (data) {
                 updateReceivingData(data);
             } else {
-                myAlert('No data found');
+                myAlert('noDataFound');
             }
         },
         error: function(jqXHR, status, throwerror) {
             loader.hide();
-            myAlert("appError", throwerror);
+            myAlert("appError", [throwerror]);
 
         }
     });
@@ -1503,7 +1505,6 @@ $(".validate_login").on('touchend', function() {
             contentType: 'application/json;charset=UTF-8',
             dataType: 'json',
             beforeSend: function (xhr) {
-                //xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.setRequestHeader("Authorization", make_base_auth(login, password));
             },
             success: function(data, status) {                    
@@ -1523,8 +1524,7 @@ $(".validate_login").on('touchend', function() {
             },
             error: function(jqXHR, status, throwerror) {
                 loader.hide();
-                myAlert("appError", throwerror);
-
+                myAlert("appError", [throwerror]);
             } 
 		});
 	}
@@ -1596,8 +1596,6 @@ $(".validate_registion").on('touchend', function() {
             },
             success:  function(data, status) {
                 loader.hide();
-                alert("WebService call successfully " + JSON.stringify(data));
-                alert("Exception: " + data.exception + " status " + status);
                 if (typeof data !== 'undefined') {
                   myAlert('accountCreated');
                   $("#user_registion #firstName").val("");
@@ -1613,9 +1611,9 @@ $(".validate_registion").on('touchend', function() {
                   myAlert('noAccountCreate');
 		        }
             },
-            error: function(error) {
+            error: function(jqXHR, status, throwerror) {
                 loader.hide();
-                myAlert("Error Web Services " + error);
+                myAlert("appError", [throwerror]);
             } 		
 	    });
     }
