@@ -78,6 +78,11 @@ label{
     text-shadow:none;
     line-height: 1em;
 }
+
+.input-sm, .form-horizontal .form-group-sm .form-control .dateInput{
+     font-size: 1.5em;
+ }
+
 .input-sm:focus, .form-horizontal .form-group-sm .form-control:focus{
     border-radius: 0px;
     color:black;

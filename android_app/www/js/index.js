@@ -668,8 +668,8 @@ function prepareSendingData() {
                           '&lotNumber='+ result[j].lotnumber +
                           '&userName='+ result[j].username +
                           '&retailerName='+ 'Softtek' +
-                          '&&&retailerParticulars='+ 'Wuxi China' +
-                          '&&observation' +
+                          '&retailerParticulars='+ 'Wuxi China' +
+                          '&observation' +
                           '&manufacturingMonth='+ getMonth(manufactureDate) +
                           '&manufacturingDay='+ getDate(manufactureDate) +
                           '&manufacturingYear='+ getYear(manufactureDate) +
@@ -681,19 +681,19 @@ function prepareSendingData() {
                           '&lastcontrolDateYear='+ 0 +
                           '&control1DateMonth='+ getMonth(controlDate1) +
                           '&control1DateDay='+ getDate(controlDate1) +
-                          '&Control1DateYear='+ getYear(controlDate1) +
+                          '&control1DateYear='+ getYear(controlDate1) +
                           '&control2DateMonth='+ getMonth(controlDate2) +
                           '&control2DateDay='+ getDate(controlDate2) +
-                          '&Control2DateYear='+ getYear(controlDate3) +
+                          '&control2DateYear='+ getYear(controlDate2) +
                           '&control3DateMonth='+ getMonth(controlDate3) +
                           '&control3DateDay='+ getDate(controlDate3) +
-                          '&Control3DateYear='+ getYear(controlDate3) +
+                          '&control3DateYear='+ getYear(controlDate3) +
                           '&control4DateMonth='+ getMonth(controlDate4) +
                           '&control4DateDay='+ getDate(controlDate4) +
-                          '&Control4DateYear='+ getYear(controlDate4) +
+                          '&control4DateYear='+ getYear(controlDate4) +
                           '&control5DateMonth='+ getMonth(controlDate5) +
                           '&control5DateDay='+ getDate(controlDate5) +
-                          '&Control5DateYear='+ getYear(controlDate5);
+                          '&control5DateYear='+ getYear(controlDate5);
 
                         $.ajax({
                             type: 'POST',
@@ -729,6 +729,7 @@ function prepareSendingData() {
                         var controlDate3 = getDateFromStr(result[j].controlDate3);
                         var controlDate4 = getDateFromStr(result[j].controlDate4);
                         var controlDate5 = getDateFromStr(result[j].controlDate5);
+                        var deleteFlag = result[j].ifDelete == 1 ? true : false;
 
                         var parameters = 'equipmentId='+ result[j].equipmentId +
                           '&reference='+ result[j].reference +
@@ -738,8 +739,8 @@ function prepareSendingData() {
                           '&lotNumber='+ result[j].lotnumber +
                           '&userName='+ result[j].username +
                           '&retailerName='+ 'Softtek' +
-                          '&&&retailerParticulars='+ 'Wuxi China' +
-                          '&&observation' +
+                          '&retailerParticulars='+ 'Wuxi China' +
+                          '&observation' +
                           '&manufacturingMonth='+ getMonth(manufactureDate) +
                           '&manufacturingDay='+ getDate(manufactureDate) +
                           '&manufacturingYear='+ getYear(manufactureDate) +
@@ -749,22 +750,23 @@ function prepareSendingData() {
                           '&lastcontrolDateMonth='+ 0 +
                           '&lastcontrolDateDay='+ 0 +
                           '&lastcontrolDateYear='+ 0 +
-                          '&delete='+ result[j].ifDelete.toString() +
+                          // '&delete='+ deleteFlag.toString() +
+                          '&delete=false' +
                           '&control1DateMonth='+ getMonth(controlDate1) +
                           '&control1DateDay='+ getDate(controlDate1) +
-                          '&Control1DateYear='+ getYear(controlDate1) +
+                          '&control1DateYear='+ getYear(controlDate1) +
                           '&control2DateMonth='+ getMonth(controlDate2) +
                           '&control2DateDay='+ getDate(controlDate2) +
-                          '&Control2DateYear='+ getYear(controlDate3) +
+                          '&control2DateYear='+ getYear(controlDate2) +
                           '&control3DateMonth='+ getMonth(controlDate3) +
                           '&control3DateDay='+ getDate(controlDate3) +
-                          '&Control3DateYear='+ getYear(controlDate3) +
+                          '&control3DateYear='+ getYear(controlDate3) +
                           '&control4DateMonth='+ getMonth(controlDate4) +
                           '&control4DateDay='+ getDate(controlDate4) +
-                          '&Control4DateYear='+ getYear(controlDate4) +
+                          '&control4DateYear='+ getYear(controlDate4) +
                           '&control5DateMonth='+ getMonth(controlDate5) +
                           '&control5DateDay='+ getDate(controlDate5) +
-                          '&Control5DateYear='+ getYear(controlDate5);
+                          '&control5DateYear='+ getYear(controlDate5);
 
                         $.ajax({
                         type: 'POST',
@@ -776,6 +778,7 @@ function prepareSendingData() {
                             xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
                         },
                         success: function(data, status) {
+                            // myAlert(JSON.stringify(data) + ' status ' + status);
                             if (typeof data.equipmentId !== 'undefined') {
                                 // myAlert('uploadSuccessfully');
                             } else {
@@ -802,6 +805,7 @@ function transactionSuccess(transaction, results) {
 }
 
 function errorHandler(transaction, error) {
+    // myAlert("failure DB transaction: " + JSON.stringify(error));
     // todo handler error message for DB transactions.
     if (error.code===1){
         // DB Table already exists
@@ -838,22 +842,25 @@ function updateReceivingData(data) {
                                       1,
                                       "0",
                                       item.equipmentId
-                                  ]);
+                                  ], transactionSuccess, errorHandler);
                             }catch(err){
                                 console.log(err);
                             }
                         } else {
-                            tx.executeSql('UPDATE cardInfor SET product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=?,ifDelete=?'
-                                            + ' WHERE ifDelete="0" and  serial = ?',
-                              [item.reference, item.username, getFullDate(item.manufacturingdate),
+                            tx.executeSql('UPDATE cardInfor SET '
+                              + ' product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=? '
+                              + ' WHERE serial = ?',
+                              [   item.reference,
+                                  item.username,
+                                  getFullDate(item.manufacturingdate),
                                   getFullDate(item.firstcommissioningdate),
                                   getFullDate(item.controlDate1),
                                   getFullDate(item.controlDate2),
                                   getFullDate(item.controlDate3),
                                   getFullDate(item.controlDate4),
                                   getFullDate(item.controlDate5),
-                                  //"0",
-                                  item.lotnumber]);
+                                  item.lotnumber
+                              ], transactionSuccess, errorHandler);
                         }
                     });
                 })(data[i]);
@@ -933,8 +940,10 @@ function showClearReadInput() {
  */
 function confirmToSelectDate(){
     var selectedMonth = parseInt($("select[name='month_tobe_selected']").val()),
-     selectedYear = parseInt($("select[name='year_tobe_selected']").val()),
-     value = selectedMonth + "/" + selectedYear;
+     selectedYear = parseInt($("select[name='year_tobe_selected']").val());
+
+    // todo: have to append 15 as date, otherwise, the remote will give error.
+    var value = selectedMonth + "/" + "15/" + selectedYear;
     //alert("confirmToSelectDate" + value);
     if (window.currentDateName === "start") {
         var proDate = $('.scan_step2 input[name="prod"]').val().split("/");

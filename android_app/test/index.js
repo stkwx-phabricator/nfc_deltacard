@@ -8,3 +8,7 @@ console.log(date2.getDate());
 var x  ;
 
 console.log(typeof x)
+
+
+var date = new Date(1482361200000);
+console.log(date.toDateString())

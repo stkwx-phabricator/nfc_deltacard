@@ -2,7 +2,7 @@
 "use strict"
 
 function getDateFromStr(str) {
-  if(str != null ) {
+  if(str != null  && str != "") {
     return new Date(str)
   }
   return null;
@@ -24,7 +24,7 @@ function getYear(date) {
   if(date != null) {
     return date.getFullYear();
   }
-  return null;
+  return 0;
 }
 
 
@@ -32,7 +32,7 @@ function getMonth(date) {
   if(date != null) {
     return date.getMonth() + 1;
   }
-  return null;
+  return 0;
 }
 
 
@@ -40,7 +40,7 @@ function getDate(date) {
   if(date != null) {
     return date.getDate();
   }
-  return null;
+  return 0;
 }
 
 /**
