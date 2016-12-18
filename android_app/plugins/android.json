@@ -4,70 +4,24 @@
         "uninstalled": []
     },
     "config_munge": {
-        "files": {
-            "res/xml/config.xml": {
-                "parents": {
-                    "/*": [
-                        {
-                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Globalization\"><param name=\"android-package\" value=\"org.apache.cordova.globalization.Globalization\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
-                            "count": 1
-                        }
-                    ],
-                    "/widget": [
-                        {
-                            "xml": "<feature name=\"NfcPlugin\"><param name=\"android-package\" value=\"com.chariotsolutions.nfc.plugin.NfcPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        }
-                    ]
-                }
-            },
-            "AndroidManifest.xml": {
-                "parents": {
-                    "/manifest": [
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.NFC\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:name=\"android.hardware.nfc\" android:required=\"false\" />",
-                            "count": 1
-                        }
-                    ],
-                    "/*": [
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-                            "count": 1
-                        }
-                    ]
-                }
-            }
-        }
+        "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
+        "cordova-plugin-http": {
             "PACKAGE_NAME": "com.softtek.delta"
         },
-        "cordova-plugin-http": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.softtek.delta"
+        }
+    },
+    "dependent_plugins": {
+        "com.chariotsolutions.nfc.plugin": {
+            "PACKAGE_NAME": "com.softtek.delta"
+        },
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.softtek.delta"
+        },
+        "cordova-plugin-file": {
             "PACKAGE_NAME": "com.softtek.delta"
         },
         "org.apache.cordova.device": {
@@ -76,21 +30,17 @@
         "org.apache.cordova.dialogs": {
             "PACKAGE_NAME": "com.softtek.delta"
         },
-        "org.apache.cordova.inappbrowser": {
-            "PACKAGE_NAME": "com.softtek.delta"
-        },
-        "org.apache.cordova.splashscreen": {
-            "PACKAGE_NAME": "com.softtek.delta"
-        },
-        "com.chariotsolutions.nfc.plugin": {
-            "PACKAGE_NAME": "com.softtek.delta"
-        },
         "org.apache.cordova.globalization": {
+            "PACKAGE_NAME": "com.softtek.delta"
+        },
+        "org.apache.cordova.inappbrowser": {
             "PACKAGE_NAME": "com.softtek.delta"
         },
         "org.apache.cordova.network-information": {
             "PACKAGE_NAME": "com.softtek.delta"
+        },
+        "org.apache.cordova.splashscreen": {
+            "PACKAGE_NAME": "com.softtek.delta"
         }
-    },
-    "dependent_plugins": {}
+    }
 }

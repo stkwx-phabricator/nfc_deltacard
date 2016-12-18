@@ -1,9 +1,24 @@
 
 "use strict"
 
+/**
+ *
+ * @param str eg. '15/12/2016'
+ * @returns {*}
+ */
 function getDateFromStr(str) {
+
   if(str != null  && str != "") {
-    return new Date(str)
+    console.log(str.substr(0, str.indexOf('/')))
+    console.log(str.substr(str.indexOf('/')+1, str.indexOf('/', str.indexOf('/')+1) - str.indexOf('/') - 1 ))
+    console.log(str.substr(str.indexOf('/', str.indexOf('/')+1)+1, str.length +1))
+
+    var day = str.substr(0, str.indexOf('/'));
+    var month = str.substr(str.indexOf('/')+1, str.indexOf('/', str.indexOf('/') + 1) - str.indexOf('/') - 1 );
+    var year = str.substr(str.indexOf('/', str.indexOf('/') + 1) + 1, str.length + 1);
+    var date = month + '/' + day + '/' + year;
+
+    return new Date(date)
   }
   return null;
 }
@@ -55,10 +70,21 @@ function getFullDate(ms) {
     var year = date.getFullYear();
     var day = date.getDate();
 
-    return month + "/" + day + "/" + year;
+    return day + "/" + month + "/" + year;
   } else {
     return ""
   }
 }
 
 
+var str = '21/12/2016'
+console.log(getDateFromStr(str));
+
+console.log(str.indexOf('/'))
+console.log(str.indexOf('/', str.indexOf('/')+1))
+
+console.log(str.substr(0, str.indexOf('/')))
+console.log(str.substr(str.indexOf('/')+1, str.indexOf('/', str.indexOf('/')+1) - str.indexOf('/') - 1 ))
+console.log(str.substr(str.indexOf('/', str.indexOf('/')+1)+1, str.length +1))
+
+// console.log(str.)

@@ -494,7 +494,7 @@
         <div class="row generic_btn menu_language">
             <span class="i_language">Language</span>
             <div data-role="popup" id="language_setting" data-overlay-theme="b" data-theme="b" data-dismissible="false"
-                 style="min-width:20em;max-width:400px;">
+                 style="min-width:20em;max-width:400px;top:65px">
                 <div role="main" class="ui-content">
                     <form>
                         <fieldset data-role="controlgroup">
@@ -504,7 +504,7 @@
                             <input type="radio" name="changeLang" id="changeLang_zh" value="on">
                             <label for="changeLang_zh">中文</label>
                             <input type="radio" name="changeLang" id="changeLang_fr" value="on">
-                            <label for="changeLang_fr">François</label>
+                            <label for="changeLang_fr">Français</label>
                             <input type="radio" name="changeLang" id="changeLang_sp" value="on">
                             <label for="changeLang_sp">Espanol</label>
                         </fieldset>
@@ -813,10 +813,11 @@
         </div>
     </div>
     <div class="row" style="position:absolute;top:30%;width:100%;">
-        <div class="row generic_btn access_my i_myPPEManager">My PPE Manager</div>
+        <div class="row generic_btn access_my i_web_access">Web Access</div>
         <div class="row generic_btn upload_my i_uploadMyProductList">Upload My Product List</div>
-        <div class="row generic_btn backup_my i_importMyProductList">Import My Product List</div>
-        <div class="row generic_btn status_my i_myPPEStatus">My PPE status</div>
+        <div class="row generic_btn backup_my i_importMyProductList">Download My Product List</div>
+        <!-- Shall we hide this My PPE Status menu -->
+        <div class="row generic_btn status_my i_myPPEStatus" style="">My PPE status</div>
     </div>
 </div>
 <div data-role="page" id="ppe_status" class="basic container">
@@ -880,7 +881,7 @@
                     </div>
                 </form>
             </div>
-            <div class="row generic_btn access_my i_products_manager">My PPE Manager</div>
+            <div class="row generic_btn access_my i_web_access">Web Access</div>
         </div>
     </div>
 </div>

@@ -5,7 +5,7 @@ $.mobile.defaultPageTransition = 'flip';
 //var web_index = "http://52.74.123.208/nfc_deltaweb/mindex.php";
 // Local Host
 //var web_server = "http://localhost/nfc_deltaweb";
-//var web_index = "http://localhost/nfc_deltaweb/mindex.php";
+var web_index = "https://www.deltaplus.eu/en_US/annual-check-service";
 // Development Environment
 //var web_server_delta = "http://172.17.17.140:8080/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.annualcheckuseraccount";
 //var web_server_delta = "https://www.deltaplus.eu/api/jsonws/deltaplus-deltaweb-annualCheck-portlet.annualcheckuseraccount";
@@ -584,6 +584,7 @@ function validateForm() {
 //for language
 function initLanguageSelection() {
     var language = window.localStorage['language'];
+    console.log('current lang ' + language);
     language = language ? language : 'en';
     if (language == 'en') {
         $('input[name="changeLang"]:eq(0)')[0].checked = true;
@@ -600,6 +601,7 @@ function initLanguageSelection() {
 function changeLanguage() {
     var index = $('input[name="changeLang"]').index($(this)),
         lang = '';
+    console.log('language index = ', index);
     if (index == 0) {
         lang = 'en';
     } else if (index == 1) {
@@ -621,19 +623,14 @@ function make_base_auth(user, password) {
 }
 
 function prepareSendingData() {
-    var uploadLoader = $.mobile.loading("show", {
-            text: "foo",
-            textVisible: true,
-            theme: "z",
-            html: '<span class="ui-bar ui-shadow ui-overlay-d ui-corner-all" style="background-color:white;"><span class="ui-icon-loading"></span><span style="font-size:2em;">uploading...</span></span>'
-        }),
+    var loader = showLoading('Loading'),
         db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024),
         result = [];
         var liferaywsUser = window.localStorage['username'];                    
         var liferaywsPassword = window.localStorage['password'];
         db.transaction(function(tx) {
             tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
-            tx.executeSql('SELECT * FROM cardInfor where ifDelete = "0"', [], function(tx, re) {
+            tx.executeSql('SELECT * FROM cardInfor ', [], function(tx, re) {
                 for (var i = 0; i < re.rows.length; i++) {
                     result[i] = {};
                     result[i].reference = re.rows.item(i).product;
@@ -705,12 +702,12 @@ function prepareSendingData() {
                                 xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
                             },
                             success: function(data, status) {
+                                console.log('created one equipment successfully')
                                 if (typeof data.equipmentId !== 'undefined') {
-                                    tx.executeSql('UPDATE cardInfor SET equipmentId=? WHERE product=? AND serial=? AND user=?',
+                                    tx.executeSql('UPDATE cardInfor SET equipmentId=? WHERE product=? AND serial=? ',
                                                 [   data.equipmentId,
                                                     data.reference,
-                                                    data.lotnumber,
-                                                    data.username], transactionSuccess, errorHandler);
+                                                    data.lotnumber], transactionSuccess, errorHandler);
                                 } else {
                                     // myAlert('No equipement id returned !!!');
                                     //todo: handle failed equipment creation.
@@ -750,8 +747,8 @@ function prepareSendingData() {
                           '&lastcontrolDateMonth='+ 0 +
                           '&lastcontrolDateDay='+ 0 +
                           '&lastcontrolDateYear='+ 0 +
-                          // '&delete='+ deleteFlag.toString() +
-                          '&delete=false' +
+                          '&delete='+ deleteFlag.toString() +
+                          // '&delete=false' +
                           '&control1DateMonth='+ getMonth(controlDate1) +
                           '&control1DateDay='+ getDate(controlDate1) +
                           '&control1DateYear='+ getYear(controlDate1) +
@@ -793,8 +790,13 @@ function prepareSendingData() {
                         });
                     }
                 }
-                uploadLoader.hide();
+                loader.hide();
                 myAlert('uploadSuccessfully');
+            });
+
+            /*remove the deleted records after sync from remote server*/
+            tx.executeSql('DELETE FROM cardInfor where ifDelete = ?', ["1"], function(tx, re) {
+                console.log("delete row count is ", re.rows.length);
             });
         });
 }
@@ -802,9 +804,11 @@ function prepareSendingData() {
 function transactionSuccess(transaction, results) {
     //todo handle DB transaction success
     // myAlert("successful DB transaction: " + results.rows.length);
+    console.log('update successfully')
 }
 
 function errorHandler(transaction, error) {
+    console.log('update failed')
     // myAlert("failure DB transaction: " + JSON.stringify(error));
     // todo handler error message for DB transactions.
     if (error.code===1){
@@ -825,7 +829,7 @@ function updateReceivingData(data) {
             for (var i in data) {
                 (function(item){
                 // var item = data[i];
-                tx.executeSql('SELECT * FROM cardInfor WHERE ifDelete="0" and serial = ?', [item.lotnumber], function(tx, re) {
+                tx.executeSql('SELECT * FROM cardInfor WHERE serial = ?', [item.lotnumber], function(tx, re) {
                         if (re.rows.length == 0) {
                             try{
                                 tx.executeSql('INSERT INTO cardInfor VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
@@ -847,7 +851,7 @@ function updateReceivingData(data) {
                                 console.log(err);
                             }
                         } else {
-                            tx.executeSql('UPDATE cardInfor SET '
+                            tx.executeSql('UPDATE cardInfor SET ifDelete="0", '
                               + ' product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=? '
                               + ' WHERE serial = ?',
                               [   item.reference,
@@ -943,7 +947,7 @@ function confirmToSelectDate(){
      selectedYear = parseInt($("select[name='year_tobe_selected']").val());
 
     // todo: have to append 15 as date, otherwise, the remote will give error.
-    var value = selectedMonth + "/" + "15/" + selectedYear;
+    var value = "15/"+ selectedMonth + "/"  + selectedYear;
     //alert("confirmToSelectDate" + value);
     if (window.currentDateName === "start") {
         var proDate = $('.scan_step2 input[name="prod"]').val().split("/");
@@ -1154,10 +1158,10 @@ $('.btn_back').on('touchend', function() {
     }
 });
 $('.btn_webhome').on('touchend', function() {
-    window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
+    window.open('http://www.deltaplus.eu', '_system', 'location=yes');
 });
 $('.website').on('touchend', function() {
-    window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
+    window.open('http://www.deltaplus.eu', '_system', 'location=yes');
 });
 $(".menu_scan").on('touchend', function() {
     $('.scan_step1_1').show();
@@ -1252,11 +1256,16 @@ $(".scan_add_to_myproduct").on('touchstart', function() {
     $(this).toggleClass('general_btn_click');
 });
 $(".scan_add_to_myproduct").on('touchend', function() {
+    console.log('scanned records serila is ', $('.scan_step2 input[name="serial"]').val());
+    if($('.scan_step2 input[name="serial"]').val() === '') {
+      myAlert('emptyCardFound');
+      return;
+    }
     // validate data before add to my product.    
     var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024);    
     db.transaction(function (tx) {        
         tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
-        tx.executeSql('SELECT serial FROM cardInfor WHERE ifDelete = "0" AND serial = ?', [nfcData[1]], function (tx, re) {                  
+        tx.executeSql('SELECT serial FROM cardInfor WHERE serial = ?', [nfcData[1]], function (tx, re) {
             if (re.rows.length == 0) {
                 writeCardInforToDB(true);
             } else {
@@ -1403,7 +1412,7 @@ $('.menu_use').on('touchstart', function() {
 });
 $('.menu_use').on('touchend', function() {
     $(this).toggleClass('general_btn_click');
-    window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
+    // window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
 });
 $('.menu_update').on('touchstart', function() {
     $(this).toggleClass('general_btn_click');
@@ -1421,7 +1430,7 @@ $('.menu_about').on('touchstart', function() {
 });
 $('.menu_about').on('touchend', function() {
     $(this).toggleClass('general_btn_click');
-    myAlert('version', ['1.5.2']);
+    myAlert('version', ['1.6.1']);
 });
 //setting end
 //product manager
@@ -1438,7 +1447,7 @@ $('.access_my').on('touchstart', function() {
 $('.access_my').on('touchend', function() {
     $(this).toggleClass('general_btn_click');
     // window.open('http://www.deltaplus.eu', '_blank', 'location=yes');
-    window.open(web_index + "?userId=" + window.localStorage['userId'], '_blank', 'location=yes');
+    window.open(web_index + "?userId=" + window.localStorage['userId'], '_system', 'location=yes');
 });
 $('.upload_my').on('touchstart', function() {
     $(this).toggleClass('general_btn_click');
@@ -1631,8 +1640,12 @@ $(".validate_registion").on('touchend', function() {
 * Remember password Function binding.
 */
 
-$(".nav_lost_password").on('click', function () {
+/*$(".nav_lost_password").on('click', function () {
     $.mobile.navigate('#remember_password');
+});*/
+
+$('.nav_lost_password').on('touchend', function() {
+    window.open(web_index, '_system', 'location=yes');
 });
 
 $(".nav_new_user_registration").on('click', function () {
