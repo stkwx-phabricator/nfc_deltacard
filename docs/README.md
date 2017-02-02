@@ -9,6 +9,7 @@
 **Solution: **
 - Stop Docker, then use android studio to start android emulator again. Once Emulator is running, you can following following commands to test your applications.
 - If still not work, you have to restart your computer, once restart, stop the docker service again.
+- If emulator error "/dev/kvm not found", please refer to here for re-installation
 
 ## Test in MAC emulator for android
 > cordova build android  

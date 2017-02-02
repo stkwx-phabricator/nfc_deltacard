@@ -6,9 +6,13 @@
  * @param str eg. '15/12/2016'
  * @returns {*}
  */
-function getDateFromStr(str) {
-
-  if(str != null  && str != "") {
+function getDateFromStr(strDate) {
+  // Note: by default, user only choose month/year in front-end, so have to prefix 15 as day.
+  if(strDate != null  && strDate != "") {
+    var str = strDate;
+    if(strDate.length < 10) {
+      str = '15/' + strDate;
+    }
     console.log(str.substr(0, str.indexOf('/')))
     console.log(str.substr(str.indexOf('/')+1, str.indexOf('/', str.indexOf('/')+1) - str.indexOf('/') - 1 ))
     console.log(str.substr(str.indexOf('/', str.indexOf('/')+1)+1, str.length +1))
@@ -70,7 +74,9 @@ function getFullDate(ms) {
     var year = date.getFullYear();
     var day = date.getDate();
 
-    return day + "/" + month + "/" + year;
+    // TODO: remove the day
+    // return day + "/" + month + "/" + year;
+    return month + "/" + year;
   } else {
     return ""
   }
