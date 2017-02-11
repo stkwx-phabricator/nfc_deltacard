@@ -18,7 +18,8 @@ var liferaywsUserAdmin = "annualcheckserviceadmin";
 var liferaywsPasswordAdmin = "annualcheckserviceadmin!789";
 
 // app maintenance flag
-var version_maintenance = false;
+var version_maintenance = true;
+var version_detail = '1.7.1';
 
 //global varity
 var ifTagFound = false,
@@ -1341,8 +1342,8 @@ $(".scan_step2_btn2").on("touchend", function () {
   $(".scan_read_btn").hide();
   $(".scan_step2_btn").show();
   if (version_maintenance) {
-    $('.scan_step2 input[name="product"]').textinput('disable');
-    $('.scan_step2 input[name="serial"]').textinput('disable');
+    $('.scan_step2 input[name="product"]').textinput('enable');
+    $('.scan_step2 input[name="serial"]').textinput('enable');
     $('.scan_step2 input[name="user"]').textinput('enable');
     $('.scan_step2 input[name="prod"]').textinput('enable');
     $('.scan_step2 input[name="start"]').textinput('enable');
@@ -1472,7 +1473,7 @@ $('.menu_about').on('touchstart', function () {
 });
 $('.menu_about').on('touchend', function () {
   $(this).toggleClass('general_btn_click');
-  myAlert('version', ['1.7.1']);
+  myAlert('version', [version_detail]);
 });
 //setting end
 //product manager

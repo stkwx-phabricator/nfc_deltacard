@@ -25,7 +25,8 @@
 
 
 ## BUG SUMMARY
-```    DONE(10H): new requirements 
+```    
+    DONE(10H): new requirements 
     DONE (8H) 2nd round of test  
     Done (4 H ) New Feature: required by George and Michale 
     DONE( 3H ) New Feature: force user input to lower case when user login and register 
@@ -40,5 +41,5 @@
     DONE (4h) : APP login failed bug 
     DONE(6 H) Replace get method with POST enhancement 
     DONE (18H): Upload product to remote Server by Call New API enhancement 
-    DONE (4h) : Download Delta products into mobile enhancement 
+    DONE (4h) : Download Delta products into mobile enhancement  
 ```
