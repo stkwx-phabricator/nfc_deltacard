@@ -18,7 +18,7 @@ var liferaywsUserAdmin = "annualcheckserviceadmin";
 var liferaywsPasswordAdmin = "annualcheckserviceadmin!789";
 
 // app maintenance flag
-var version_maintenance = true;
+var version_maintenance = false;
 var version_detail = '1.7.1';
 
 //global varity
