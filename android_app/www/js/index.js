@@ -452,12 +452,12 @@ function writeCardInforToDB(ifAddIdOnly) {
   nfcData[9] = $('.scan_step2 input[name="sav5"]').val();
   var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024);
   db.transaction(function (tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
-    tx.executeSql('SELECT * FROM cardInfor WHERE serial = ?', [nfcData[1]], function (tx, re) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor_user(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
+    tx.executeSql('SELECT * FROM cardInfor_user WHERE serial = ?', [nfcData[1]], function (tx, re) {
       if (re.rows.length == 0) {
-        tx.executeSql('INSERT INTO cardInfor VALUES(?,?,?,?,?,?,?,?,?,?,?,"0",NULL)', nfcData);
+        tx.executeSql('INSERT INTO cardInfor_user VALUES(?,?,?,?,?,?,?,?,?,?,?,"0",NULL)', nfcData);
       } else {
-        tx.executeSql('UPDATE cardInfor SET product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=?,ifDelete="0" WHERE serial = ?', [nfcData[0], nfcData[2], nfcData[3], nfcData[4], nfcData[5], nfcData[6], nfcData[7], nfcData[8], nfcData[9], nfcData[1]]);
+        tx.executeSql('UPDATE cardInfor_user SET product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=?,ifDelete="0" WHERE serial = ?', [nfcData[0], nfcData[2], nfcData[3], nfcData[4], nfcData[5], nfcData[6], nfcData[7], nfcData[8], nfcData[9], nfcData[1]]);
       }
     });
     if (ifAddIdOnly) {
@@ -472,8 +472,8 @@ function readCardInforListFromDB(ifShowUpdate) {
   var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024),
     result = [];
   db.transaction(function (tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)')
-    tx.executeSql("SELECT * FROM cardInfor WHERE ifDelete ='0'", [], function (tx, re) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor_user(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)')
+    tx.executeSql("SELECT * FROM cardInfor_user WHERE ifDelete ='0'", [], function (tx, re) {
       for (var i = 0; i < re.rows.length; i++) {
         result[i] = {};
         result[i].product = re.rows.item(i).product;
@@ -487,7 +487,7 @@ function readCardInforListFromDB(ifShowUpdate) {
 function deleteRecordFromDB(serial) {
   var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024);
   db.transaction(function (tx) {
-    tx.executeSql('UPDATE cardInfor SET ifDelete = "1" WHERE serial = ?', [serial], function (tx, re) {
+    tx.executeSql('UPDATE cardInfor_user SET ifDelete = "1" WHERE serial = ?', [serial], function (tx, re) {
       readCardInforListFromDB();
       //$.mobile.back();
     });
@@ -497,7 +497,7 @@ function deleteRecordFromDB(serial) {
 function readCradInforWithId(id) {
   var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024);
   db.transaction(function (tx) {
-    tx.executeSql('SELECT * FROM cardInfor WHERE serial = ?', [id], function (tx, re) {
+    tx.executeSql('SELECT * FROM cardInfor_user WHERE serial = ?', [id], function (tx, re) {
       showProductDetail(re.rows.item(0));
     });
   });
@@ -647,8 +647,8 @@ function prepareSendingData() {
   var liferaywsUser = window.localStorage['username'];
   var liferaywsPassword = window.localStorage['password'];
   db.transaction(function (tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
-    tx.executeSql('SELECT * FROM cardInfor ', [], function (tx, re) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor_user(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
+    tx.executeSql('SELECT * FROM cardInfor_user ', [], function (tx, re) {
       for (var i = 0; i < re.rows.length; i++) {
         result[i] = {};
         result[i].reference = re.rows.item(i).product;
@@ -736,7 +736,7 @@ function prepareSendingData() {
 
                 // Workaround for above issue, to re-open db connection
                 db.transaction(function (tx) {
-                  tx.executeSql('UPDATE cardInfor SET equipmentId=? WHERE product=? AND serial=? ',
+                  tx.executeSql('UPDATE cardInfor_user SET equipmentId=? WHERE product=? AND serial=? ',
                     [data.equipmentId,
                       data.reference,
                       data.lotnumber], transactionSuccess, errorHandler);
@@ -829,7 +829,7 @@ function prepareSendingData() {
     });
 
     /*remove the deleted records after sync from remote server*/
-    tx.executeSql('DELETE FROM cardInfor WHERE ifDelete = ?', ["1"], function (tx, re) {
+    tx.executeSql('DELETE FROM cardInfor_user WHERE ifDelete = ?', ["1"], function (tx, re) {
       console.log("delete row count is ", re.rows.length);
     });
   });
@@ -859,17 +859,17 @@ function updateReceivingData(data) {
   try {
     var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024);
     db.transaction(function (tx) {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
+      tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor_user(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
       for (var i in data) {
 
         console.log('equipmentId ' + data[i].equipmentId + ' serial id: ' + data[i].lotnumber);
 
         (function (item) {
           // var item = data[i];
-          tx.executeSql('SELECT * FROM cardInfor WHERE serial = ?', [item.lotnumber], function (tx, re) {
+          tx.executeSql('SELECT * FROM cardInfor_user WHERE serial = ?', [item.lotnumber], function (tx, re) {
             if (re.rows.length == 0) {
               try {
-                tx.executeSql('INSERT INTO cardInfor VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                tx.executeSql('INSERT INTO cardInfor_user VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
                   [item.reference,
                     item.lotnumber,
                     item.username,
@@ -888,7 +888,7 @@ function updateReceivingData(data) {
                 console.log(err);
               }
             } else {
-              tx.executeSql('UPDATE cardInfor SET ifDelete="0", '
+              tx.executeSql('UPDATE cardInfor_user SET ifDelete="0", '
                 + ' product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=? '
                 + ' WHERE serial = ?',
                 [item.reference,
@@ -1306,8 +1306,8 @@ $(".scan_add_to_myproduct").on('touchend', function () {
   // validate data before add to my product.
   var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024);
   db.transaction(function (tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
-    tx.executeSql('SELECT serial FROM cardInfor WHERE serial = ?', [nfcData[1]], function (tx, re) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor_user(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
+    tx.executeSql('SELECT serial FROM cardInfor_user WHERE serial = ?', [nfcData[1]], function (tx, re) {
       if (re.rows.length == 0) {
         writeCardInforToDB(true);
       } else {
