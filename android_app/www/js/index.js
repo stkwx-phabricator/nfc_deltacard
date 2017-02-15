@@ -667,25 +667,25 @@ function prepareSendingData() {
         // myAlert('equipmentId ' + result[i].equipmentId + ' serial id: ' + result[i].lotnumber);
       }
 
-      for (var j = 0; j < result.length; j++) {
-        //if(true) {
 
+      var resultArray = [];
+      async.every(result, function (item, cb) {
         // myAlert('equipmentId ' + result[j].equipmentId + ' serial id: ' + result[j].lotnumber);
-        if (result[j].equipmentId == null || result[j].equipmentId == '') {
-          var manufactureDate = getDateFromStr(result[j].manufacturingdate);
-          var firstcommissioningdate = getDateFromStr(result[j].firstcommissioningdate);
-          var controlDate1 = getDateFromStr(result[j].controlDate1);
-          var controlDate2 = getDateFromStr(result[j].controlDate2);
-          var controlDate3 = getDateFromStr(result[j].controlDate3);
-          var controlDate4 = getDateFromStr(result[j].controlDate4);
-          var controlDate5 = getDateFromStr(result[j].controlDate5);
+        if (item.equipmentId == null || item.equipmentId == '') {
+          var manufactureDate = getDateFromStr(item.manufacturingdate);
+          var firstcommissioningdate = getDateFromStr(item.firstcommissioningdate);
+          var controlDate1 = getDateFromStr(item.controlDate1);
+          var controlDate2 = getDateFromStr(item.controlDate2);
+          var controlDate3 = getDateFromStr(item.controlDate3);
+          var controlDate4 = getDateFromStr(item.controlDate4);
+          var controlDate5 = getDateFromStr(item.controlDate5);
 
-          var parameters = 'reference=' + result[j].reference +
+          var parameters = 'reference=' + item.reference +
             '&brand=' + 'DELTAPLUS' +
             '&designation=' + 'DeltaPlus' +
             '&description' +
-            '&lotNumber=' + result[j].lotnumber +
-            '&userName=' + result[j].username +
+            '&lotNumber=' + item.lotnumber +
+            '&userName=' + item.username +
             '&retailerName=' + 'DELTAPLUS' +
             '&retailerParticulars=' + 'DELTAPLUS China' +
             '&observation' +
@@ -739,36 +739,46 @@ function prepareSendingData() {
                   tx.executeSql('UPDATE cardInfor_user SET equipmentId=? WHERE product=? AND serial=? ',
                     [data.equipmentId,
                       data.reference,
-                      data.lotnumber], transactionSuccess, errorHandler);
+                      data.lotnumber],
+                    function (transaction, results) {
+                      // resultArray.push(true);
+                      cb(null, true);
+                    }, function (transaction, error) {
+                      resultArray.push(error);
+                      cb(null, false);
+                    });
                 });
 
               } else {
                 // myAlert('No equipment id returned !!!');
                 //todo: handle failed equipment creation.
+                // resultArray.push(error);
+                cb(null, false);
               }
             },
             error: function (m1, m2, m3) {
               //myAlert("Error Web Services status " + m2 + " Exception "  + m3);
-              myAlert("appError", [m3]);
+              // myAlert("appError", [m3]);
+              cb(null, false);
             }
           });
         } else {
-          var manufactureDate = getDateFromStr(result[j].manufacturingdate);
-          var firstcommissioningdate = getDateFromStr(result[j].firstcommissioningdate);
-          var controlDate1 = getDateFromStr(result[j].controlDate1);
-          var controlDate2 = getDateFromStr(result[j].controlDate2);
-          var controlDate3 = getDateFromStr(result[j].controlDate3);
-          var controlDate4 = getDateFromStr(result[j].controlDate4);
-          var controlDate5 = getDateFromStr(result[j].controlDate5);
-          var deleteFlag = result[j].ifDelete == 1 ? true : false;
+          var manufactureDate = getDateFromStr(item.manufacturingdate);
+          var firstcommissioningdate = getDateFromStr(item.firstcommissioningdate);
+          var controlDate1 = getDateFromStr(item.controlDate1);
+          var controlDate2 = getDateFromStr(item.controlDate2);
+          var controlDate3 = getDateFromStr(item.controlDate3);
+          var controlDate4 = getDateFromStr(item.controlDate4);
+          var controlDate5 = getDateFromStr(item.controlDate5);
+          var deleteFlag = item.ifDelete == 1 ? true : false;
 
-          var parameters = 'equipmentId=' + result[j].equipmentId +
-            '&reference=' + result[j].reference +
+          var parameters = 'equipmentId=' + item.equipmentId +
+            '&reference=' + item.reference +
             '&brand=' + 'DELTAPLUS' +
             '&designation=' + 'DeltaPlus' +
             '&description' +
-            '&lotNumber=' + result[j].lotnumber +
-            '&userName=' + result[j].username +
+            '&lotNumber=' + item.lotnumber +
+            '&userName=' + item.username +
             '&retailerName=' + 'DELTAPLUS' +
             '&retailerParticulars=' + 'DELTAPLUS China' +
             '&observation' +
@@ -812,20 +822,195 @@ function prepareSendingData() {
               // myAlert(JSON.stringify(data) + ' status ' + status);
               if (typeof data.equipmentId !== 'undefined') {
                 // myAlert('uploadSuccessfully');
+                // resultArray.push(error);
+                cb(null, true);
               } else {
                 //todo: handle failed equipment creation.
                 // myAlert('No success returns');
+
+                resultArray.push(false);
+                cb(null, false);
               }
             },
             error: function (m1, m2, m3) {
-              myAlert("Error Web Services status " + m2 + " Exception " + m3);
-              myAlert("appError", [m3]);
+              // myAlert("Error Web Services status " + m2 + " Exception " + m3);
+              // myAlert("appError", [m3]);
+
+              resultArray.push(m3);
+              cb(null, false);
             }
           });
         }
-      }
-      loader.hide();
-      myAlert('uploadSuccessfully');
+      }, function (err, result) {
+
+        loader.hide();
+        if(err || resultArray.length > 0) {
+          myAlert(JSON.stringify(resultArray));
+        } else {
+          myAlert('uploadSuccessfully');
+        }
+      });
+
+
+      /*  for (var j = 0; j < result.length; j++) {
+       //if(true) {
+
+       // myAlert('equipmentId ' + result[j].equipmentId + ' serial id: ' + result[j].lotnumber);
+       if (result[j].equipmentId == null || result[j].equipmentId == '') {
+       var manufactureDate = getDateFromStr(result[j].manufacturingdate);
+       var firstcommissioningdate = getDateFromStr(result[j].firstcommissioningdate);
+       var controlDate1 = getDateFromStr(result[j].controlDate1);
+       var controlDate2 = getDateFromStr(result[j].controlDate2);
+       var controlDate3 = getDateFromStr(result[j].controlDate3);
+       var controlDate4 = getDateFromStr(result[j].controlDate4);
+       var controlDate5 = getDateFromStr(result[j].controlDate5);
+
+       var parameters = 'reference=' + result[j].reference +
+       '&brand=' + 'DELTAPLUS' +
+       '&designation=' + 'DeltaPlus' +
+       '&description' +
+       '&lotNumber=' + result[j].lotnumber +
+       '&userName=' + result[j].username +
+       '&retailerName=' + 'DELTAPLUS' +
+       '&retailerParticulars=' + 'DELTAPLUS China' +
+       '&observation' +
+       '&manufacturingMonth=' + getMonth(manufactureDate) +
+       '&manufacturingDay=' + getDate(manufactureDate) +
+       '&manufacturingYear=' + getYear(manufactureDate) +
+       '&firstUsageMonth=' + getMonth(firstcommissioningdate) +
+       '&firstUsageDay=' + getDate(firstcommissioningdate) +
+       '&firstUsageYear=' + getYear(firstcommissioningdate) +
+       '&lastcontrolDateMonth=' + 0 +
+       '&lastcontrolDateDay=' + 0 +
+       '&lastcontrolDateYear=' + 0 +
+       '&control1DateMonth=' + getMonth(controlDate1) +
+       '&control1DateDay=' + getDate(controlDate1) +
+       '&control1DateYear=' + getYear(controlDate1) +
+       '&control2DateMonth=' + getMonth(controlDate2) +
+       '&control2DateDay=' + getDate(controlDate2) +
+       '&control2DateYear=' + getYear(controlDate2) +
+       '&control3DateMonth=' + getMonth(controlDate3) +
+       '&control3DateDay=' + getDate(controlDate3) +
+       '&control3DateYear=' + getYear(controlDate3) +
+       '&control4DateMonth=' + getMonth(controlDate4) +
+       '&control4DateDay=' + getDate(controlDate4) +
+       '&control4DateYear=' + getYear(controlDate4) +
+       '&control5DateMonth=' + getMonth(controlDate5) +
+       '&control5DateDay=' + getDate(controlDate5) +
+       '&control5DateYear=' + getYear(controlDate5);
+
+       $.ajax({
+       type: 'POST',
+       url: web_server_equipment + "create-equipment",
+       contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+       dataType: 'json',
+       data: parameters,
+       beforeSend: function (xhr) {
+       xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
+       },
+       success: function (data, status) {
+       console.log('created one equipment successfully')
+       if (typeof data.equipmentId !== 'undefined') {
+       // TODO: Uncaught InvalidStateError: Failed to execute 'executeSql' on 'SQLTransaction': SQL execution is disallowed.
+       /!*
+       tx.executeSql('UPDATE cardInfor SET equipmentId=? WHERE product=? AND serial=? ',
+       [data.equipmentId,
+       data.reference,
+       data.lotnumber], transactionSuccess, errorHandler);
+       *!/
+
+       // Workaround for above issue, to re-open db connection
+       db.transaction(function (tx) {
+       tx.executeSql('UPDATE cardInfor_user SET equipmentId=? WHERE product=? AND serial=? ',
+       [data.equipmentId,
+       data.reference,
+       data.lotnumber], transactionSuccess, errorHandler);
+       });
+
+       } else {
+       // myAlert('No equipment id returned !!!');
+       //todo: handle failed equipment creation.
+       }
+       },
+       error: function (m1, m2, m3) {
+       //myAlert("Error Web Services status " + m2 + " Exception "  + m3);
+       myAlert("appError", [m3]);
+       }
+       });
+       } else {
+       var manufactureDate = getDateFromStr(result[j].manufacturingdate);
+       var firstcommissioningdate = getDateFromStr(result[j].firstcommissioningdate);
+       var controlDate1 = getDateFromStr(result[j].controlDate1);
+       var controlDate2 = getDateFromStr(result[j].controlDate2);
+       var controlDate3 = getDateFromStr(result[j].controlDate3);
+       var controlDate4 = getDateFromStr(result[j].controlDate4);
+       var controlDate5 = getDateFromStr(result[j].controlDate5);
+       var deleteFlag = result[j].ifDelete == 1 ? true : false;
+
+       var parameters = 'equipmentId=' + result[j].equipmentId +
+       '&reference=' + result[j].reference +
+       '&brand=' + 'DELTAPLUS' +
+       '&designation=' + 'DeltaPlus' +
+       '&description' +
+       '&lotNumber=' + result[j].lotnumber +
+       '&userName=' + result[j].username +
+       '&retailerName=' + 'DELTAPLUS' +
+       '&retailerParticulars=' + 'DELTAPLUS China' +
+       '&observation' +
+       '&manufacturingMonth=' + getMonth(manufactureDate) +
+       '&manufacturingDay=' + getDate(manufactureDate) +
+       '&manufacturingYear=' + getYear(manufactureDate) +
+       '&firstUsageMonth=' + getMonth(firstcommissioningdate) +
+       '&firstUsageDay=' + getDate(firstcommissioningdate) +
+       '&firstUsageYear=' + getYear(firstcommissioningdate) +
+       '&lastcontrolDateMonth=' + 0 +
+       '&lastcontrolDateDay=' + 0 +
+       '&lastcontrolDateYear=' + 0 +
+       '&delete=' + deleteFlag.toString() +
+       // '&delete=false' +
+       '&control1DateMonth=' + getMonth(controlDate1) +
+       '&control1DateDay=' + getDate(controlDate1) +
+       '&control1DateYear=' + getYear(controlDate1) +
+       '&control2DateMonth=' + getMonth(controlDate2) +
+       '&control2DateDay=' + getDate(controlDate2) +
+       '&control2DateYear=' + getYear(controlDate2) +
+       '&control3DateMonth=' + getMonth(controlDate3) +
+       '&control3DateDay=' + getDate(controlDate3) +
+       '&control3DateYear=' + getYear(controlDate3) +
+       '&control4DateMonth=' + getMonth(controlDate4) +
+       '&control4DateDay=' + getDate(controlDate4) +
+       '&control4DateYear=' + getYear(controlDate4) +
+       '&control5DateMonth=' + getMonth(controlDate5) +
+       '&control5DateDay=' + getDate(controlDate5) +
+       '&control5DateYear=' + getYear(controlDate5);
+
+       $.ajax({
+       type: 'POST',
+       url: web_server_equipment + "/update-equipment",
+       contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
+       dataType: 'json',
+       data: parameters,
+       beforeSend: function (xhr) {
+       xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
+       },
+       success: function (data, status) {
+       // myAlert(JSON.stringify(data) + ' status ' + status);
+       if (typeof data.equipmentId !== 'undefined') {
+       // myAlert('uploadSuccessfully');
+       } else {
+       //todo: handle failed equipment creation.
+       // myAlert('No success returns');
+       }
+       },
+       error: function (m1, m2, m3) {
+       myAlert("Error Web Services status " + m2 + " Exception " + m3);
+       myAlert("appError", [m3]);
+       }
+       });
+       }
+       }
+       */
+
     });
 
     /*remove the deleted records after sync from remote server*/

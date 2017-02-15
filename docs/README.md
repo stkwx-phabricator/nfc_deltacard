@@ -3,7 +3,7 @@
   cordova build --release  
   jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../docs/delta.keystore "/Users/kaishen/Documents/Confidential/github/nfc_deltacard/android_app/platforms/android/build/outputs/apk/android-release-unsigned.apk" delta  
   password: delta.com
-  cp /Users/kaishen/Documents/Confidential/github/nfc_deltacard/android_app/platforms/android/build/outputs/apk/android-release-unsigned.apk ../dist/delta_kaya_mac.apk  
+  cp /Users/kaishen/Documents/Confidential/github/nfc_deltacard/android_app/platforms/android/build/outputs/apk/android-release-unsigned.apk ../dist/delta_test.apk  
 
 ## Issue of Cannot open Android emulator when docker/ vbox is running  
 **Solution: **
