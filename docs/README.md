@@ -1,10 +1,17 @@
+## NOTE:
+- We have 2 version branch for android_maintenance and android_client, please sync the code for both, if you have changes.
+- This APP is build on JDK8, please make sure that your JDK version when run cordova build/ release
+
 ## Built in Mac
-> cd /Users/kaishen/Documents/Confidential/github/nfc_deltacard/android_app  
+> 
+```
+  jdk8 
+  cd /Users/kaishen/Documents/Confidential/github/nfc_deltacard/android_app  
   cordova build --release  
   jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../docs/delta.keystore "/Users/kaishen/Documents/Confidential/github/nfc_deltacard/android_app/platforms/android/build/outputs/apk/android-release-unsigned.apk" delta  
   password: delta.com
   cp /Users/kaishen/Documents/Confidential/github/nfc_deltacard/android_app/platforms/android/build/outputs/apk/android-release-unsigned.apk ../dist/delta_kaya_mac.apk  
-
+```
 ## Issue of Cannot open Android emulator when docker/ vbox is running  
 **Solution: **
 - Stop Docker, then use android studio to start android emulator again. Once Emulator is running, you can following following commands to test your applications.
