@@ -360,10 +360,10 @@ function refreshLocalData(cardInforList, ifShowUpdate) {
     for (var i in cardInforList) {
       if (window.currentUpdatedRecordId === cardInforList[i].serial) {
         content = content + temp.join("").replace("{id}", parseInt(i) + 1).replace("{product}",
-            cardInforList[i].product).replace('/{serial}/g', cardInforList[i].serial).replace("{color}", "color:red;");
+            cardInforList[i].product).replace(/{serial}/g, cardInforList[i].serial).replace("{color}", "color:red;");
       } else {
         content = content + temp.join("").replace("{id}", parseInt(i) + 1).replace("{product}",
-            cardInforList[i].product).replace('/{serial}/g', cardInforList[i].serial);
+            cardInforList[i].product).replace(/{serial}/g, cardInforList[i].serial);
       }
     }
   } else {
