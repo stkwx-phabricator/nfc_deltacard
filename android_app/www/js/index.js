@@ -360,10 +360,10 @@ function refreshLocalData(cardInforList, ifShowUpdate) {
     for (var i in cardInforList) {
       if (window.currentUpdatedRecordId === cardInforList[i].serial) {
         content = content + temp.join("").replace("{id}", parseInt(i) + 1).replace("{product}",
-            cardInforList[i].product).replace(/{serial}/g, cardInforList[i].serial).replace("{color}", "color:red;");
+            cardInforList[i].product).replace('/{serial}/g', cardInforList[i].serial).replace("{color}", "color:red;");
       } else {
         content = content + temp.join("").replace("{id}", parseInt(i) + 1).replace("{product}",
-            cardInforList[i].product).replace(/{serial}/g, cardInforList[i].serial);
+            cardInforList[i].product).replace('/{serial}/g', cardInforList[i].serial);
       }
     }
   } else {
@@ -1190,10 +1190,29 @@ function confirmToSelectDate() {
   $(".scan_step2 input[name='" + window.currentDateName + "']").val(value);
   $("#date_picker").popup('close');
 }
+
+function cancelSelectDate(e) {
+  console.log('->>>>>>>>>>>>> cancelSelectDate')
+  $("#date_picker").popup('close');
+
+/*  if(e.event == 'click')
+    $("#date_picker").popup('close');
+  else
+    console.log('---> event: ' + e.event);*/
+}
+
 /**
- * for date picker end
+ * for date picker to cancel / close the date picker
  */
 $(".btn_confirmSelectDate").on('click', confirmToSelectDate);
+$(".btn_cancelSelectDate").on('touchend', function(e) {
+  console.log('event type = ' + e.type);
+  cancelSelectDate(e)
+});
+$(".btn_cancelSelectDate").on('touchstart', function(e) {
+  console.log('event type = ' + e.type);
+  // cancelSelectDate(e)
+});
 
 $(".glyphicon-remove").on('click', function (e) {
   clearReadInput(e);
@@ -1396,6 +1415,8 @@ $(".menu_scan").on('touchend', function () {
   $('.scan_step1_3').hide();
   $('.scan_step1_4').hide();
   $.mobile.navigate('#scan');
+  // $.mobile.navigate('#scan_read');
+
   //window.history.pushState({}, '', '#scan');
 });
 $(".menu_view").on('touchend', function () {
