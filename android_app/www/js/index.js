@@ -1,3 +1,5 @@
+var userService = new User();
+var dataSyncService = new DataSync();
 //global setting
 $.mobile.defaultPageTransition = 'flip';
 // AWS Server
@@ -19,7 +21,7 @@ var liferaywsPasswordAdmin = "annualcheckserviceadmin!789";
 
 // app maintenance flag
 var version_maintenance = true;
-var version_detail = '1.7.1';
+var version_detail = '1.7.2';
 
 //global varity
 var ifTagFound = false,
@@ -844,7 +846,7 @@ function prepareSendingData() {
       }, function (err, result) {
 
         loader.hide();
-        if(err || resultArray.length > 0) {
+        if (err || resultArray.length > 0) {
           myAlert(JSON.stringify(resultArray));
         } else {
           myAlert('uploadSuccessfully');
@@ -1195,21 +1197,21 @@ function cancelSelectDate(e) {
   console.log('->>>>>>>>>>>>> cancelSelectDate')
   $("#date_picker").popup('close');
 
-/*  if(e.event == 'click')
-    $("#date_picker").popup('close');
-  else
-    console.log('---> event: ' + e.event);*/
+  /*  if(e.event == 'click')
+   $("#date_picker").popup('close');
+   else
+   console.log('---> event: ' + e.event);*/
 }
 
 /**
  * for date picker to cancel / close the date picker
  */
 $(".btn_confirmSelectDate").on('click', confirmToSelectDate);
-$(".btn_cancelSelectDate").on('touchend', function(e) {
+$(".btn_cancelSelectDate").on('touchend', function (e) {
   console.log('event type = ' + e.type);
   cancelSelectDate(e)
 });
-$(".btn_cancelSelectDate").on('touchstart', function(e) {
+$(".btn_cancelSelectDate").on('touchstart', function (e) {
   console.log('event type = ' + e.type);
   // cancelSelectDate(e)
 });
@@ -1756,6 +1758,10 @@ $('.signout').on('touchend', function () {
   window.localStorage['userId'] = '';
   window.localStorage['username'] = '';
   window.localStorage['password'] = '';
+  userService.clearUser(function() {
+    console.log('clear all cached user info')
+
+  });
 
   $.mobile.navigate('#home');
 });
@@ -1801,6 +1807,8 @@ $(".validate_login").on('touchend', function () {
           window.localStorage['password'] = password;
           $("#product_manager input[name='login']").val("");
           $("#product_manager input[name='password']").val("");
+          userService.saveUser(data.userId, login, password, function(){});
+
           $.mobile.navigate('#product_manager_center');
         } else {
           myAlert('loginfailed');
@@ -2152,6 +2160,28 @@ var app = {
     registeMimeTypeListener(mimeCallBack, mimeSuccessCallBack);
     registeTagListener(tagCallBack, tagSuccessCallBack);
 
+
+    var loader = showLoading('Signin...');
+    userService.readUser(function (user) {
+      loader.hide();
+      if(user != null) {
+        console.log('user data: ' + JSON.stringify(user));
+        window.localStorage['userId'] = user.userId;
+        window.localStorage['username'] = user.username;
+        window.localStorage['password'] = user.password;
+        async.waterfall([
+          userService.autoLogin,
+          dataSyncService.upload,
+          dataSyncService.download,
+        ], function(err) {
+          if(err) {
+            console.log('Error when sync data ' + JSON.stringify(err));
+          }
+        })
+      } else {
+        $.mobile.navigate('#product_manager');
+      }
+    })
 
   }
 };
