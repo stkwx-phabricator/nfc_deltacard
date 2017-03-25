@@ -1,3 +1,5 @@
+
+
 ## Changes on 2017-03-22  v1.7.2
 - Use the login page as the default page when open a app.
 - Auto sync data between app and website when user login. 2 synchronization job as below
@@ -7,6 +9,7 @@
 - When user reopen app,
     - automatically sign-in if with network, and do data synchronization of step 2
     - Automatically log-off user if no network.
+
 
 ## Changes on 2017-02-02  v1.7.1
 - Change web access link to new URL and add new link for "About Manager"
