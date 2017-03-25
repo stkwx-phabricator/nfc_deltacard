@@ -38,15 +38,15 @@ DataSync.prototype.download = function (cb) {
   function saveDataIntoDB(data, callback) {
     var db = openDatabase('deltaplus', '1.0', 'deltaplus', 5 * 1024 * 1024);
     db.transaction(function (tx) {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
+      tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor_user(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
 
       async.every(data, function (item, cb) {
           console.log('equipmentId ' + item.equipmentId + ' serial id: ' + item.lotnumber);
           // var item = data[i];
-          tx.executeSql('SELECT * FROM cardInfor WHERE serial = ?', [item.lotnumber], function (tx, re) {
+          tx.executeSql('SELECT * FROM cardInfor_user WHERE serial = ?', [item.lotnumber], function (tx, re) {
             if (re.rows.length == 0) {
               try {
-                tx.executeSql('INSERT INTO cardInfor VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                tx.executeSql('INSERT INTO cardInfor_user VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',
                   [item.reference,
                     item.lotnumber,
                     item.username,
@@ -71,7 +71,7 @@ DataSync.prototype.download = function (cb) {
                 cb(err);
               }
             } else {
-              tx.executeSql('UPDATE cardInfor SET ifDelete="0", '
+              tx.executeSql('UPDATE cardInfor_user SET ifDelete="0", '
                 + ' product=?,user=?,prod=?,start=?,sav1=?,sav2=?,sav3=?,sav4=?,sav5=? '
                 + ' WHERE serial = ?',
                 [item.reference,
@@ -123,8 +123,8 @@ DataSync.prototype.upload = function (callback) {
   var liferaywsUser = window.localStorage['username'];
   var liferaywsPassword = window.localStorage['password'];
   db.transaction(function (tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
-    tx.executeSql('SELECT * FROM cardInfor ', [], function (tx, re) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS cardInfor_user(product,serial,user,prod,start,sav1,sav2,sav3,sav4,sav5,ifFirst,ifDelete,equipmentId)');
+    tx.executeSql('SELECT * FROM cardInfor_user ', [], function (tx, re) {
       for (var i = 0; i < re.rows.length; i++) {
         result[i] = {};
         result[i].reference = re.rows.item(i).product;
@@ -204,7 +204,7 @@ DataSync.prototype.upload = function (callback) {
               if (typeof data.equipmentId !== 'undefined') {
                 // TODO: Uncaught InvalidStateError: Failed to execute 'executeSql' on 'SQLTransaction': SQL execution is disallowed.
                 /*
-                 tx.executeSql('UPDATE cardInfor SET equipmentId=? WHERE product=? AND serial=? ',
+                 tx.executeSql('UPDATE cardInfor_user SET equipmentId=? WHERE product=? AND serial=? ',
                  [data.equipmentId,
                  data.reference,
                  data.lotnumber], transactionSuccess, errorHandler);
@@ -212,7 +212,7 @@ DataSync.prototype.upload = function (callback) {
 
                 // Workaround for above issue, to re-open db connection
                 db.transaction(function (tx) {
-                  tx.executeSql('UPDATE cardInfor SET equipmentId=? WHERE product=? AND serial=? ',
+                  tx.executeSql('UPDATE cardInfor_user SET equipmentId=? WHERE product=? AND serial=? ',
                     [data.equipmentId,
                       data.reference,
                       data.lotnumber],
@@ -302,7 +302,7 @@ DataSync.prototype.upload = function (callback) {
                 if(data.message && data.message.indexOf('No equipment') > -1) {
                   // Workaround for above issue, to re-open db connection
                   db.transaction(function (tx) {
-                    tx.executeSql('DELETE from cardInfor WHERE equipmentId=? ',
+                    tx.executeSql('DELETE from cardInfor_user WHERE equipmentId=? ',
                       [item.equipmentId],
                       function (transaction, results) {
                         cb(null, true);
@@ -337,7 +337,7 @@ DataSync.prototype.upload = function (callback) {
     });
 
     /*remove the deleted records after sync from remote server*/
-    tx.executeSql('DELETE FROM cardInfor WHERE ifDelete = ?', ["1"], function (tx, re) {
+    tx.executeSql('DELETE FROM cardInfor_user WHERE ifDelete = ?', ["1"], function (tx, re) {
       console.log("delete row count is ", re.rows.length);
     });
   });
