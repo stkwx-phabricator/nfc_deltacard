@@ -298,17 +298,25 @@ DataSync.prototype.upload = function (callback) {
                 // resultArray.push(error);
                 cb(null, true);
               } else {
-                //todo: handle failed equipment creation.
-                // myAlert('No success returns');
-
-                resultArray.push(false);
-                cb(null, false);
+                //todo: handle failed equipment update. Remove no-found equipmentId
+                if(data.message && data.message.indexOf('No equipment') > -1) {
+                  // Workaround for above issue, to re-open db connection
+                  db.transaction(function (tx) {
+                    tx.executeSql('DELETE from cardInfor WHERE equipmentId=? ',
+                      [item.equipmentId],
+                      function (transaction, results) {
+                        cb(null, true);
+                      }, function (transaction, error) {
+                        resultArray.push(error);
+                        cb(null, false);
+                      });
+                  });
+                } else {
+                  cb(null, false);
+                }
               }
             },
             error: function (m1, m2, m3) {
-              // myAlert("Error Web Services status " + m2 + " Exception " + m3);
-              // myAlert("appError", [m3]);
-
               resultArray.push(m3);
               cb(null, false);
             }

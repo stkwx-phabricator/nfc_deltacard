@@ -726,7 +726,7 @@ function prepareSendingData() {
               xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
             },
             success: function (data, status) {
-              console.log('created one equipment successfully')
+              console.log('create-equipment' + JSON.stringify(data) + ' status ' + status);
               if (typeof data.equipmentId !== 'undefined') {
                 // TODO: Uncaught InvalidStateError: Failed to execute 'executeSql' on 'SQLTransaction': SQL execution is disallowed.
                 /*
@@ -822,16 +822,29 @@ function prepareSendingData() {
             },
             success: function (data, status) {
               // myAlert(JSON.stringify(data) + ' status ' + status);
+              console.log('update-equipment' + JSON.stringify(data) + ' status ' + status);
               if (typeof data.equipmentId !== 'undefined') {
                 // myAlert('uploadSuccessfully');
                 // resultArray.push(error);
                 cb(null, true);
               } else {
-                //todo: handle failed equipment creation.
-                // myAlert('No success returns');
-
-                resultArray.push(false);
-                cb(null, false);
+                //todo: handle failed equipment update. Remove no-found equipmentId
+                if(data.message && data.message.indexOf('No equipment') > -1) {
+                  // Workaround for above issue, to re-open db connection
+                  db.transaction(function (tx) {
+                    tx.executeSql('DELETE from cardInfor WHERE equipmentId=? ',
+                      [item.equipmentId],
+                      function (transaction, results) {
+                        // resultArray.push(true);
+                        cb(null, true);
+                      }, function (transaction, error) {
+                        resultArray.push(error);
+                        cb(null, false);
+                      });
+                  });
+                } else {
+                  cb(null, false);
+                }
               }
             },
             error: function (m1, m2, m3) {
@@ -852,167 +865,6 @@ function prepareSendingData() {
           myAlert('uploadSuccessfully');
         }
       });
-
-
-      /*  for (var j = 0; j < result.length; j++) {
-       //if(true) {
-
-       // myAlert('equipmentId ' + result[j].equipmentId + ' serial id: ' + result[j].lotnumber);
-       if (result[j].equipmentId == null || result[j].equipmentId == '') {
-       var manufactureDate = getDateFromStr(result[j].manufacturingdate);
-       var firstcommissioningdate = getDateFromStr(result[j].firstcommissioningdate);
-       var controlDate1 = getDateFromStr(result[j].controlDate1);
-       var controlDate2 = getDateFromStr(result[j].controlDate2);
-       var controlDate3 = getDateFromStr(result[j].controlDate3);
-       var controlDate4 = getDateFromStr(result[j].controlDate4);
-       var controlDate5 = getDateFromStr(result[j].controlDate5);
-
-       var parameters = 'reference=' + result[j].reference +
-       '&brand=' + 'DELTAPLUS' +
-       '&designation=' + 'DeltaPlus' +
-       '&description' +
-       '&lotNumber=' + result[j].lotnumber +
-       '&userName=' + result[j].username +
-       '&retailerName=' + 'DELTAPLUS' +
-       '&retailerParticulars=' + 'DELTAPLUS China' +
-       '&observation' +
-       '&manufacturingMonth=' + getMonth(manufactureDate) +
-       '&manufacturingDay=' + getDate(manufactureDate) +
-       '&manufacturingYear=' + getYear(manufactureDate) +
-       '&firstUsageMonth=' + getMonth(firstcommissioningdate) +
-       '&firstUsageDay=' + getDate(firstcommissioningdate) +
-       '&firstUsageYear=' + getYear(firstcommissioningdate) +
-       '&lastcontrolDateMonth=' + 0 +
-       '&lastcontrolDateDay=' + 0 +
-       '&lastcontrolDateYear=' + 0 +
-       '&control1DateMonth=' + getMonth(controlDate1) +
-       '&control1DateDay=' + getDate(controlDate1) +
-       '&control1DateYear=' + getYear(controlDate1) +
-       '&control2DateMonth=' + getMonth(controlDate2) +
-       '&control2DateDay=' + getDate(controlDate2) +
-       '&control2DateYear=' + getYear(controlDate2) +
-       '&control3DateMonth=' + getMonth(controlDate3) +
-       '&control3DateDay=' + getDate(controlDate3) +
-       '&control3DateYear=' + getYear(controlDate3) +
-       '&control4DateMonth=' + getMonth(controlDate4) +
-       '&control4DateDay=' + getDate(controlDate4) +
-       '&control4DateYear=' + getYear(controlDate4) +
-       '&control5DateMonth=' + getMonth(controlDate5) +
-       '&control5DateDay=' + getDate(controlDate5) +
-       '&control5DateYear=' + getYear(controlDate5);
-
-       $.ajax({
-       type: 'POST',
-       url: web_server_equipment + "create-equipment",
-       contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
-       dataType: 'json',
-       data: parameters,
-       beforeSend: function (xhr) {
-       xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
-       },
-       success: function (data, status) {
-       console.log('created one equipment successfully')
-       if (typeof data.equipmentId !== 'undefined') {
-       // TODO: Uncaught InvalidStateError: Failed to execute 'executeSql' on 'SQLTransaction': SQL execution is disallowed.
-       /!*
-       tx.executeSql('UPDATE cardInfor SET equipmentId=? WHERE product=? AND serial=? ',
-       [data.equipmentId,
-       data.reference,
-       data.lotnumber], transactionSuccess, errorHandler);
-       *!/
-
-       // Workaround for above issue, to re-open db connection
-       db.transaction(function (tx) {
-       tx.executeSql('UPDATE cardInfor_user SET equipmentId=? WHERE product=? AND serial=? ',
-       [data.equipmentId,
-       data.reference,
-       data.lotnumber], transactionSuccess, errorHandler);
-       });
-
-       } else {
-       // myAlert('No equipment id returned !!!');
-       //todo: handle failed equipment creation.
-       }
-       },
-       error: function (m1, m2, m3) {
-       //myAlert("Error Web Services status " + m2 + " Exception "  + m3);
-       myAlert("appError", [m3]);
-       }
-       });
-       } else {
-       var manufactureDate = getDateFromStr(result[j].manufacturingdate);
-       var firstcommissioningdate = getDateFromStr(result[j].firstcommissioningdate);
-       var controlDate1 = getDateFromStr(result[j].controlDate1);
-       var controlDate2 = getDateFromStr(result[j].controlDate2);
-       var controlDate3 = getDateFromStr(result[j].controlDate3);
-       var controlDate4 = getDateFromStr(result[j].controlDate4);
-       var controlDate5 = getDateFromStr(result[j].controlDate5);
-       var deleteFlag = result[j].ifDelete == 1 ? true : false;
-
-       var parameters = 'equipmentId=' + result[j].equipmentId +
-       '&reference=' + result[j].reference +
-       '&brand=' + 'DELTAPLUS' +
-       '&designation=' + 'DeltaPlus' +
-       '&description' +
-       '&lotNumber=' + result[j].lotnumber +
-       '&userName=' + result[j].username +
-       '&retailerName=' + 'DELTAPLUS' +
-       '&retailerParticulars=' + 'DELTAPLUS China' +
-       '&observation' +
-       '&manufacturingMonth=' + getMonth(manufactureDate) +
-       '&manufacturingDay=' + getDate(manufactureDate) +
-       '&manufacturingYear=' + getYear(manufactureDate) +
-       '&firstUsageMonth=' + getMonth(firstcommissioningdate) +
-       '&firstUsageDay=' + getDate(firstcommissioningdate) +
-       '&firstUsageYear=' + getYear(firstcommissioningdate) +
-       '&lastcontrolDateMonth=' + 0 +
-       '&lastcontrolDateDay=' + 0 +
-       '&lastcontrolDateYear=' + 0 +
-       '&delete=' + deleteFlag.toString() +
-       // '&delete=false' +
-       '&control1DateMonth=' + getMonth(controlDate1) +
-       '&control1DateDay=' + getDate(controlDate1) +
-       '&control1DateYear=' + getYear(controlDate1) +
-       '&control2DateMonth=' + getMonth(controlDate2) +
-       '&control2DateDay=' + getDate(controlDate2) +
-       '&control2DateYear=' + getYear(controlDate2) +
-       '&control3DateMonth=' + getMonth(controlDate3) +
-       '&control3DateDay=' + getDate(controlDate3) +
-       '&control3DateYear=' + getYear(controlDate3) +
-       '&control4DateMonth=' + getMonth(controlDate4) +
-       '&control4DateDay=' + getDate(controlDate4) +
-       '&control4DateYear=' + getYear(controlDate4) +
-       '&control5DateMonth=' + getMonth(controlDate5) +
-       '&control5DateDay=' + getDate(controlDate5) +
-       '&control5DateYear=' + getYear(controlDate5);
-
-       $.ajax({
-       type: 'POST',
-       url: web_server_equipment + "/update-equipment",
-       contentType: 'application/x-www-form-urlencoded;charset=UTF-8',
-       dataType: 'json',
-       data: parameters,
-       beforeSend: function (xhr) {
-       xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
-       },
-       success: function (data, status) {
-       // myAlert(JSON.stringify(data) + ' status ' + status);
-       if (typeof data.equipmentId !== 'undefined') {
-       // myAlert('uploadSuccessfully');
-       } else {
-       //todo: handle failed equipment creation.
-       // myAlert('No success returns');
-       }
-       },
-       error: function (m1, m2, m3) {
-       myAlert("Error Web Services status " + m2 + " Exception " + m3);
-       myAlert("appError", [m3]);
-       }
-       });
-       }
-       }
-       */
-
     });
 
     /*remove the deleted records after sync from remote server*/
@@ -1705,7 +1557,15 @@ $('.upload_my').on('touchstart', function () {
 });
 $('.upload_my').on('touchend', function () {
   $(this).toggleClass('general_btn_click');
-  prepareSendingData();
+  // prepareSendingData();
+  dataSyncService.upload(function(err) {
+    "use strict";
+    if(err) {
+      console.log('Error when upload data '+ JSON.stringify(err));
+    } else {
+      myAlert('uploadSuccessfully');
+    }
+  })
 });
 $('.backup_my').on('touchstart', function () {
   $(this).toggleClass('general_btn_click');
@@ -1713,7 +1573,16 @@ $('.backup_my').on('touchstart', function () {
 $('.backup_my').on('touchend', function () {
   $(this).toggleClass('general_btn_click');
 
-  var login = window.localStorage['username'];
+  dataSyncService.download(function(err) {
+    "use strict";
+    if(err) {
+      return console.log('error during download data' + JSON.stringify(err));
+    } else {
+      myAlert('importSuccessfully');
+    }
+  })
+
+/*  var login = window.localStorage['username'];
   var password = window.localStorage['password'];
   var loader = showLoading('Loading');
   $.ajax({
@@ -1738,7 +1607,7 @@ $('.backup_my').on('touchend', function () {
       myAlert("appError", [throwerror]);
 
     }
-  });
+  });*/
 });
 $('.status_my').on('touchstart', function () {
   $(this).toggleClass('general_btn_click');
@@ -1807,7 +1676,24 @@ $(".validate_login").on('touchend', function () {
           window.localStorage['password'] = password;
           $("#product_manager input[name='login']").val("");
           $("#product_manager input[name='password']").val("");
-          userService.saveUser(data.userId, login, password, function(){});
+
+          // save user login info.
+          userService.saveUser(data.userId, login, password, function(err, username){
+            "use strict";
+            if(err) {
+              myAlert(JSON.stringify(err));
+            }
+          });
+
+          // Do auto data sync when login
+          async.waterfall([
+            dataSyncService.upload,
+            dataSyncService.download,
+          ], function(err) {
+            if(err) {
+              console.log('Error when sync data ' + JSON.stringify(err));
+            }
+          })
 
           $.mobile.navigate('#product_manager_center');
         } else {
