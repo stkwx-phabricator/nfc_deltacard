@@ -2058,6 +2058,9 @@ var app = {
           userService.autoLogin,
           dataSyncService.upload,
           dataSyncService.download,
+          function(callback) {
+            $.mobile.navigate('#home');
+          }
         ], function(err) {
           if(err) {
             console.log('Error when sync data ' + JSON.stringify(err));
