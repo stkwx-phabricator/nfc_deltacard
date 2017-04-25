@@ -582,7 +582,7 @@ function validateForm() {
     return false;
   }
 
-  if (!isAlphanumeric(user)) {
+  if (user != "" && !isAlphanumeric(user)) {
     if (!isChinese(user)) {
       myAlert('invalidInput', ['User']);
       $('.scan_step2 input[name="user"]').val("");
