@@ -187,7 +187,7 @@ window.i18n.zh = {
     yes: '是',
     no: '否',
     addFirstUseDate: '确认保存产品首次使用日期？保存后将无法再次编辑',
-    beforeAddFirstUseDate: '你不能拯救给用户，如果尚未启动的第一次使用日期！',
+    beforeAddFirstUseDate: '请填写第一次使用日期！',
     notSameCard: '您所同步的ID卡与开始同步的不是同一张，同步失败！',
     saveInfo: '若要保存数据，您必须同步 ID 卡',
     creationMsgMissing: '信息不完整，请正确填写所有信息!',
