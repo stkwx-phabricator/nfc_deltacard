@@ -1418,7 +1418,7 @@ $(".scan_step2_btn2").on("touchend", function () {
     $('.scan_step2 input[name="user"]').textinput('enable');
     $('.scan_step2 input[name="prod"]').textinput('enable');
     $('.scan_step2 input[name="start"]').textinput('enable');
-  } else if (nfcData[10] == "0" || nfcData[10] == null) {
+  } else if (nfcData[10] == "0" || nfcData[10] == null || nfcData[4] == null || nfcData[4] == '') {
     $('.scan_step2 input[name="user"]').textinput('enable');
     $('.scan_step2 input[name="start"]').textinput('enable');
     nfcData[10] = '1';
@@ -2060,6 +2060,7 @@ var app = {
           dataSyncService.download,
           function(callback) {
             $.mobile.navigate('#home');
+            callback(null);
           }
         ], function(err) {
           if(err) {
