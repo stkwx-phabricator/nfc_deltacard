@@ -79,7 +79,8 @@ window.i18n.en = {
     addIdToMyProduct: 'Add ID to My Products successfully',
     saveData: 'Save Data',
     uploadMyProductList: 'Upload My Product List',
-	useSameIdCard:'Please use the same ID card!',
+	  useSameIdCard:'Please use the same ID card!',
+    notShakeCard: 'Please do not shake the NFCID card during sync data.',
     productFieldEmpty:'Product field is empty!',	
 	//added on 1.31 2015
     productMaxLength:'Product field exceed maximum length (10 chars)',
@@ -222,6 +223,7 @@ window.i18n.zh = {
     saveData: '保存数据',
     uploadMyProductList: '上传我的产品列表',
     useSameIdCard: '请使用相同的NFCID卡',
+    notShakeCard: '请不要晃动NFCID卡',
     productFieldEmpty: '产品不能为空！',
 	//added on 1.31 2015
     productMaxLength:'产品名字过长 (最多10个字符)',
@@ -364,6 +366,7 @@ window.i18n.sp = {
     saveData: 'Guardar los datos',
     uploadMyProductList: 'Añadir a mi lista de productos',
 	  useSameIdCard:'Utilice la misma tarjeta!',
+    notShakeCard: 'No agite la tarjeta NFCID',
     productFieldEmpty:'¡Campo de producto está vacía!',
 	//added on 1.31 2015
     productMaxLength:'El campo Producto excede el maximo de caracteres para el nombre (10 chars)',
@@ -505,6 +508,7 @@ window.i18n.fr = {
     saveData: 'Enregistrer les données',
     uploadMyProductList: 'Exporter ma listes de produits',
 	  useSameIdCard:"S’il vous plaît utiliser la même carte!",
+    notShakeCard: 'Ne pas secouer carte NFCID',
     productFieldEmpty:'Produit le champ est vide !',
 	//added on 1.31 2015
     productMaxLength:'Le champ Produit dépasse le nom de longueur maximum (10 chars)',
