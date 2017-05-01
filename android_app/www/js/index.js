@@ -103,8 +103,11 @@ var ifTagFound = false,
           nfc.write(message, function () {
 
           }, function (error) {
-            // todo there is some random error when saving data into card, eg. if you move card during writing process.
-            myAlert('appError', error);
+            // TODO: there is a random error when saving data into card, eg. if you move card during writing process.
+            // myAlert('appError', error);
+            isNfcEnable = false;
+            scan_next(3, 3);
+            myAlert('notShakeCard');
           });
           myAlert('dataFomatNotRight', [nfc.bytesToHexString(tag.id)]);
           return;
@@ -206,8 +209,11 @@ var ifTagFound = false,
             writeCardInforToDB();
             hasViewMyPro = false;
           }, function (error) {
-            myAlert('appError', [error]);
-            $.mobile.navigate('#scan');
+            // myAlert('appError', [error]);
+            // $.mobile.navigate('#scan');
+            isNfcEnable = false;
+            scan_next(3, 3);
+            myAlert('notShakeCard');
           });
           mimeCallBack = function () {
           };
@@ -231,8 +237,13 @@ var ifTagFound = false,
             writeCardInforToDB();
             hasViewMyPro = false;
           }, function (error) {
-            myAlert('appError', [error]);
-            $.mobile.navigate('#scan');
+            // myAlert("Error occurs when sync data: message = " + JSON.stringify(message) + "; error = " + JSON.stringify(error));
+            // myAlert('appError', [error]);
+            // $.mobile.navigate('#scan');
+
+            isNfcEnable = false;
+            scan_next(3, 3);
+            myAlert('notShakeCard');
           });
           mimeCallBack = function () {
           };
