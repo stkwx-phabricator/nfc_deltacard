@@ -21,7 +21,7 @@ var liferaywsPasswordAdmin = "annualcheckserviceadmin!789";
 
 // app maintenance flag
 var version_maintenance = true;
-var version_detail = '1.8.0';
+var version_detail = '1.8.1';
 
 //global varity
 var ifTagFound = false,
