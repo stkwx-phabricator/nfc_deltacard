@@ -21,7 +21,7 @@ var liferaywsPasswordAdmin = "annualcheckserviceadmin!789";
 
 // app maintenance flag
 var version_maintenance = false;
-var version_detail = '1.8.0';
+var version_detail = '1.8.1';
 
 //global varity
 var ifTagFound = false,
@@ -556,7 +556,7 @@ function validateForm() {
     myAlert('productFieldEmpty');
     return false;
   }
-  if (product.length > 10) {
+  if (product.length > 15) {
     myAlert('productMaxLength');
     $('.scan_step2 input[name="product"]').val("");
     $('.scan_step2 input[name="product"]').focus();
@@ -582,7 +582,7 @@ function validateForm() {
     $('.scan_step2 input[name="serial"]').focus();
     return false;
   }
-  if (user.length > 15) {
+  if (user.length > 10) {
     myAlert('userMaxLength');
     $('.scan_step2 input[name="user"]').val("");
     $('.scan_step2 input[name="user"]').focus();
@@ -694,13 +694,13 @@ function prepareSendingData() {
           var controlDate5 = getDateFromStr(item.controlDate5);
 
           var parameters = 'reference=' + item.reference +
-            '&brand=' + 'DELTAPLUS' +
-            '&designation=' + 'DeltaPlus' +
+            '&brand=' + '-' +
+            '&designation=' + '-' +
             '&description' +
             '&lotNumber=' + item.lotnumber +
             '&userName=' + item.username +
-            '&retailerName=' + 'DELTAPLUS' +
-            '&retailerParticulars=' + 'DELTAPLUS China' +
+            '&retailerName=' + '-' +
+            '&retailerParticulars=' + '-' +
             '&observation' +
             '&manufacturingMonth=' + getMonth(manufactureDate) +
             '&manufacturingDay=' + getDate(manufactureDate) +
@@ -787,13 +787,13 @@ function prepareSendingData() {
 
           var parameters = 'equipmentId=' + item.equipmentId +
             '&reference=' + item.reference +
-            '&brand=' + 'DELTAPLUS' +
-            '&designation=' + 'DeltaPlus' +
+            '&brand=' + '-' +
+            '&designation=' + '-' +
             '&description' +
             '&lotNumber=' + item.lotnumber +
             '&userName=' + item.username +
-            '&retailerName=' + 'DELTAPLUS' +
-            '&retailerParticulars=' + 'DELTAPLUS China' +
+            '&retailerName=' + '-' +
+            '&retailerParticulars=' + '-' +
             '&observation' +
             '&manufacturingMonth=' + getMonth(manufactureDate) +
             '&manufacturingDay=' + getDate(manufactureDate) +

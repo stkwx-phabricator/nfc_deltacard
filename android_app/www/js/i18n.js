@@ -83,10 +83,10 @@ window.i18n.en = {
     notShakeCard: 'Please do not shake the NFCID card during sync data.',
     productFieldEmpty:'Product field is empty!',	
 	//added on 1.31 2015
-    productMaxLength:'Product field exceed maximum length (10 chars)',
+    productMaxLength:'Product field exceed maximum length (15 chars)',
     serialFieldEmpty:'ID field is empty',
     serialMaxLength:'Serial field exceed maximum length (12 chars)',
-    userMaxLength:'User field exceed maximum length name (15 chars)',
+    userMaxLength:'User field exceed maximum length name (10 chars)',
     //added on 2.2 2015
     dataFomatNotRight:'Data format is not right. Initialization has been finished, please read again! tag id: {0}',
     nfcDisabled:'NFC has been disabled, please turn on in settings!',
@@ -226,10 +226,10 @@ window.i18n.zh = {
     notShakeCard: '请不要晃动NFCID卡',
     productFieldEmpty: '产品不能为空！',
 	//added on 1.31 2015
-    productMaxLength:'产品名字过长 (最多10个字符)',
+    productMaxLength:'产品名字过长 (最多15个字符)',
     serialFieldEmpty:'序列号不能为空',
     serialMaxLength:'序列号过长(最多12个字符)',
-    userMaxLength:'用户名过长(最多3个汉字或15个字符)',
+    userMaxLength:'用户名过长(最多3个汉字或10个字符)',
     //added on 2.2 2015
     dataFomatNotRight:'数据格式不正确，已初始化，请在此扫描！tag id : {0}',
     nfcDisabled:'NFC 功能被关闭,请在设置中打开。',
@@ -369,10 +369,10 @@ window.i18n.sp = {
     notShakeCard: 'No agite la tarjeta NFCID',
     productFieldEmpty:'¡Campo de producto está vacía!',
 	//added on 1.31 2015
-    productMaxLength:'El campo Producto excede el maximo de caracteres para el nombre (10 chars)',
+    productMaxLength:'El campo Producto excede el maximo de caracteres para el nombre (15 chars)',
     serialFieldEmpty:'El campo Serial Number esta vacio',
     serialMaxLength:'El numero de serie exceder la longitud máxima（12 chars）',
-    userMaxLength:'El nombre de usuario exceder la longitud máxima (15 chars)',
+    userMaxLength:'El nombre de usuario exceder la longitud máxima (10 chars)',
     //added on 2.2 2015
     dataFomatNotRight:'Formato de datos no es correcto. ¡Inicialización ha sido terminada, lea otra vez! id Card: {0}',
     nfcDisabled:'NFC ha sido deshabilitado, por favor, activar en ajustes!',
@@ -511,10 +511,10 @@ window.i18n.fr = {
     notShakeCard: 'Ne pas secouer carte NFCID',
     productFieldEmpty:'Produit le champ est vide !',
 	//added on 1.31 2015
-    productMaxLength:'Le champ Produit dépasse le nom de longueur maximum (10 chars)',
+    productMaxLength:'Le champ Produit dépasse le nom de longueur maximum (15 chars)',
     serialFieldEmpty:'Le champ série est vide',
     serialMaxLength:'Le champ série dépasse le nom de longueur maximale (12 chars)',
-    userMaxLength:'Le champ utilisateur dépasse le nom de longueur maximale (15 chars)',
+    userMaxLength:'Le champ utilisateur dépasse le nom de longueur maximale (10 chars)',
     //added on 2.2 2015
     dataFomatNotRight:'Format de données ne est pas juste. Initialisation a été fini, se il vous plaît lire à nouveau! tag id: {0}',
     nfcDisabled:"NFC a été désactivé, s'il vous plaît activer dans les paramètres!",
