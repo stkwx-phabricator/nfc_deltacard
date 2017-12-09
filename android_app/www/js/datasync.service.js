@@ -157,13 +157,13 @@ DataSync.prototype.upload = function (callback) {
           var controlDate5 = getDateFromStr(item.controlDate5);
 
           var parameters = 'reference=' + item.reference +
-            '&brand=' + 'DELTAPLUS' +
-            '&designation=' + 'DeltaPlus' +
+            '&brand=' + '-' +
+            '&designation=' + '-' +
             '&description' +
             '&lotNumber=' + item.lotnumber +
             '&userName=' + item.username +
-            '&retailerName=' + 'DELTAPLUS' +
-            '&retailerParticulars=' + 'DELTAPLUS China' +
+            '&retailerName=' + '-' +
+            '&retailerParticulars=' + '-' +
             '&observation' +
             '&manufacturingMonth=' + getMonth(manufactureDate) +
             '&manufacturingDay=' + getDate(manufactureDate) +
@@ -247,13 +247,13 @@ DataSync.prototype.upload = function (callback) {
 
           var parameters = 'equipmentId=' + item.equipmentId +
             '&reference=' + item.reference +
-            '&brand=' + 'DELTAPLUS' +
-            '&designation=' + 'DeltaPlus' +
+            '&brand=' + '-' +
+            '&designation=' + '-' +
             '&description' +
             '&lotNumber=' + item.lotnumber +
             '&userName=' + item.username +
-            '&retailerName=' + 'DELTAPLUS' +
-            '&retailerParticulars=' + 'DELTAPLUS China' +
+            '&retailerName=' + '-' +
+            '&retailerParticulars=' + '-' +
             '&observation' +
             '&manufacturingMonth=' + getMonth(manufactureDate) +
             '&manufacturingDay=' + getDate(manufactureDate) +
