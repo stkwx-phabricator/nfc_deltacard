@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "521207309660",
+    "firebase_url": "https://nfc-deltaplus.firebaseio.com",
+    "project_id": "nfc-deltaplus",
+    "storage_bucket": "nfc-deltaplus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521207309660:android:79faa76554859b18fd0d99",
+        "android_client_info": {
+          "package_name": "com.deltaplus.nfccard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "521207309660-l1cu2k43d8tb6vhtqm87up8627utbedi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3oZrGI13o-03yRm2SpQbgNTl8T8zkMfw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "521207309660-l1cu2k43d8tb6vhtqm87up8627utbedi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,76 +1,76 @@
 {
-    "org.apache.cordova.device": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.device"
-        }
-    },
-    "org.apache.cordova.dialogs": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.dialogs"
-        }
-    },
-    "org.apache.cordova.inappbrowser": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.inappbrowser"
-        }
-    },
-    "org.apache.cordova.splashscreen": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.splashscreen"
-        }
-    },
-    "com.chariotsolutions.nfc.plugin": {
-        "source": {
-            "type": "registry",
-            "id": "com.chariotsolutions.nfc.plugin"
-        }
-    },
-    "org.apache.cordova.globalization": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.globalization"
-        }
-    },
-    "org.apache.cordova.network-information": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.network-information"
-        }
-    },
-    "cordova-plugin-file": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-file"
-        },
-        "is_top_level": false,
-        "variables": {}
-    },
-    "cordova-plugin-compat": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-compat"
-        },
-        "is_top_level": false,
-        "variables": {}
-    },
-    "cordova-plugin-whitelist": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-whitelist@1.3.0"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-http": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-http"
-        },
-        "is_top_level": true,
-        "variables": {}
+  "org.apache.cordova.device": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.device"
     }
+  },
+  "org.apache.cordova.dialogs": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.dialogs"
+    }
+  },
+  "org.apache.cordova.inappbrowser": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.inappbrowser"
+    }
+  },
+  "org.apache.cordova.splashscreen": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.splashscreen"
+    }
+  },
+  "com.chariotsolutions.nfc.plugin": {
+    "source": {
+      "type": "registry",
+      "id": "com.chariotsolutions.nfc.plugin"
+    }
+  },
+  "org.apache.cordova.globalization": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.globalization"
+    }
+  },
+  "org.apache.cordova.network-information": {
+    "source": {
+      "type": "registry",
+      "id": "org.apache.cordova.network-information"
+    }
+  },
+  "cordova-plugin-file": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-file"
+    },
+    "is_top_level": false,
+    "variables": {}
+  },
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist@1.3.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-http": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-http"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-compat": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-compat@1.2.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
 }
