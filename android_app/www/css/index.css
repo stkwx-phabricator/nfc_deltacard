@@ -20,22 +20,22 @@ div{
 .ui-page { -webkit-backface-visibility: hidden; }
 .form-control{
     border-width: 0px;
-    background-color: yellow;
+    background-color: #e8f0fe;
     font-size: 1em;
     text-decoration: none;
     text-shadow:none;
 }
 .form-control[disabled]{
-    background-color: gray;
+    background-color: #eeeeee;
     border-width: 0px;
     text-decoration: none;
     text-shadow:none;
 }
 .form-control[readonly]{
-    background-color: yellow;
+    background-color: #e8f0fe;
 }
 .little[disabled]{
-    background-color: gray;
+    background-color: #eeeeee;
     border-width: 0px;
     text-decoration: none;
     text-shadow:none;
@@ -53,8 +53,8 @@ table thead,table tbody{
 }
 /*rewirte bootstrap css*/
 .table>thead>tr>th,.table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
-    border-top: 1px solid black;
-    border-bottom: 2px solid black;
+    border-top: 1px solid #74949a;
+    border-bottom: 2px solid #74949a;
     font-size: 1.5em;
 }
 .table>thead>tr>th{
@@ -207,7 +207,7 @@ label{
     color:green;
 }
 .scan_step2{
-    background-color:black;
+    background-color:#74949a;
     width:95%;
     padding-right: 1%;
     padding-left: 1%;
@@ -220,7 +220,7 @@ label{
     width:100%;
 }
 .myproducts_detail_form{
-    background-color:black;
+    background-color:#74949A;
     width:95%;
     padding-right: 1%;
     padding-left: 1%;
@@ -272,7 +272,7 @@ label{
 }
 /*table style*/
 .productList{
-   background-color: black; 
+   background-color: #74949a; 
    width: 95%;
    margin: 0 auto;
    overflow-y:auto; 
@@ -301,7 +301,7 @@ label{
 }
 /*product manager*/
 .product_manager_login_form{
-    background-color:black;
+    background-color:#74949a;
     width:95%;
     overflow-y:auto;
     margin:0 auto;
@@ -310,20 +310,20 @@ label{
     padding-left: 1%;
 }
 .product_manager_login_form input{
-    background-color: yellow;
+    background-color: #e8f0fe;
     color: black;
     font-weight: bold;
 }
 /*end*/
 .user_login_form{
-    background-color: black;
+    background-color: #74949a;
     padding-left: 1%;
     padding-right: 1%;
     width: 95%;
     margin: 0 auto;
 }
 .user_login_form input{
-    background-color:yellow;
+    background-color:#e8f0fe;
 }
 .control-label1{
     line-height: 2.5em;

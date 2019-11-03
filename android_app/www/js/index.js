@@ -21,7 +21,7 @@ var liferaywsPasswordAdmin = "annualcheckserviceadmin!789";
 
 // app maintenance flag
 var version_maintenance = false;
-var version_detail = '1.8.1';
+var version_detail = '2.0.0';
 
 //global varity
 var ifTagFound = false,
@@ -401,7 +401,7 @@ function registeMimeTypeListener(callback, success) {
       //navigator.notification.alert('language 1: ' + language.value + '\n');
       var lang = language.value.split('-');
       // navigator.notification.alert('language 2: ' + lang[0] + '\n');
-      if (lang != null && (lang[0] == 'en' || lang[0] == 'zh' || lang[0] == 'sp' || lang[0] == 'fr')) {
+      if (lang != null && (lang[0] == 'en' || lang[0] == 'zh' || lang[0] == 'sp' || lang[0] == 'fr' || lang[0] == 'pt')) {
         window.localStorage['language'] = lang[0];
         //      navigator.notification.alert('language 3: ' + window.localStorage['language'] + '\n');
       }
@@ -593,7 +593,7 @@ function validateForm() {
     return false;
   }
 
-  if (!isAlphanumeric(user)) {
+  if (user != "" && !isAlphanumeric(user)) {
     if (!isChinese(user)) {
       myAlert('invalidInput', ['User']);
       $('.scan_step2 input[name="user"]').val("");
@@ -625,6 +625,8 @@ function initLanguageSelection() {
     $('input[name="changeLang"]:eq(2)')[0].checked = true;
   } else if (language == 'sp') {
     $('input[name="changeLang"]:eq(3)')[0].checked = true;
+  } else if (language == 'pt') {
+    $('input[name="changeLang"]:eq(4)')[0].checked = true;
   }
   $('input[name="changeLang"]').checkboxradio("refresh");
 }
@@ -641,6 +643,8 @@ function changeLanguage() {
     lang = 'fr';
   } else if (index == 3) {
     lang = 'sp';
+  } else if (index == 4) {
+    lang = 'pt';
   }
   window.localStorage['language'] = lang;
   updateLanguage(lang);
@@ -737,7 +741,7 @@ function prepareSendingData() {
               xhr.setRequestHeader("Authorization", make_base_auth(liferaywsUser, liferaywsPassword));
             },
             success: function (data, status) {
-              console.log('created one equipment successfully')
+              console.log('create-equipment' + JSON.stringify(data) + ' status ' + status);
               if (typeof data.equipmentId !== 'undefined') {
                 // TODO: Uncaught InvalidStateError: Failed to execute 'executeSql' on 'SQLTransaction': SQL execution is disallowed.
                 /*
@@ -833,6 +837,7 @@ function prepareSendingData() {
             },
             success: function (data, status) {
               // myAlert(JSON.stringify(data) + ' status ' + status);
+              console.log('update-equipment' + JSON.stringify(data) + ' status ' + status);
               if (typeof data.equipmentId !== 'undefined') {
                 // myAlert('uploadSuccessfully');
                 // resultArray.push(error);
@@ -869,7 +874,7 @@ function prepareSendingData() {
       }, function (err, result) {
 
         loader.hide();
-        if(err || resultArray.length > 0) {
+        if (err || resultArray.length > 0) {
           myAlert(JSON.stringify(resultArray));
         } else {
           myAlert('uploadSuccessfully');
@@ -1642,7 +1647,7 @@ $('.signout').on('touchend', function () {
 
   });
 
-  $.mobile.navigate('#home');
+  $.mobile.navigate('#product_manager');
 });
 
 $("input[name='login']").change(function () {
@@ -1827,7 +1832,8 @@ $('.nav_lost_password').on('touchend', function () {
 });
 
 $(".nav_new_user_registration").on('click', function () {
-  $.mobile.navigate('#user_registion');
+  //$.mobile.navigate('#user_registion');
+  window.open(web_index, '_system', 'location=yes');
 });
 
 $('.nav_about_product_manager').on('touchend', function () {

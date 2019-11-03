@@ -20,7 +20,7 @@
         <div class="col-xs-2 btn_webhome"></div>
         <div class="col-xs-8 pull-right btn_navigator">
             <div class="col-xs-4 btn_back">
-                <span class="glyphicon glyphicon-arrow-left"></span>
+
             </div>
             <div class="col-xs-4 btn_home">
                 <span class="glyphicon glyphicon-home" style="color:yellow;"></span>
@@ -44,7 +44,7 @@
         <div class="col-xs-2 btn_webhome"></div>
         <div class="col-xs-8 pull-right btn_navigator">
             <div class="col-xs-4 btn_back">
-                <span class="glyphicon glyphicon-arrow-left"></span>
+                
             </div>
             <div class="col-xs-4 btn_home">
                 <span class="glyphicon glyphicon-home"></span>
@@ -94,7 +94,7 @@
         <div class="col-xs-2 btn_webhome"></div>
         <div class="col-xs-8 pull-right btn_navigator">
             <div class="col-xs-4 btn_back">
-                <span class="glyphicon glyphicon-arrow-left"></span>
+                
             </div>
             <div class="col-xs-4 btn_home">
                 <span class="glyphicon glyphicon-home"></span>
@@ -106,7 +106,7 @@
     </div>
     <div class="row">
         <div style="position:absolute;width:100%;top:32%;">
-            <div class="scan_step2" style="border:2px solid yellow">
+            <div class="scan_step2" style="border:2px solid black">
                 <form class="form-horizontal" role="form" style="margin:1em 0em 0em 2em;">
                     <div class="form-group form-group-sm">
                         <label class="col-xs-3 i_product">Product:</label>
@@ -246,7 +246,7 @@
         <div class="col-xs-2 btn_webhome"></div>
         <div class="col-xs-8 pull-right btn_navigator">
             <div class="col-xs-4 btn_back">
-                <span class="glyphicon glyphicon-arrow-left"></span>
+                
             </div>
             <div class="col-xs-4 btn_home">
                 <span class="glyphicon glyphicon-home"></span>
@@ -303,7 +303,7 @@
         <div class="col-xs-2 btn_webhome"></div>
         <div class="col-xs-8 pull-right btn_navigator">
             <div class="col-xs-4 btn_back">
-                <span class="glyphicon glyphicon-arrow-left"></span>
+                
             </div>
             <div class="col-xs-4 btn_home">
                 <span class="glyphicon glyphicon-home"></span>
@@ -314,7 +314,7 @@
         </div>
     </div>
     <div class="row" style="position: absolute; width: 100%; top:32%;">
-        <table class="table table-condensed" style="margin-bottom: 0em; background-color: black; width: 95%; margin: 0 auto; color:white; border:2px solid yellow">
+        <table class="table table-condensed" style="margin-bottom: 0em; background-color: #74949a; width: 95%; margin: 0 auto; color:white; border:2px solid black">
             <thead style="">
             <tr>
                 <th width="10%"></th>
@@ -324,7 +324,7 @@
             </tr>
             </thead>
         </table>
-        <div class="productList" style="border-left:2px solid yellow; border-right:2px solid yellow; border-bottom: 2px solid yellow">
+        <div class="productList" style="border-left:2px solid black; border-right:2px solid black; border-bottom: 2px solid black">
             <table class="table table-condensed">
                 <tbody>
                 <tr>
@@ -348,7 +348,7 @@
         <div class="col-xs-2 btn_webhome"></div>
         <div class="col-xs-8 pull-right btn_navigator">
             <div class="col-xs-4 btn_back">
-                <span class="glyphicon glyphicon-arrow-left"></span>
+                
             </div>
             <div class="col-xs-4 btn_home">
                 <span class="glyphicon glyphicon-home"></span>
@@ -359,7 +359,7 @@
         </div>
     </div>
     <div class="row" style="position: absolute;width: 100%;top:32%;">
-        <div class="myproducts_detail_form" style="border:2px solid yellow">
+        <div class="myproducts_detail_form" style="border:2px solid black">
                 <form class="form-horizontal" role="form" style="margin:1em 0em 0em 2em;">
                     <div class="form-group form-group-sm">
                         <label class="col-xs-3 i_product">Product:</label>
@@ -472,7 +472,14 @@
                     </div>
                 </form>
         </div>
-        <div class="generic_btn backToViewMyProducts i_delete">Delete</div>
+		<div class="row" style="text-align: center">
+			<div class="col-xs-5 generic_small_btn backToViewMyProducts" style="margin-left: 2em;">
+				<div style="line-height: 1em;margin-top: 1.5em;" class="i_delete">Delete</div>
+			</div>
+			<div class="col-xs-5 generic_small_btn menu_view">
+				<div style="line-height: 1em;margin-top: 1.5em;" class="i_view_my_products">View my Products</div>
+			</div>
+		</div>
     </div>
 </div>
 <div data-role="page" id="setting" class="basic container">
@@ -480,7 +487,7 @@
         <div class="col-xs-2 btn_webhome"></div>
         <div class="col-xs-8 pull-right btn_navigator">
             <div class="col-xs-4 btn_back">
-                <span class="glyphicon glyphicon-arrow-left"></span>
+                
             </div>
             <div class="col-xs-4 btn_home">
                 <span class="glyphicon glyphicon-home"></span>
@@ -507,6 +514,8 @@
                             <label for="changeLang_fr">Français</label>
                             <input type="radio" name="changeLang" id="changeLang_sp" value="on">
                             <label for="changeLang_sp">Espanol</label>
+							<input type="radio" name="changeLang" id="changeLang_pt" value="on">
+                            <label for="changeLang_pt">Portuguese</label>
                         </fieldset>
                     </form>
                   <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b i_return" data-rel="back" data-transition="flow" style="width: 100%">Confirm</a>
@@ -523,7 +532,7 @@
         <div class="col-xs-2 btn_webhome"></div>
         <div class="col-xs-8 pull-right btn_navigator">
             <div class="col-xs-4 btn_back">
-                <span class="glyphicon glyphicon-arrow-left"></span>
+                
             </div>
             <div class="col-xs-4 btn_home">
                 <span class="glyphicon glyphicon-home"></span>
@@ -544,7 +553,7 @@
                     <div class="col-xs-4"></div>
                 </div>
                 <div class="form-group form-group-sm ">
-                    <label class="col-xs-3 i_login">Username (email):</label>
+                    <label class="col-xs-3 i_login">email:</label>
 
                     <div class="col-xs-9">
                         <input type="text" name="login" class="form-control">
@@ -577,7 +586,7 @@
         <div class="col-xs-2 btn_webhome"></div>
         <div class="col-xs-8 pull-right btn_navigator">
             <div class="col-xs-4 btn_back">
-                <span class="glyphicon glyphicon-arrow-left"></span>
+                
             </div>
             <div class="col-xs-4 btn_home">
                 <span class="glyphicon glyphicon-home"></span>
@@ -667,7 +676,7 @@
             <div class="col-xs-2 btn_webhome"></div>
             <div class="col-xs-8 pull-right btn_navigator">
                 <div class="col-xs-4 btn_back">
-                    <span class="glyphicon glyphicon-arrow-left"></span>
+                    
                 </div>
                 <div class="col-xs-4 btn_home">
                     <span class="glyphicon glyphicon-home"></span>
@@ -802,7 +811,7 @@
         <div class="col-xs-2 btn_webhome"></div>
         <div class="col-xs-8 pull-right btn_navigator">
             <div class="col-xs-4 btn_back">
-                <span class="glyphicon glyphicon-arrow-left"></span>
+                
             </div>
             <div class="col-xs-4 btn_home">
                 <span class="glyphicon glyphicon-home"></span>
@@ -826,7 +835,7 @@
         <div class="col-xs-2 btn_webhome"></div>
         <div class="col-xs-8 pull-right btn_navigator">
             <div class="col-xs-4 btn_back">
-                <span class="glyphicon glyphicon-arrow-left"></span>
+                
             </div>
             <div class="col-xs-4 btn_home">
                 <span class="glyphicon glyphicon-home"></span>
